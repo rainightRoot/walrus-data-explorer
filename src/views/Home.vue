@@ -89,13 +89,13 @@
                   </div>
                   <div class="heatmap-days-container">
                     <div class="heatmap-days-labels">
-                      <div class="day-label">Sun</div>
+                      <div class="day-label"></div>
                       <div class="day-label">Mon</div>
-                      <div class="day-label">Tue</div>
+                      <div class="day-label"></div>
                       <div class="day-label">Wed</div>
-                      <div class="day-label">Thu</div>
+                      <div class="day-label"></div>
                       <div class="day-label">Fri</div>
-                      <div class="day-label">Sat</div>
+                      <div class="day-label"></div>
                     </div>
                     <div class="heatmap-days">
                       <template v-for="week in 40">
@@ -104,28 +104,28 @@
                           :key="(week-1)*7 + (day-1)" 
                           class="heatmap-day"
                           :class="'level-' + getDayLevel(week-1, day-1)"
-                          :title="getDayDate(week-1, day-1) + ': ' + getDayCount(week-1, day-1) + ' commits'"
+                          :title="formatTooltipDate(getDayData(week-1, day-1))"
                           @mouseover="showTooltip($event, getDayData(week-1, day-1))"
                           @mouseout="hideTooltip"
                         ></div>
                       </template>
                       <div class="heatmap-tooltip" ref="tooltip" v-show="showingTooltip">
-                        <div class="tooltip-date">{{ tooltipData.date }}</div>
-                        <div class="tooltip-count">{{ tooltipData.count }} commits</div>
+                        <div class="tooltip-date">{{ formatTooltipDate(tooltipData) }}</div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="heatmap-legend">
-                <span>Activity level:</span>
+              <div class="heatmap-legend" style="justify-content: flex-end;">
+                <span class="legend-text">Less</span>
                 <ul class="legend-items">
-                  <li class="legend-item"><span class="legend-color level-0"></span>None</li>
-                  <li class="legend-item"><span class="legend-color level-1"></span>Low</li>
-                  <li class="legend-item"><span class="legend-color level-2"></span>Medium</li>
-                  <li class="legend-item"><span class="legend-color level-3"></span>High</li>
-                  <li class="legend-item"><span class="legend-color level-4"></span>Very High</li>
+                  <li class="legend-item"><span class="legend-color level-0"></span></li>
+                  <li class="legend-item"><span class="legend-color level-1"></span></li>
+                  <li class="legend-item"><span class="legend-color level-2"></span></li>
+                  <li class="legend-item"><span class="legend-color level-3"></span></li>
+                  <li class="legend-item"><span class="legend-color level-4"></span></li>
                 </ul>
+                <span class="legend-text">More</span>
               </div>
               
               <!-- Contributors list -->
@@ -297,7 +297,7 @@ export default {
     return {
       githubContributions: [],
       githubLoading: true,
-      allMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      allMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       heatmapDays: [],
       showingTooltip: false,
       tooltipData: {
@@ -652,10 +652,19 @@ export default {
     },
     
     formatChineseDate(date) {
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      return `${year}年${month}月${day}日`;
+      return format(date, 'MMM d, yyyy', { locale: enUS });
+    },
+    
+    formatTooltipDate(day) {
+      if (!day || !day.date) return 'No data available';
+      
+      if (day.count === 0) {
+        return `No contributions on ${day.date}`;
+      } else if (day.count === 1) {
+        return `1 contribution on ${day.date}`;
+      } else {
+        return `${day.count} contributions on ${day.date}`;
+      }
     },
     
     getRecentMonths() {
@@ -725,10 +734,7 @@ export default {
     },
     
     showTooltip(event, day) {
-      this.tooltipData = {
-        date: day.date,
-        count: day.count
-      };
+      this.tooltipData = day;
       this.showingTooltip = true;
       
       // 在下一个帧更新提示框位置
@@ -1449,14 +1455,13 @@ export default {
 .legend-item {
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  margin: 0 1px;
 }
 
 .legend-color {
   display: inline-block;
-  width: 12px;
-  height: 12px;
-  margin-right: 4px;
+  width: 10px;
+  height: 10px;
   border-radius: 2px;
 }
 
@@ -1483,16 +1488,17 @@ export default {
 /* Heatmap tooltip styles */
 .heatmap-tooltip {
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(36, 41, 46, 0.95);
   color: white;
   padding: 8px 10px;
-  border-radius: 4px;
+  border-radius: 3px;
   font-size: 12px;
   z-index: 1000;
   pointer-events: none;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   transition: opacity 0.2s;
   transform: translateZ(0);
+  border: 1px solid rgba(27, 31, 35, 0.2);
 }
 
 .tooltip-date {
