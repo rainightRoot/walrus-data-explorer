@@ -28,35 +28,37 @@
         <button @click="searchTransaction">Search</button>
       </div>
       
-      <div class="transactions-table">
-        <div class="table-header">
-          <div class="col-hash">Tx Hash</div>
-          <div class="col-type">Type</div>
-          <div class="col-time">Time</div>
-          <div class="col-amount">Amount</div>
-          <div class="col-fee">Fee</div>
-        </div>
-        
-        <div v-if="loading" class="loading">Loading...</div>
-        <template v-else>
-          <div 
-            v-for="tx in transactions" 
-            :key="tx.hash"
-            class="transaction-row"
-          >
-            <div class="col-hash">
-              <router-link :to="`/transactions/${tx.hash}`">
-                {{ shortHash(tx.hash) }}
-              </router-link>
-            </div>
-            <div class="col-type">
-              <span class="tx-type">{{ tx.type }}</span>
-            </div>
-            <div class="col-time">{{ formatTime(tx.time) }}</div>
-            <div class="col-amount">{{ tx.amount }} TIA</div>
-            <div class="col-fee">{{ tx.fee }} TIA</div>
+      <div class="table-container">
+        <div class="transactions-table">
+          <div class="table-header">
+            <div class="col-hash">Tx Hash</div>
+            <div class="col-type">Type</div>
+            <div class="col-time">Time</div>
+            <div class="col-amount">Amount</div>
+            <div class="col-fee">Fee</div>
           </div>
-        </template>
+          
+          <div v-if="loading" class="loading">Loading...</div>
+          <template v-else>
+            <div 
+              v-for="tx in transactions" 
+              :key="tx.hash"
+              class="transaction-row"
+            >
+              <div class="col-hash">
+                <router-link :to="`/transactions/${tx.hash}`">
+                  {{ shortHash(tx.hash) }}
+                </router-link>
+              </div>
+              <div class="col-type">
+                <span class="tx-type">{{ tx.type }}</span>
+              </div>
+              <div class="col-time">{{ formatTime(tx.time) }}</div>
+              <div class="col-amount">{{ tx.amount }} TIA</div>
+              <div class="col-fee">{{ tx.fee }} TIA</div>
+            </div>
+          </template>
+        </div>
       </div>
       
       <div class="pagination">
@@ -271,6 +273,39 @@ export default {
 @media (max-width: 768px) {
   .stats-cards {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .search-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+  
+  .search-bar button {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 4px;
+  }
+  
+  .tx-type {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+  
+  .pagination {
+    padding-top: 15px;
+  }
+  
+  /* Soft shadow for cards */
+  .transactions-container, .stat-card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
   }
 }
 </style> 

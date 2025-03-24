@@ -8,15 +8,21 @@
             <span class="explorer-text">Explorer</span>
           </router-link>
           <div class="network-tag">mainnet</div>
+           <!-- Mobile menu toggle button -->
+          <button class="mobile-menu-toggle" :class="{ 'active': mobileMenuOpen }" @click="toggleMobileMenu">
+            <svg aria-hidden="true" fill="currentColor" focusable="false" height="20" role="presentation" viewBox="0 0 20 14" width="20" class="text-common"><path d="M5 1C5 0.447734 5.44773 0 6 0H19C19.5523 0 20 0.447734 20 1C20 1.55227 19.5523 2 19 2H6C5.44773 2 5 1.55223 5 1ZM19 6H1C0.447734 6 0 6.44777 0 7C0 7.55226 0.447734 8 1 8H19C19.5523 8 20 7.55226 20 7C20 6.44777 19.5523 6 19 6ZM19 12H10C9.44777 12 9 12.4477 9 13C9 13.5522 9.44777 14 10 14H19C19.5523 14 20 13.5522 20 13C20 12.4477 19.5523 12 19 12Z"></path></svg>
+          </button>
         </div>
         
-        <nav class="main-nav">
-          <router-link to="/" exact>Home</router-link>
-          <router-link to="/validators">Validators</router-link>
-          <router-link to="/blocks">Blocks</router-link>
-          <router-link to="/transactions">Transactions</router-link>
-          <router-link to="/governance">Governance</router-link>
-          <router-link to="/staking">Staking</router-link>
+       
+        
+        <nav class="main-nav" :class="{ 'mobile-open': mobileMenuOpen }">
+          <router-link to="/" exact @click="closeMobileMenu">Home</router-link>
+          <router-link to="/validators" @click="closeMobileMenu">Validators</router-link>
+          <router-link to="/blocks" @click="closeMobileMenu">Blocks</router-link>
+          <router-link to="/transactions" @click="closeMobileMenu">Transactions</router-link>
+          <router-link to="/governance" @click="closeMobileMenu">Governance</router-link>
+          <router-link to="/staking" @click="closeMobileMenu">Staking</router-link>
         </nav>
         
         <div class="search-section">
@@ -27,6 +33,9 @@
         </div>
       </div>
     </header>
+    
+    <!-- Overlay for mobile menu -->
+    <div class="mobile-overlay" v-if="mobileMenuOpen" @click="closeMobileMenu"></div>
     
     <div class="main-content">
       <div class="container">
@@ -65,7 +74,8 @@ export default {
   name: 'App',
   data() {
     return {
-      searchQuery: ''
+      searchQuery: '',
+      mobileMenuOpen: false
     }
   },
   methods: {
@@ -87,6 +97,29 @@ export default {
       }
       
       this.searchQuery = ''
+      this.closeMobileMenu()
+    },
+    toggleMobileMenu() {
+      this.mobileMenuOpen = !this.mobileMenuOpen
+      
+      // Prevent body scrolling when menu is open
+      if (this.mobileMenuOpen) {
+        document.body.style.overflow = 'hidden'
+      } else {
+        document.body.style.overflow = ''
+      }
+    },
+    closeMobileMenu() {
+      if (this.mobileMenuOpen) {
+        this.mobileMenuOpen = false
+        document.body.style.overflow = ''
+      }
+    }
+  },
+  // Close menu when route changes
+  watch: {
+    '$route'() {
+      this.closeMobileMenu()
     }
   }
 }
@@ -108,7 +141,7 @@ export default {
 .header-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  flex-wrap: wrap;
   max-width: 1200px;
   margin: 0 auto;
   padding: 15px 20px;
@@ -122,28 +155,30 @@ export default {
 .logo {
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
-  font-weight: 700;
   text-decoration: none;
+  margin-right: 15px;
 }
 
 .logo-text {
+  font-size: 1.3rem;
+  font-weight: 700;
   color: var(--primary-color);
 }
 
 .explorer-text {
-  color: var(--secondary-color);
+  font-size: 1.3rem;
+  font-weight: 300;
+  color: var(--text-color);
   margin-left: 4px;
 }
 
 .network-tag {
-  margin-left: 10px;
+  display: inline-block;
   padding: 2px 8px;
-  background-color: var(--primary-color);
-  color: white;
+  background-color: #e6f7ee;
+  color: #42b983;
   border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.8rem;
   text-transform: uppercase;
 }
 
@@ -164,17 +199,16 @@ export default {
 .main-nav a:after {
   content: '';
   position: absolute;
+  left: 0;
+  bottom: 0;
   width: 0;
   height: 2px;
-  bottom: 0;
-  left: 0;
   background-color: var(--primary-color);
-  transition: width 0.2s;
+  transition: width 0.3s;
 }
 
-.main-nav a:hover,
-.main-nav a.router-link-active {
-  color: var(--primary-color);
+.main-nav a:hover:after {
+  width: 100%;
 }
 
 .main-nav a.router-link-active:after {
@@ -184,6 +218,7 @@ export default {
 .search-section {
   display: flex;
   max-width: 300px;
+  margin-left: auto;
 }
 
 .search-section input {
@@ -205,6 +240,142 @@ export default {
 
 .search-btn:hover {
   background: var(--primary-dark);
+}
+
+/* Mobile menu toggle button */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 24px;
+}
+
+.mobile-menu-toggle .bar {
+  width: 100%;
+  height: 3px;
+  background-color: var(--text-color);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* Mobile overlay */
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+}
+
+/* 响应式设计 - Mobile Menu */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 16px;
+  }
+  
+  .logo-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+    z-index: 101;
+  }
+  
+  .mobile-overlay {
+    display: block;
+  }
+  
+  .main-nav {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 15px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+  }
+  
+  .main-nav.mobile-open {
+    display: flex;
+  }
+  
+  .main-nav a {
+    padding: 12px 0;
+    margin: 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .search-section {
+    max-width: none;
+    width: 100%;
+    margin-top: 15px;
+  }
+  
+  /* Animation for hamburger to X */
+  .mobile-menu-toggle.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  
+  .mobile-menu-toggle.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .mobile-menu-toggle.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+  
+  .logo-text {
+    font-size: 1.2rem;
+  }
+  
+  .explorer-text {
+    font-size: 1.2rem;
+  }
+  
+  .network-tag {
+    font-size: 0.7rem;
+    padding: 1px 6px;
+  }
+  
+  .main-nav {
+    padding-top: 5px;
+  }
+  
+  .main-nav a {
+    padding: 15px 0;
+    font-size: 1.1rem;
+  }
+  
+  .search-section {
+    display: flex;
+    margin-top: 10px;
+  }
+  
+  .search-section input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px;
+    font-size: 16px; /* Prevent iOS zoom on focus */
+    border-radius: 4px 0 0 4px;
+  }
+  
+  .search-btn {
+    border-radius: 0 4px 4px 0;
+    padding: 0 15px;
+  }
 }
 
 /* 主内容区 */
@@ -264,35 +435,5 @@ export default {
   font-size: 0.9rem;
   padding-top: 20px;
   border-top: 1px solid #495057;
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .header-container {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .logo-section {
-    margin-bottom: 10px;
-  }
-  
-  .main-nav {
-    order: 3;
-    margin-top: 15px;
-    overflow-x: auto;
-    justify-content: flex-start;
-    padding-bottom: 5px;
-  }
-  
-  .main-nav a {
-    font-size: 0.9rem;
-    white-space: nowrap;
-  }
-  
-  .search-section {
-    max-width: none;
-    width: 100%;
-  }
 }
 </style> 
