@@ -6,7 +6,7 @@ import './assets/styles/global.css'
 import './assets/responsive-tables.css'
 import * as formatters from './utils/formatters'
 
-// 注册全局方法
+// Register global methods
 Object.keys(formatters).forEach(key => {
   Vue.prototype[`$${key}`] = formatters[key]
 })

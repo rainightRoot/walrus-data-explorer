@@ -68,16 +68,16 @@
             <a href="https://github.com/celestiaorg" target="_blank" class="view-all-link">View All</a>
           </div>
           <div class="card-body">
-            <!-- GitHub 活动热力图 -->
+            <!-- GitHub activity heatmap section -->
             <div class="github-heatmap-container">
-              <!-- <h3 class="heatmap-title">MystenLabs 组织贡献活动（最近 9 个月）</h3> -->
-              <div v-if="githubLoading" class="heatmap-loading">正在加载 MystenLabs 的活跃度数据...</div>
+              <!-- <h3 class="heatmap-title">MystenLabs Organization Contribution Activity (Last 9 Months)</h3> -->
+              <div v-if="githubLoading" class="heatmap-loading">Loading MystenLabs activity data...</div>
               <div v-else>
-                <div v-if="githubContributions.length === 0" class="no-data">暂无活跃度数据</div>
+                <div v-if="githubContributions.length === 0" class="no-data">No activity data available</div>
                 <div v-else class="custom-heatmap">
-                  <!-- 自定义热力图实现 -->
+                  <!-- Custom heatmap implementation -->
                   <div class="heatmap-months">
-                    <!-- 显示最近 9 个月 -->
+                    <!-- Display last 9 months -->
                     <div 
                       v-for="(month, index) in getMonthPositions()" 
                       :key="index" 
@@ -89,13 +89,13 @@
                   </div>
                   <div class="heatmap-days-container">
                     <div class="heatmap-days-labels">
-                      <div class="day-label">周日</div>
-                      <div class="day-label">周一</div>
-                      <div class="day-label">周二</div>
-                      <div class="day-label">周三</div>
-                      <div class="day-label">周四</div>
-                      <div class="day-label">周五</div>
-                      <div class="day-label">周六</div>
+                      <div class="day-label">Sun</div>
+                      <div class="day-label">Mon</div>
+                      <div class="day-label">Tue</div>
+                      <div class="day-label">Wed</div>
+                      <div class="day-label">Thu</div>
+                      <div class="day-label">Fri</div>
+                      <div class="day-label">Sat</div>
                     </div>
                     <div class="heatmap-days">
                       <template v-for="week in 40">
@@ -104,40 +104,40 @@
                           :key="(week-1)*7 + (day-1)" 
                           class="heatmap-day"
                           :class="'level-' + getDayLevel(week-1, day-1)"
-                          :title="getDayDate(week-1, day-1) + ': ' + getDayCount(week-1, day-1) + ' 次提交'"
+                          :title="getDayDate(week-1, day-1) + ': ' + getDayCount(week-1, day-1) + ' commits'"
                           @mouseover="showTooltip($event, getDayData(week-1, day-1))"
                           @mouseout="hideTooltip"
                         ></div>
                       </template>
                       <div class="heatmap-tooltip" ref="tooltip" v-show="showingTooltip">
                         <div class="tooltip-date">{{ tooltipData.date }}</div>
-                        <div class="tooltip-count">{{ tooltipData.count }} 次提交</div>
+                        <div class="tooltip-count">{{ tooltipData.count }} commits</div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="heatmap-legend">
-                <span>活跃度：</span>
+                <span>Activity level:</span>
                 <ul class="legend-items">
-                  <li class="legend-item"><span class="legend-color level-0"></span>无</li>
-                  <li class="legend-item"><span class="legend-color level-1"></span>低</li>
-                  <li class="legend-item"><span class="legend-color level-2"></span>中</li>
-                  <li class="legend-item"><span class="legend-color level-3"></span>高</li>
-                  <li class="legend-item"><span class="legend-color level-4"></span>很高</li>
+                  <li class="legend-item"><span class="legend-color level-0"></span>None</li>
+                  <li class="legend-item"><span class="legend-color level-1"></span>Low</li>
+                  <li class="legend-item"><span class="legend-color level-2"></span>Medium</li>
+                  <li class="legend-item"><span class="legend-color level-3"></span>High</li>
+                  <li class="legend-item"><span class="legend-color level-4"></span>Very High</li>
                 </ul>
               </div>
               
-              <!-- 贡献者列表 -->
+              <!-- Contributors list -->
               <div class="contributors-section">
-                <h4 class="contributors-title">主要贡献者</h4>
+                <h4 class="contributors-title">Top Contributors</h4>
                 <div class="contributors-list">
                   <div v-for="(contributor, index) in topContributors" :key="index" class="contributor-item">
                     <img :src="contributor.avatar" :alt="contributor.name" class="contributor-avatar">
                     <div class="contributor-info">
                       <div class="contributor-name">{{ contributor.name }}</div>
                       <div class="contributor-stats">
-                        <span class="contributor-commits">{{ contributor.commits }} 次提交</span>
+                        <span class="contributor-commits">{{ contributor.commits }} commits</span>
                         <span class="contributor-additions">+{{ contributor.additions }}</span>
                         <span class="contributor-deletions">-{{ contributor.deletions }}</span>
                       </div>
@@ -297,7 +297,7 @@ export default {
     return {
       githubContributions: [],
       githubLoading: true,
-      allMonths: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+      allMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       heatmapDays: [],
       showingTooltip: false,
       tooltipData: {
@@ -352,19 +352,19 @@ export default {
           repo: 'celestiaorg/celestia-node',
           message: 'docs: update test command',
           author: 'Johny21',
-          time: new Date(Date.now() - 3600000 * 3) // 3 小时前
+          time: new Date(Date.now() - 3600000 * 3) // 3 hours ago
         },
         {
           repo: 'celestiaorg/celestia-app',
           message: 'fix: resolve performance issue in state sync',
           author: 'devuser42',
-          time: new Date(Date.now() - 3600000 * 8) // 8 小时前
+          time: new Date(Date.now() - 3600000 * 8) // 8 hours ago
         },
         {
           repo: 'celestiaorg/celestia-core',
           message: 'feat: implement new consensus optimizations',
           author: 'cosmicdev',
-          time: new Date(Date.now() - 3600000 * 24) // 1 天前
+          time: new Date(Date.now() - 3600000 * 24) // 1 day ago
         }
       ],
       upcomingUnlocks: [
@@ -382,15 +382,15 @@ export default {
       activeProposals: [
         {
           id: 12,
-          title: '增加验证者最大数量提案',
+          title: 'Proposal to Increase Maximum Validator Count',
           status: 'voting',
-          endTime: new Date(Date.now() + 3600000 * 72) // 3 天后结束
+          endTime: new Date(Date.now() + 3600000 * 72) // Ends in 3 days
         },
         {
           id: 11,
-          title: '社区池资金分配方案',
+          title: 'Community Pool Fund Allocation Proposal',
           status: 'deposit',
-          endTime: new Date(Date.now() + 3600000 * 24) // 1 天后开始
+          endTime: new Date(Date.now() + 3600000 * 24) // Starts in 1 day
         }
       ],
       investors: [
@@ -719,9 +719,9 @@ export default {
     
     tooltipFormatter(value) {
       if (!value || !value.count) {
-        return '0 次提交';
+        return '0 commits';
       }
-      return `${value.date}: ${value.count} 次提交`;
+      return `${value.date}: ${value.count} commits`;
     },
     
     showTooltip(event, day) {
@@ -1320,7 +1320,7 @@ export default {
     grid-template-columns: 1fr;
   }
 }
-/* GitHub 热力图样式 */
+/* GitHub activity heatmap section */
 .github-heatmap-container {
   margin-bottom: 20px;
   width: 100%;
@@ -1334,7 +1334,7 @@ export default {
   font-style: italic;
 }
 
-/* 自定义热力图样式 */
+/* Custom heatmap implementation */
 .custom-heatmap {
   margin: 10px 0 20px;
   overflow: hidden;
@@ -1480,7 +1480,7 @@ export default {
   background-color: #196127;
 }
 
-/* 热力图提示框样式 */
+/* Heatmap tooltip styles */
 .heatmap-tooltip {
   position: fixed;
   background-color: rgba(0, 0, 0, 0.8);
@@ -1504,7 +1504,7 @@ export default {
   color: #9ecbff;
 }
 
-/* 贡献者列表样式 */
+/* Contributors section styles */
 .contributors-section {
   margin-top: 20px;
   padding-top: 15px;
@@ -1575,7 +1575,7 @@ export default {
   color: #d73a49;
 }
 
-/* 确保热力图响应式 */
+/* Ensure heatmap responsiveness */
 :deep(.vch__container) {
   width: 100%;
   overflow-x: auto;
