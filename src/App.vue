@@ -139,7 +139,7 @@ export default {
 .network-tag {
   margin-left: 10px;
   padding: 2px 8px;
-  background: var(--primary-color);
+  background-color: var(--primary-color);
   color: white;
   border-radius: 4px;
   font-size: 0.7rem;
@@ -178,7 +178,7 @@ export default {
 }
 
 .main-nav a.router-link-active:after {
-  width: 100%;
+  background-color: var(--primary-color);
 }
 
 .search-section {
@@ -201,6 +201,10 @@ export default {
   color: white;
   border: none;
   border-radius: 0 4px 4px 0;
+}
+
+.search-btn:hover {
+  background: var(--primary-dark);
 }
 
 /* 主内容区 */

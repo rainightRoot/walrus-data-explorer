@@ -1,8 +1,21 @@
 /* 全局样式 - 基于 Celestia Explorer 网站 */
 :root {
-  /* 基于 Celestia 颜色方案 */
-  --primary-color: #6A5ACD; /* 紫罗兰色为主色调 */
-  --primary-light: #E6E6FA;
+  /* 主色调调整为 Celestia 官方紫色 */
+  --primary-color: #7B4DFF; /* Celestia 官方紫色 */
+  --primary-light: #E9E2FF;
+  --primary-dark: #5A3CBF;
+  
+  /* 状态颜色 */
+  --success-color: #28a745;
+  --success-light: #e6f7ee;
+  --danger-color: #dc3545;
+  --danger-light: #fee;
+  --warning-color: #ffc107;
+  --warning-light: #fff5e6;
+  --info-color: #17a2b8;
+  --info-light: #f0f8ff;
+  
+  /* 其他不变 */
   --secondary-color: #343a40;
   --text-color: #212529;
   --text-light: #6c757d;
@@ -12,14 +25,6 @@
   --border-color: #e9ecef;
   --shadow: 0 2px 8px rgba(0,0,0,0.05);
   --border-radius: 6px;
-  --success-color: #28a745;
-  --success-light: #e6f7ee;
-  --danger-color: #dc3545;
-  --danger-light: #fee;
-  --warning-color: #ffc107;
-  --warning-light: #fff5e6;
-  --info-color: #17a2b8;
-  --info-light: #f0f8ff;
 }
 
 body {
@@ -182,24 +187,30 @@ button {
   font-weight: 500;
 }
 
-.status-badge.success, .status-badge.active {
+.status-badge.active, 
+.status-badge.success, 
+.status-badge.passed {
   background: var(--success-light);
   color: var(--success-color);
 }
 
-.status-badge.failed, .status-badge.rejected {
+.status-badge.inactive, 
+.status-badge.failed, 
+.status-badge.rejected {
   background: var(--danger-light);
   color: var(--danger-color);
 }
 
-.status-badge.pending, .status-badge.unbonding {
-  background: var(--warning-light);
-  color: var(--warning-color);
+.status-badge.pending, 
+.status-badge.voting {
+  background: var(--primary-light);
+  color: var(--primary-color);
 }
 
-.status-badge.voting {
-  background: var(--info-light);
-  color: var(--info-color);
+.status-badge.waiting, 
+.status-badge.deposit {
+  background: var(--warning-light);
+  color: var(--warning-color);
 }
 
 /* 进度条 */
@@ -266,7 +277,7 @@ button {
 }
 
 .btn:hover {
-  opacity: 0.9;
+  background-color: var(--primary-dark);
 }
 
 .btn-outline {
@@ -361,4 +372,29 @@ button {
   .table-row, .table-header {
     font-size: 0.8rem;
   }
+}
+
+/* 图表颜色 */
+.chart-colors {
+  --chart-primary: var(--primary-color);
+  --chart-secondary: var(--primary-light);
+  --chart-success: var(--success-color);
+  --chart-danger: var(--danger-color);
+  --chart-warning: var(--warning-color);
+  --chart-info: var(--info-color);
+}
+
+/* 活跃链接样式 */
+a.router-link-active,
+button.active {
+  color: var(--primary-color);
+}
+
+/* 价格变化 */
+.price-change.positive {
+  color: var(--success-color);
+}
+
+.price-change.negative {
+  color: var(--danger-color);
 } 
