@@ -317,4 +317,129 @@ export default {
     grid-template-columns: 1fr;
   }
 }
+
+/* Dark mode styles for Staking Page */
+[data-theme="dark"] .section {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .staking-page h1 {
+  color: #fff;
+}
+
+[data-theme="dark"] .section h2 {
+  color: #eee;
+}
+
+/* Stats cards */
+[data-theme="dark"] .stat-card {
+  background-color: var(--card-bg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .stat-card h3 {
+  color: #b0b3b8;
+}
+
+[data-theme="dark"] .stat-card .value {
+  color: #fff;
+}
+
+/* Summary stats */
+[data-theme="dark"] .stat-item .label {
+  color: #b0b3b8;
+}
+
+[data-theme="dark"] .stat-item .value {
+  color: #fff;
+}
+
+/* Validator table */
+[data-theme="dark"] .validator-table {
+  border-top-color: #444;
+}
+
+[data-theme="dark"] .table-header {
+  color: #b0b3b8;
+  border-bottom-color: #444;
+}
+
+[data-theme="dark"] .table-row {
+  border-bottom-color: #444;
+}
+
+/* Rank circle */
+[data-theme="dark"] .rank {
+  background-color: #333;
+  color: #ddd;
+}
+
+/* Validator name */
+[data-theme="dark"] .validator-name a {
+  color: #a48aff;
+}
+
+/* Links */
+[data-theme="dark"] .view-all-link a {
+  color: #a48aff;
+}
+
+/* Calculator */
+[data-theme="dark"] .calculator {
+  background-color: #252525;
+}
+
+[data-theme="dark"] .input-group label {
+  color: #ddd;
+}
+
+[data-theme="dark"] .input-group input {
+  background-color: #333;
+  border-color: #555;
+  color: #eee;
+}
+
+[data-theme="dark"] .calculator-results {
+  border-top-color: #444;
+}
+
+[data-theme="dark"] .result-item .label {
+  color: #b0b3b8;
+}
+
+[data-theme="dark"] .result-item .value {
+  color: #fff;
+}
+
+/* Buttons */
+[data-theme="dark"] button {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Status indicators */
+[data-theme="dark"] .active-indicator {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: #4cce5a;
+}
+
+[data-theme="dark"] .inactive-indicator {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: #ff6b6b;
+}
+
+/* Fix specific text elements */
+[data-theme="dark"] .commission,
+[data-theme="dark"] .voting-power,
+[data-theme="dark"] .delegators {
+  color: #b0b3b8;
+}
+
+/* Make sure no-data and loading states are visible */
+[data-theme="dark"] .no-data,
+[data-theme="dark"] .loading {
+  color: #aaa;
+}
 </style> 

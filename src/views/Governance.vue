@@ -277,6 +277,10 @@ export default {
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+[data-theme="dark"] .proposals-container {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
 .status-filter {
   display: flex;
   flex-wrap: wrap;
@@ -418,5 +422,122 @@ export default {
     flex-direction: column;
     gap: 8px;
   }
+}
+
+/* Add comprehensive dark mode styling for governance elements */
+[data-theme="dark"] .proposal-card {
+  background-color: #252525;
+  border-color: #444;
+}
+
+/* Improve status badge colors for dark mode */
+[data-theme="dark"] .proposal-status.voting {
+  background: rgba(66, 185, 131, 0.2);
+  color: #4cce5a;
+}
+
+[data-theme="dark"] .proposal-status.passed {
+  background: rgba(66, 185, 131, 0.2);
+  color: #4cce5a;
+}
+
+[data-theme="dark"] .proposal-status.rejected {
+  background: rgba(229, 62, 62, 0.2);
+  color: #ff6b6b;
+}
+
+[data-theme="dark"] .proposal-status.vetoed {
+  background: rgba(155, 89, 182, 0.2);
+  color: #d183ff;
+}
+
+/* Improve text colors for dark mode */
+[data-theme="dark"] .proposal-id {
+  color: #b0b3b8;
+}
+
+[data-theme="dark"] .proposal-title a {
+  color: #fff;
+}
+
+[data-theme="dark"] .proposal-title a:hover {
+  color: #a48aff;
+}
+
+[data-theme="dark"] .proposal-meta {
+  color: #aaa;
+}
+
+[data-theme="dark"] .proposal-meta span {
+  color: #ddd;
+}
+
+/* Enhance voting results display */
+[data-theme="dark"] .vote-type {
+  color: #ddd;
+}
+
+[data-theme="dark"] .count {
+  color: #aaa;
+}
+
+/* Make active status filter more visible */
+[data-theme="dark"] .status-filter button {
+  background-color: #2a2a2a !important;
+  border: 1px solid #444;
+  color: #ddd !important;
+}
+
+[data-theme="dark"] .status-filter button.active {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  border-color: var(--primary-dark);
+}
+
+/* Ensure the voting bars have good contrast */
+[data-theme="dark"] .vote-bar {
+  background-color: #333;
+}
+
+/* Keep vote colors bright for good visibility */
+[data-theme="dark"] .vote-bar .yes-votes {
+  background: #42b983;
+}
+
+[data-theme="dark"] .vote-bar .no-votes {
+  background: #e53e3e;
+}
+
+[data-theme="dark"] .vote-bar .abstain-votes {
+  background: #f39c12;
+}
+
+[data-theme="dark"] .vote-bar .veto-votes {
+  background: #9b59b6;
+}
+
+/* Fix loading and no data messages */
+[data-theme="dark"] .loading,
+[data-theme="dark"] .no-data {
+  color: #aaa;
+}
+
+/* Fix submitter address text */
+[data-theme="dark"] .submitter span {
+  color: #ddd;
+}
+
+[data-theme="dark"] .voting-end span {
+  color: #ddd;
+}
+
+/* Fix h1 page title */
+[data-theme="dark"] .governance-page h1 {
+  color: #fff;
+}
+
+/* Fix stats cards specifically for this page */
+[data-theme="dark"] .governance-page .stats-cards .stat-card {
+  background-color: #252525;
 }
 </style> 

@@ -31,7 +31,7 @@
     right: 0;
     bottom: 0;
     width: 30px;
-    background: linear-gradient(to right, rgba(255,255,255,0), rgba(0,0,0,0.05));
+    background: linear-gradient(to right, rgba(255,255,255,0), var(--bg-color, rgba(0,0,0,0.05)));
     pointer-events: none;
   }
   
@@ -48,4 +48,58 @@
   .table-container::-webkit-scrollbar-track {
     background-color: rgba(0, 0, 0, 0.05);
   }
+}
+
+/* Update the table gradient to work with both themes */
+.table-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 30px;
+  background: linear-gradient(to right, rgba(255,255,255,0), var(--bg-color, rgba(0,0,0,0.05)));
+  pointer-events: none;
+}
+
+[data-theme="dark"] .table-container::after {
+  background: linear-gradient(to right, rgba(30,30,30,0), rgba(18,18,18,0.2));
+}
+
+/* Enhance table appearance for dark mode */
+[data-theme="dark"] .table-header {
+  color: #eeeeee;
+  background-color: var(--table-header-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .block-row,
+[data-theme="dark"] .transaction-row,
+[data-theme="dark"] .validator-row {
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .table-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .table-container::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Ensure tables have proper background colors in dark mode */
+[data-theme="dark"] .table-container {
+  background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .validators-table,
+[data-theme="dark"] .blocks-table,
+[data-theme="dark"] .transactions-table {
+  background-color: var(--card-bg);
+}
+
+/* Add a subtle border to better define tables in dark mode */
+[data-theme="dark"] .table-container {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
 } 

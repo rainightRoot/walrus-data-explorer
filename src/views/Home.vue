@@ -180,7 +180,7 @@
             <router-link to="/blocks" class="view-all-link">View All</router-link>
           </div>
           <div class="card-body no-padding">
-            <latest-blocks :limit="5" />
+            <LatestBlocks :data-theme="theme" />
           </div>
         </div>
 
@@ -769,6 +769,11 @@ export default {
     hideTooltip() {
       this.showingTooltip = false;
     }
+  },
+  computed: {
+    theme() {
+      return document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+    }
   }
 }
 </script>
@@ -776,10 +781,11 @@ export default {
 <style scoped>
 .home-page {
   margin-bottom: 40px;
+  background-color: var(--bg-color);
 }
 
 .page-header {
-  background: #fff;
+  background-color: var(--card-bg);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
   padding: 20px;
@@ -788,6 +794,11 @@ export default {
   flex-wrap: wrap;
   gap: 20px;
   border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .page-header {
+  background-color: #1e1e1e;
+  border-color: #333;
 }
 
 .project-info {
@@ -805,6 +816,10 @@ export default {
   margin-bottom: 15px;
   color: var(--text-light);
   line-height: 1.6;
+}
+
+[data-theme="dark"] .project-description {
+  color: #ddd;
 }
 
 .project-links {
@@ -827,6 +842,10 @@ export default {
 .link-item:hover {
   background: var(--primary-light);
   color: var(--primary-color);
+}
+
+[data-theme="dark"] .project-links a {
+  background-color: #333;
 }
 
 .network-info {
@@ -1353,6 +1372,43 @@ export default {
   width: 480px; /* 40列 * 12px = 480px */
   height: 20px;
 }
+[data-theme="dark"] .heatmap-months {
+  position: relative;
+  margin-left: 30px;
+  margin-bottom: 5px;
+  width: 480px; /* 40列 * 12px = 480px */
+  height: 20px;
+  color: #b0b3b8;
+}
+
+[data-theme="dark"] .heatmap-days-labels{
+  color: #b0b3b8;
+
+}
+[data-theme="dark"] .contributor-commits{
+  color: #b0b3b8;
+
+}
+[data-theme="dark"] .unlock-date{
+  color: #b0b3b8;
+
+}
+[data-theme="dark"] .investor-name{
+  color: #b0b3b8;
+
+}
+[data-theme="dark"] .supply-value{
+  color: #b0b3b8;
+
+}
+[data-theme="dark"] .legend-item{
+  color: #b0b3b8;
+
+}
+[data-theme="dark"] .current-price{
+  color: #b0b3b8;
+
+}
 
 .heatmap-month {
   position: absolute;
@@ -1593,5 +1649,73 @@ export default {
 
 :deep(.vch__days) {
   font-size: 10px;
+}
+
+/* Dark mode adjustments for heatmap and charts */
+[data-theme="dark"] .level-0 {
+  background-color: #333;
+}
+
+[data-theme="dark"] .level-1 {
+  background-color: #4a5d3f;
+}
+
+[data-theme="dark"] .level-2 {
+  background-color: #5c8a4c;
+}
+
+[data-theme="dark"] .level-3 {
+  background-color: #6bc64a;
+}
+
+[data-theme="dark"] .level-4 {
+  background-color: #7fef52;
+}
+
+/* Make activity cards and contributors more visible in dark mode */
+[data-theme="dark"] .activity-item,
+[data-theme="dark"] .contributor-item {
+  background-color: #252525;
+  border-color: #333;
+}
+
+[data-theme="dark"] .unlock-item,
+[data-theme="dark"] .stats-item {
+  background-color: #222;
+  border-color: #333;
+}
+
+/* Enhance chart card for dark mode */
+[data-theme="dark"] .chart-card {
+  background: var(--card-bg);
+}
+
+[data-theme="dark"] .period-btn {
+  background: #2a2a2a;
+  color: #ddd;
+  border-color: #444;
+}
+
+[data-theme="dark"] .period-btn.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* Activity timeline for dark mode */
+[data-theme="dark"] .activity-time {
+  color: #888;
+}
+
+[data-theme="dark"] .activity-message {
+  color: #eee;
+}
+
+[data-theme="dark"] .view-all-link {
+  color: #a48aff;
+}
+
+[data-theme="dark"] .heatmap-tooltip {
+  background-color: rgba(40, 40, 40, 0.95);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
 }
 </style> 

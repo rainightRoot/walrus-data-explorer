@@ -1,9 +1,6 @@
 <template>
   <div class="latest-blocks">
-    <div class="section-header">
-      <h2>Latest Blocks</h2>
-      <router-link to="/blocks" class="view-all">View All</router-link>
-    </div>
+  
     
     <div class="blocks-list">
       <div v-if="loading" class="loading">Loading...</div>
@@ -123,5 +120,99 @@ export default {
   padding: 20px;
   text-align: center;
   color: #666;
+}
+
+/* Add these styles to the component */
+[data-theme="dark"] .latest-blocks {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+/* Make sure the block list has proper background and borders in dark mode */
+[data-theme="dark"] .latest-blocks-container {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .block-header {
+  background-color: var(--card-header-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .block-item {
+  border-color: var(--border-color);
+  background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .block-item:hover {
+  background-color: var(--table-row-hover);
+}
+
+/* Fix text colors in dark mode */
+[data-theme="dark"] .block-height {
+  color: #a48aff; /* Lighter purple for better visibility */
+}
+
+[data-theme="dark"] .block-proposer {
+  color: #eee;
+}
+
+[data-theme="dark"] .block-time {
+  color: #aaa;
+}
+
+[data-theme="dark"] .block-txs {
+  color: #eee;
+}
+
+[data-theme="dark"] .view-all-btn {
+  background-color: #2a2a2a;
+  color: #ddd;
+  border-color: #444;
+}
+
+[data-theme="dark"] .view-all-btn:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Make sure the block icons are visible in dark mode */
+[data-theme="dark"] .block-icon {
+  background-color: #2a2a2a;
+  color: var(--primary-color);
+}
+
+/* Status indicators in dark mode */
+[data-theme="dark"] .status-dot.success {
+  background-color: var(--success-color);
+}
+
+[data-theme="dark"] .status-dot.pending {
+  background-color: var(--warning-color);
+}
+
+[data-theme="dark"] .status-dot.error {
+  background-color: var(--danger-color);
+}
+
+/* Add these new text color styles */
+[data-theme="dark"] .section-header h2 {
+  color: #eee;
+}
+
+[data-theme="dark"] .view-all {
+  color: #a48aff; /* Lighter purple for better contrast */
+}
+
+[data-theme="dark"] .block-details span {
+  color: #ddd; /* Lighter text for better visibility */
+}
+
+[data-theme="dark"] .block-height a {
+  color: #a48aff; /* Lighter purple for links */
+}
+
+[data-theme="dark"] .loading, 
+[data-theme="dark"] .no-data {
+  color: #aaa;
 }
 </style> 

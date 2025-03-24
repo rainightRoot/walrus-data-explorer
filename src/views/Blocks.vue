@@ -196,6 +196,11 @@ export default {
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+[data-theme="dark"] .blocks-container {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
 .search-bar {
   display: flex;
   margin-bottom: 20px;
@@ -217,7 +222,6 @@ export default {
 }
 .blocks-table {
   width: 100%;
-  border-top: 1px solid #eee;
 }
 .table-header {
   display: flex;
@@ -238,7 +242,12 @@ export default {
 .col-time { width: 30%; }
 .col-txs { width: 20%; }
 .col-proposer { width: 30%; }
-
+[data-theme="dark"] .col-txs {
+  color: #b0b3b8;
+}
+[data-theme="dark"] .block-row:hover {
+  background: #878787;
+}
 .col-height a, .col-proposer a {
   color: #42b983;
   text-decoration: none;

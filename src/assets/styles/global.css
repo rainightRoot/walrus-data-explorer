@@ -1,7 +1,7 @@
 /* Global styles - Based on Celestia Explorer website */
 :root {
-  /* Main color adjusted to Celestia official purple */
-  --primary-color: #7B4DFF; /* Celestia official purple */
+  /* Theme colors will now be controlled by CSS variables */
+  --primary-color: #7B4DFF;
   --primary-light: #E9E2FF;
   --primary-dark: #5A3CBF;
   
@@ -15,38 +15,81 @@
   --info-color: #17a2b8;
   --info-light: #f0f8ff;
   
-  /* Others unchanged */
-  --secondary-color: #343a40;
-  --text-color: #212529;
-  --text-light: #6c757d;
+  /* Light theme (default) */
   --bg-color: #F8F9FA;
   --card-bg: white;
   --card-header-bg: #F8F9FA;
+  --text-color: #212529;
+  --text-light: #6c757d;
+  --secondary-color: #343a40;
   --border-color: #e9ecef;
   --shadow: 0 2px 8px rgba(0,0,0,0.05);
   --border-radius: 6px;
+  
+  /* Table colors */
+  --table-header-bg: #f8f9fa;
+  --table-row-hover: #f5f5f5;
+  --table-border: #dee2e6;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --card-header-bg: #252525;
+  --text-color: #e4e6eb;
+  --text-light: #b0b3b8;
+  --secondary-color: #ddd;
+  --border-color: #333;
+  --shadow: 0 2px 8px rgba(0,0,0,0.2);
+  
+  /* Table colors */
+  --table-header-bg: #252525;
+  --table-row-hover: #2a2a2a;
+  --table-border: #333;
+}
+
+/* Add these styles at the top of the file to ensure dark mode applies globally */
+html {
+  background-color: var(--bg-color);
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
   margin: 0;
   padding: 0;
   line-height: 1.6;
   font-size: 14px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh; /* Ensure body covers the entire viewport height */
 }
 
+/* Make sure the app container covers the full page */
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: column;
 }
 
+/* Ensure main content fills available space */
+.main-content {
+  flex: 1;
+  background-color: var(--bg-color);
+  min-height: calc(100vh - 200px);
+  padding: 20px 0;
+}
+
+/* Ensure container backgrounds are transparent to show parent background */
 .container {
-  width: calc(100% - 40px) ;
+  width: calc(100% - 40px);
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  background-color: transparent;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -438,15 +481,168 @@ button.active {
   color: var(--danger-color);
 }
 
-/* Main content area */
-.main-content {
-  min-height: calc(100vh - 200px);
-  padding: 20px 0;
-}
-
 /* Footer styles */
 .main-footer {
   background: #343a40;
   color: #fff;
   padding: 40px 0 20px;
+}
+
+/* Add transition to all color properties */
+*, *::before, *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Elements where we don't want transitions */
+.heatmap-day, .mobile-menu-toggle, .theme-toggle svg {
+  transition: none;
+}
+
+/* Card styles dark mode enhancements */
+[data-theme="dark"] .card {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .card-header {
+  background: var(--card-header-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .stat-card {
+  background: var(--card-bg);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Improve chart readability in dark mode */
+[data-theme="dark"] .chart-area {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+}
+
+/* Improve text contrast in dark mode */
+[data-theme="dark"] a {
+  color: #a48aff; /* Lighter purple for better contrast */
+}
+
+[data-theme="dark"] .value {
+  color: #fff;
+}
+
+[data-theme="dark"] h1, 
+[data-theme="dark"] h2, 
+[data-theme="dark"] h3, 
+[data-theme="dark"] h4, 
+[data-theme="dark"] h5, 
+[data-theme="dark"] h6 {
+  color: #eee;
+}
+
+[data-theme="dark"] .power-percentage,
+[data-theme="dark"] .col-time, 
+[data-theme="dark"] .col-fee {
+  color: #aaa;
+}
+
+/* Improve status badges visibility */
+[data-theme="dark"] .status-badge {
+  font-weight: 500;
+}
+
+/* Form controls dark mode */
+[data-theme="dark"] input {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #eee;
+}
+
+[data-theme="dark"] input::placeholder {
+  color: #888;
+}
+
+[data-theme="dark"] .search-bar button {
+  background: var(--primary-color) !important;
+}
+
+[data-theme="dark"] .status-filter button {
+  background: #2a2a2a !important;
+  color: #ddd !important;
+}
+
+[data-theme="dark"] .status-filter button.active {
+  background: var(--primary-color) !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .pagination button {
+  background: #2a2a2a !important;
+  color: #ddd !important;
+}
+[data-theme="dark"] .pagination {
+  color: #ddd !important;
+}
+
+/* Fix the stats cards in dark mode */
+[data-theme="dark"] .stats-cards .stat-card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .stats-cards .value {
+  color: #fff !important;
+}
+
+[data-theme="dark"] .stats-cards h3 {
+  color: #ddd !important;
+}
+
+/* Enhance text color handling in dark mode */
+[data-theme="dark"] {
+  --text-color: #e4e6eb;
+  --text-light: #b0b3b8;
+  --secondary-color: #ddd;
+}
+
+/* Add or enhance these specific dark mode text styles */
+[data-theme="dark"] .card-header h2,
+[data-theme="dark"] .card-header h3 {
+  color: #fff;
+}
+
+[data-theme="dark"] p {
+  color: #ddd;
+}
+
+[data-theme="dark"] .section-title,
+[data-theme="dark"] .page-title {
+  color: #fff;
+}
+
+/* Fix any text that uses hardcoded colors */
+[data-theme="dark"] .text-secondary {
+  color: #b0b3b8 !important;
+}
+
+[data-theme="dark"] .text-primary {
+  color: #a48aff !important;
+}
+
+/* Ensure all view-all links have consistent styling */
+[data-theme="dark"] .view-all-link,
+[data-theme="dark"] .view-all {
+  color: #a48aff;
+}
+
+/* Ensure values in stats and metrics are readable */
+[data-theme="dark"] .info-item .value,
+[data-theme="dark"] .stat-value,
+[data-theme="dark"] .metric-value {
+  color: #fff;
+}
+
+[data-theme="dark"] .info-item .label,
+[data-theme="dark"] .stat-label,
+[data-theme="dark"] .metric-label {
+  color: #b0b3b8;
 } 

@@ -246,7 +246,7 @@ export default {
   border-bottom: 1px solid #eee;
 }
 .validator-row:hover {
-  background: #f9f9f9;
+  background: var(--table-row-hover);
 }
 .col-rank { width: 5%; padding-left: 10px;}
 .col-name { width: 30%; }
@@ -267,12 +267,12 @@ export default {
   font-size: 0.85rem;
 }
 .status-badge.active {
-  background: #e6f7ee;
-  color: #42b983;
+  background: var(--success-light);
+  color: var(--success-color);
 }
 .status-badge.inactive {
-  background: #fee;
-  color: #e53e3e;
+  background: var(--danger-light);
+  color: var(--danger-color);
 }
 .power-percentage {
   font-size: 0.8rem;
@@ -324,5 +324,27 @@ export default {
   .validators-container, .stat-card {
     box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
   }
+}
+
+/* Update status badge colors to work with dark mode */
+[data-theme="dark"] .status-badge.active {
+  background: rgba(40, 167, 69, 0.2);
+  color: #4cce5a;
+}
+[data-theme="dark"] .col-rank {
+  color: #b0b3b8;
+}
+[data-theme="dark"] .validators-container {
+  background: var(--card-bg);
+}
+
+[data-theme="dark"] .status-badge.inactive {
+  background: rgba(220, 53, 69, 0.2);
+  color: #ff6b6b;
+}
+
+/* Ensure tables have proper hover colors */
+.validator-row:hover {
+  background: var(--table-row-hover);
 }
 </style> 

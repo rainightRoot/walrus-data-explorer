@@ -190,6 +190,10 @@ export default {
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+[data-theme="dark"] .transactions-container{
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
 .search-bar {
   display: flex;
   margin-bottom: 20px;
@@ -211,7 +215,6 @@ export default {
 }
 .transactions-table {
   width: 100%;
-  border-top: 1px solid #eee;
 }
 .table-header {
   display: flex;
@@ -228,11 +231,18 @@ export default {
 .transaction-row:hover {
   background: #f9f9f9;
 }
+[data-theme="dark"] .transaction-row:hover {
+  background: #878787;
+}
 .col-hash { width: 30%; }
 .col-type { width: 20%; }
 .col-time { width: 20%; }
 .col-amount { width: 15%; }
 .col-fee { width: 15%; }
+[data-theme="dark"] .col-amount {
+  color: #b0b3b8;
+}
+
 
 .col-hash a {
   color: #42b983;

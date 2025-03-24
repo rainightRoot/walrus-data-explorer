@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :data-theme="theme">
     <header class="main-header">
       <div class="header-container">
         <div class="logo-section">
@@ -25,11 +25,31 @@
           <router-link to="/staking" @click="closeMobileMenu">Staking</router-link>
         </nav>
         
-        <div class="search-section">
-          <input type="text" placeholder="Search blocks/transactions/addresses..." @keyup.enter="search" v-model="searchQuery" />
-          <button @click="search" class="search-btn">
-            🔍
+        <div class="right-controls">
+          <!-- Theme toggle button -->
+          <button @click="toggleTheme" class="theme-toggle" :title="theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'">
+            <svg v-if="theme === 'light'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="moon-icon">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sun-icon">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
           </button>
+          
+          <div class="search-section">
+            <input type="text" placeholder="Search blocks/transactions/addresses..." @keyup.enter="search" v-model="searchQuery" />
+            <button @click="search" class="search-btn">
+              🔍
+            </button>
+          </div>
         </div>
       </div>
     </header>
@@ -75,7 +95,19 @@ export default {
   data() {
     return {
       searchQuery: '',
-      mobileMenuOpen: false
+      mobileMenuOpen: false,
+      theme: 'light'
+    }
+  },
+  created() {
+    // Load user's theme preference from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      this.theme = savedTheme;
+    } else {
+      // Check if user prefers dark mode from system settings
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      this.theme = prefersDark ? 'dark' : 'light';
     }
   },
   methods: {
@@ -114,12 +146,31 @@ export default {
         this.mobileMenuOpen = false
         document.body.style.overflow = ''
       }
+    },
+    toggleTheme() {
+      this.theme = this.theme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', this.theme);
     }
   },
   // Close menu when route changes
   watch: {
-    '$route'() {
-      this.closeMobileMenu()
+    theme(newTheme) {
+      // Apply a class to the body element for easier styling
+      if (newTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+      } else {
+        document.body.classList.remove('dark-theme');
+      }
+    },
+    $route() {
+      // Close mobile menu when route changes
+      this.closeMobileMenu();
+    }
+  },
+  mounted() {
+    // Initialize body class based on current theme
+    if (this.theme === 'dark') {
+      document.body.classList.add('dark-theme');
     }
   }
 }
@@ -131,8 +182,9 @@ export default {
 
 /* 头部导航 */
 .main-header {
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background-color: var(--bg-color);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -145,6 +197,7 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   padding: 15px 20px;
+  background-color: transparent;
 }
 
 .logo-section {
@@ -213,6 +266,39 @@ export default {
 
 .main-nav a.router-link-active:after {
   background-color: var(--primary-color);
+}
+
+.right-controls {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  margin-right: 16px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.moon-icon, .sun-icon {
+  color: var(--text-color);
 }
 
 .search-section {
@@ -318,50 +404,20 @@ export default {
     border-bottom: 1px solid var(--border-color);
   }
   
+  .right-controls {
+    width: 100%;
+    order: 2;
+    margin-top: 15px;
+  }
+  
+  .theme-toggle {
+    margin-right: 10px;
+  }
+  
   .search-section {
     max-width: none;
     width: 100%;
     margin-top: 15px;
-  }
-  
-  /* Animation for hamburger to X */
-  .mobile-menu-toggle.active .bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-  
-  .mobile-menu-toggle.active .bar:nth-child(2) {
-    opacity: 0;
-  }
-  
-  .mobile-menu-toggle.active .bar:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-  }
-  
-  .logo-text {
-    font-size: 1.2rem;
-  }
-  
-  .explorer-text {
-    font-size: 1.2rem;
-  }
-  
-  .network-tag {
-    font-size: 0.7rem;
-    padding: 1px 6px;
-  }
-  
-  .main-nav {
-    padding-top: 5px;
-  }
-  
-  .main-nav a {
-    padding: 15px 0;
-    font-size: 1.1rem;
-  }
-  
-  .search-section {
-    display: flex;
-    margin-top: 10px;
   }
   
   .search-section input {
@@ -386,9 +442,13 @@ export default {
 
 /* 页脚 */
 .main-footer {
-  background: #343a40;
-  color: #fff;
+  background: var(--secondary-color);
+  color: var(--bg-color);
   padding: 40px 0 20px;
+}
+
+[data-theme="dark"] .main-footer {
+  background: #1a1a1a;
 }
 
 .footer-content {
@@ -404,13 +464,13 @@ export default {
 }
 
 .footer-section h3 {
-  color: #fff;
+  color: var(--bg-color);
   margin-bottom: 15px;
   font-size: 1.1rem;
 }
 
 .footer-section p {
-  color: #adb5bd;
+  color: var(--text-light);
   line-height: 1.6;
 }
 
@@ -421,19 +481,77 @@ export default {
 }
 
 .footer-links a {
-  color: #adb5bd;
+  color: var(--text-light);
   text-decoration: none;
 }
 
 .footer-links a:hover {
-  color: #fff;
+  color: var(--bg-color);
 }
 
 .copyright {
   text-align: center;
-  color: #6c757d;
+  color: var(--text-light);
   font-size: 0.9rem;
   padding-top: 20px;
-  border-top: 1px solid #495057;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile menu dark mode enhancements */
+[data-theme="dark"] .mobile-menu-toggle {
+  color: #fff;
+}
+
+[data-theme="dark"] .mobile-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .main-nav.mobile-open {
+  background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .main-nav a {
+  border-color: var(--border-color);
+}
+
+/* Update these styles to ensure dark mode applies to main sections */
+.main-header {
+  background-color: var(--bg-color);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.header-container {
+  background-color: transparent;
+}
+
+.mobile-overlay {
+  background-color: rgba(0, 0, 0, 0.5); /* Darken for light mode */
+}
+
+[data-theme="dark"] .mobile-overlay {
+  background-color: rgba(0, 0, 0, 0.7); /* Darker for dark mode */
+}
+
+/* Add contrast between header and content in dark mode */
+[data-theme="dark"] .main-header {
+  background-color: #1a1a1a; /* Slightly different than body background */
+  border-bottom: 1px solid #333;
+}
+
+/* Make specific dark mode adjustments to elements that may need contrast */
+[data-theme="dark"] .logo-section {
+  color: #fff;
+}
+
+[data-theme="dark"] .search-section input {
+  background-color: #2a2a2a;
+  color: #eee;
+  border-color: #444;
+}
+
+[data-theme="dark"] .search-btn {
+  background-color: var(--primary-color);
+  color: white;
 }
 </style> 
