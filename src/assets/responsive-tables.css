@@ -1,0 +1,51 @@
+/* Responsive table styles */
+.responsive-table {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Add this class to all tables that need horizontal scrolling on mobile */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+/* Enhance mobile table appearance */
+@media (max-width: 768px) {
+  .table-header, .table-row, .block-row, .transaction-row, .validator-row {
+    min-width: 650px;
+  }
+  
+  /* Make scrollable area more obvious */
+  .table-container {
+    position: relative;
+  }
+  
+  .table-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 30px;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(0,0,0,0.05));
+    pointer-events: none;
+  }
+  
+  /* Improve touch scrolling */
+  .table-container::-webkit-scrollbar {
+    height: 6px;
+  }
+  
+  .table-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+  
+  .table-container::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+} 

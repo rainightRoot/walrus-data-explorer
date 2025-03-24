@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './assets/styles/global.css'
+import './assets/responsive-tables.css'
 import * as formatters from './utils/formatters'
 
 // 注册全局方法

@@ -28,35 +28,37 @@
         <button @click="searchBlock">Search</button>
       </div>
       
-      <div class="blocks-table">
-        <div class="table-header">
-          <div class="col-height">Height</div>
-          <div class="col-time">Time</div>
-          <div class="col-txs">Txs</div>
-          <div class="col-proposer">Proposer</div>
-        </div>
-        
-        <div v-if="loading" class="loading">Loading...</div>
-        <template v-else>
-          <div 
-            v-for="block in blocks" 
-            :key="block.height"
-            class="block-row"
-          >
-            <div class="col-height">
-              <router-link :to="`/blocks/${block.height}`">
-                {{ block.height }}
-              </router-link>
-            </div>
-            <div class="col-time">{{ formatTime(block.time) }}</div>
-            <div class="col-txs">{{ block.txCount }}</div>
-            <div class="col-proposer">
-              <router-link :to="`/validators/${block.proposerAddress}`">
-                {{ block.proposer }}
-              </router-link>
-            </div>
+      <div class="table-container">
+        <div class="blocks-table">
+          <div class="table-header">
+            <div class="col-height">Height</div>
+            <div class="col-time">Time</div>
+            <div class="col-txs">Txs</div>
+            <div class="col-proposer">Proposer</div>
           </div>
-        </template>
+          
+          <div v-if="loading" class="loading">Loading...</div>
+          <template v-else>
+            <div 
+              v-for="block in blocks" 
+              :key="block.height"
+              class="block-row"
+            >
+              <div class="col-height">
+                <router-link :to="`/blocks/${block.height}`">
+                  {{ block.height }}
+                </router-link>
+              </div>
+              <div class="col-time">{{ formatTime(block.time) }}</div>
+              <div class="col-txs">{{ block.txCount }}</div>
+              <div class="col-proposer">
+                <router-link :to="`/validators/${block.proposerAddress}`">
+                  {{ block.proposer }}
+                </router-link>
+              </div>
+            </div>
+          </template>
+        </div>
       </div>
       
       <div class="pagination">
@@ -268,6 +270,42 @@ export default {
 @media (max-width: 768px) {
   .stats-cards {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .search-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+  
+  .search-bar button {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 4px;
+  }
+  
+  .pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .pagination button {
+    min-width: 100px;
+    padding: 12px 15px;
+    font-size: 1rem;
+  }
+  
+  /* Soft shadow for cards */
+  .blocks-container, .stat-card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
   }
 }
 </style> 

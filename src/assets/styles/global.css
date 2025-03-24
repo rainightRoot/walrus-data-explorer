@@ -43,7 +43,7 @@ body {
 }
 
 .container {
-  width: 100%;
+  width: calc(100% - 40px) ;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
@@ -63,6 +63,10 @@ h1 {
 h2 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.2rem;
 }
 
 a {
@@ -371,6 +375,41 @@ button {
   
   .table-row, .table-header {
     font-size: 0.8rem;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+  }
+  
+  body {
+    font-size: 15px;
+  }
+  
+  /* Increase spacing between page sections */
+  .stat-card, .blocks-container, .transactions-container, .validators-container {
+    margin-bottom: 1.5rem;
+    padding: 15px;
+  }
+  
+  /* Better spacing for content */
+  .main-content {
+    padding: 15px 0;
+  }
+  
+  /* Larger touch targets */
+  button, 
+  .router-link-active,
+  .search-btn {
+    min-height: 44px; /* Apple's recommended minimum touch target size */
   }
 }
 

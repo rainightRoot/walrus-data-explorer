@@ -34,42 +34,44 @@
         </div>
       </div>
       
-      <div class="validators-table">
-        <div class="table-header">
-          <div class="col-rank">#</div>
-          <div class="col-name">Validator</div>
-          <div class="col-status">Status</div>
-          <div class="col-voting-power">Voting Power</div>
-          <div class="col-commission">Commission</div>
-          <div class="col-delegators">Delegators</div>
-        </div>
-        
-        <div v-if="loading" class="loading">Loading...</div>
-        <template v-else>
-          <div 
-            v-for="(validator, index) in filteredValidators" 
-            :key="validator.address"
-            class="validator-row"
-          >
-            <div class="col-rank">{{ index + 1 }}</div>
-            <div class="col-name">
-              <router-link :to="`/validators/${validator.address}`">
-                {{ validator.name }}
-              </router-link>
-            </div>
-            <div class="col-status">
-              <span :class="['status-badge', validator.status]">
-                {{ validator.status === 'active' ? 'Active' : 'Inactive' }}
-              </span>
-            </div>
-            <div class="col-voting-power">
-              {{ formatNumber(validator.votingPower) }} TIA
-              <div class="power-percentage">{{ validator.votingPercentage }}%</div>
-            </div>
-            <div class="col-commission">{{ validator.commission }}%</div>
-            <div class="col-delegators">{{ validator.delegators }}</div>
+      <div class="table-container">
+        <div class="validators-table">
+          <div class="table-header">
+            <div class="col-rank">#</div>
+            <div class="col-name">Validator</div>
+            <div class="col-status">Status</div>
+            <div class="col-voting-power">Voting Power</div>
+            <div class="col-commission">Commission</div>
+            <div class="col-delegators">Delegators</div>
           </div>
-        </template>
+          
+          <div v-if="loading" class="loading">Loading...</div>
+          <template v-else>
+            <div 
+              v-for="(validator, index) in filteredValidators" 
+              :key="validator.address"
+              class="validator-row"
+            >
+              <div class="col-rank">{{ index + 1 }}</div>
+              <div class="col-name">
+                <router-link :to="`/validators/${validator.address}`">
+                  {{ validator.name }}
+                </router-link>
+              </div>
+              <div class="col-status">
+                <span :class="['status-badge', validator.status]">
+                  {{ validator.status === 'active' ? 'Active' : 'Inactive' }}
+                </span>
+              </div>
+              <div class="col-voting-power">
+                {{ formatNumber(validator.votingPower) }} TIA
+                <div class="power-percentage">{{ validator.votingPercentage }}%</div>
+              </div>
+              <div class="col-commission">{{ validator.commission }}%</div>
+              <div class="col-delegators">{{ validator.delegators }}</div>
+            </div>
+          </template>
+        </div>
       </div>
     </div>
   </div>
@@ -221,6 +223,12 @@ export default {
   background: #42b983;
   color: white;
 }
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
 .validators-table {
   width: 100%;
   border-top: 1px solid #eee;
@@ -240,7 +248,7 @@ export default {
 .validator-row:hover {
   background: #f9f9f9;
 }
-.col-rank { width: 5%; }
+.col-rank { width: 5%; padding-left: 10px;}
 .col-name { width: 30%; }
 .col-status { width: 15%; }
 .col-voting-power { width: 20%; }
@@ -279,12 +287,42 @@ export default {
 @media (max-width: 768px) {
   .stats-cards {
     grid-template-columns: 1fr;
+    gap: 15px;
   }
+  
   .filters {
     flex-direction: column;
+    gap: 15px;
   }
+  
+  .search-bar {
+    width: 100%;
+  }
+  
   .search-bar input {
     width: 100%;
+    padding: 12px 15px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  .status-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .status-filter button {
+    flex: 1;
+    min-width: 80px;
+    text-align: center;
+    padding: 12px 8px;
+    margin-right: 0;
+  }
+  
+  /* Add a subtle shadow to help separate elements */
+  .validators-container, .stat-card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
   }
 }
 </style> 
