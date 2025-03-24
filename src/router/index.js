@@ -11,10 +11,59 @@ const routes = [
     component: Home
   },
   {
+    path: '/validators',
+    name: 'Validators',
+    component: () => import('../views/Validators.vue')
+  },
+  {
+    path: '/validators/:address',
+    name: 'ValidatorDetail',
+    component: () => import('../views/ValidatorDetail.vue')
+  },
+  {
+    path: '/blocks',
+    name: 'Blocks',
+    component: () => import('../views/Blocks.vue')
+  },
+  {
+    path: '/blocks/:height',
+    name: 'BlockDetail',
+    component: () => import('../views/BlockDetail.vue')
+  },
+  {
+    path: '/transactions',
+    name: 'Transactions',
+    component: () => import('../views/Transactions.vue')
+  },
+  {
+    path: '/transactions/:hash',
+    name: 'TransactionDetail',
+    component: () => import('../views/TransactionDetail.vue')
+  },
+  {
+    path: '/governance',
+    name: 'Governance',
+    component: () => import('../views/Governance.vue')
+  },
+  {
+    path: '/governance/:id',
+    name: 'ProposalDetail',
+    component: () => import('../views/ProposalDetail.vue')
+  },
+  {
+    path: '/staking',
+    name: 'Staking',
+    component: () => import('../views/Staking.vue')
+  },
+  {
+    path: '/accounts/:address',
+    name: 'AccountDetail',
+    component: () => import('../views/AccountDetail.vue')
+  },
+  {
     path: '/about',
     name: 'About',
-    // 路由懒加载
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import('../views/About.vue')
   }
 ]
 
