@@ -1,13 +1,13 @@
 <template>
   <div class="latest-blocks">
     <div class="section-header">
-      <h2>最新区块</h2>
-      <router-link to="/blocks" class="view-all">查看全部</router-link>
+      <h2>Latest Blocks</h2>
+      <router-link to="/blocks" class="view-all">View All</router-link>
     </div>
     
     <div class="blocks-list">
-      <div v-if="loading" class="loading">加载中...</div>
-      <div v-else-if="blocks.length === 0" class="no-data">暂无数据</div>
+      <div v-if="loading" class="loading">Loading...</div>
+      <div v-else-if="blocks.length === 0" class="no-data">No data available</div>
       <div v-else class="block-item" v-for="block in blocks" :key="block.height">
         <div class="block-height">
           <router-link :to="`/blocks/${block.height}`">#{{ block.height }}</router-link>
@@ -15,7 +15,7 @@
         <div class="block-info">
           <div class="block-time">{{ formatTime(block.time) }}</div>
           <div class="block-details">
-            <span>{{ block.txCount }} 交易</span>
+            <span>{{ block.txCount }} txs</span>
             <span>{{ block.proposer }}</span>
           </div>
         </div>
@@ -26,7 +26,7 @@
 
 <script>
 import { format, formatDistance } from 'date-fns'
-import zhCN from 'date-fns/locale/zh-CN'
+import enUS from 'date-fns/locale/en-US'
 
 export default {
   name: 'LatestBlocks',
@@ -54,7 +54,11 @@ export default {
       }, 1000)
     },
     formatTime(time) {
-      return formatDistance(time, new Date(), { addSuffix: true, locale: zhCN })
+      return formatDistance(
+        new Date(time),
+        new Date(),
+        { addSuffix: true, locale: enUS }
+      )
     }
   }
 }

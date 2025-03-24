@@ -2,21 +2,21 @@
   <div class="account-detail-page">
     <div class="back-link">
       <router-link to="/">
-        <span class="back-arrow">←</span> 返回首页
+        <span class="back-arrow">←</span> Back to Home
       </router-link>
     </div>
     
-    <h1>账户详情</h1>
+    <h1>Account Details</h1>
     
-    <div v-if="loading" class="loading">加载账户数据中...</div>
-    <div v-else-if="!account" class="error">账户未找到</div>
+    <div v-if="loading" class="loading">Loading account data...</div>
+    <div v-else-if="!account" class="error">Account not found</div>
     <template v-else>
       <div class="address-card">
         <div class="address-header">
-          <h2>地址</h2>
+          <h2>Address</h2>
           <div class="address-actions">
             <button class="action-btn" @click="copyToClipboard(account.address)">
-              <span class="icon">📋</span> 复制
+              <span class="icon">📋</span> Copy
             </button>
           </div>
         </div>
@@ -25,15 +25,15 @@
       
       <div class="stats-cards">
         <div class="stat-card">
-          <h3>可用余额</h3>
+          <h3>Available Balance</h3>
           <div class="value">{{ formatNumber(account.availableBalance) }} TIA</div>
         </div>
         <div class="stat-card">
-          <h3>已质押</h3>
+          <h3>Staked</h3>
           <div class="value">{{ formatNumber(account.stakedBalance) }} TIA</div>
         </div>
         <div class="stat-card">
-          <h3>总余额</h3>
+          <h3>Total Balance</h3>
           <div class="value">{{ formatNumber(account.totalBalance) }} TIA</div>
         </div>
       </div>
@@ -44,35 +44,35 @@
             :class="{ active: activeTab === 'transactions' }" 
             @click="activeTab = 'transactions'"
           >
-            交易记录
+            Transactions
           </button>
           <button 
             :class="{ active: activeTab === 'delegations' }" 
             @click="activeTab = 'delegations'"
           >
-            质押委托
+            Delegations
           </button>
           <button 
             :class="{ active: activeTab === 'rewards' }" 
             @click="activeTab = 'rewards'"
           >
-            奖励
+            Rewards
           </button>
         </div>
         
         <div class="tab-content">
           <div v-if="activeTab === 'transactions'" class="transactions-tab">
             <div class="tab-header">
-              <h3>交易记录</h3>
+              <h3>Transactions</h3>
             </div>
-            <div v-if="transactions.length === 0" class="no-data">暂无交易记录</div>
+            <div v-if="transactions.length === 0" class="no-data">No transactions found</div>
             <div v-else class="transactions-list">
               <div class="table-header">
-                <div class="col-hash">交易哈希</div>
-                <div class="col-type">类型</div>
-                <div class="col-time">时间</div>
-                <div class="col-amount">金额</div>
-                <div class="col-status">状态</div>
+                <div class="col-hash">Transaction Hash</div>
+                <div class="col-type">Type</div>
+                <div class="col-time">Time</div>
+                <div class="col-amount">Amount</div>
+                <div class="col-status">Status</div>
               </div>
               <div v-for="tx in transactions" :key="tx.hash" class="transaction-row">
                 <div class="col-hash">
@@ -89,27 +89,27 @@
                 </div>
                 <div class="col-status">
                   <span :class="['status-badge', tx.status]">
-                    {{ tx.status === 'success' ? '成功' : '失败' }}
+                    {{ tx.status === 'success' ? 'Success' : 'Failed' }}
                   </span>
                 </div>
               </div>
             </div>
             <div v-if="transactions.length > 0 && hasMoreTransactions" class="view-more">
-              <button @click="loadMoreTransactions">加载更多</button>
+              <button @click="loadMoreTransactions">Load More</button>
             </div>
           </div>
           
           <div v-if="activeTab === 'delegations'" class="delegations-tab">
             <div class="tab-header">
-              <h3>质押委托</h3>
+              <h3>Delegations</h3>
             </div>
-            <div v-if="delegations.length === 0" class="no-data">暂无质押委托</div>
+            <div v-if="delegations.length === 0" class="no-data">No delegations found</div>
             <div v-else class="delegations-list">
               <div class="table-header">
-                <div class="col-validator">验证者</div>
-                <div class="col-amount">质押金额</div>
-                <div class="col-reward">预计奖励</div>
-                <div class="col-status">状态</div>
+                <div class="col-validator">Validator</div>
+                <div class="col-amount">Staked Amount</div>
+                <div class="col-reward">Estimated Reward</div>
+                <div class="col-status">Status</div>
               </div>
               <div v-for="delegation in delegations" :key="delegation.validatorAddress" class="delegation-row">
                 <div class="col-validator">
@@ -118,10 +118,10 @@
                   </router-link>
                 </div>
                 <div class="col-amount">{{ formatNumber(delegation.amount) }} TIA</div>
-                <div class="col-reward">{{ delegation.estimatedReward }} TIA / 天</div>
+                <div class="col-reward">{{ delegation.estimatedReward }} TIA / Day</div>
                 <div class="col-status">
                   <span :class="['status-badge', delegation.status]">
-                    {{ delegation.status === 'active' ? '活跃' : '解绑中' }}
+                    {{ delegation.status === 'active' ? 'Active' : 'Unbonding' }}
                   </span>
                 </div>
               </div>
@@ -130,24 +130,24 @@
           
           <div v-if="activeTab === 'rewards'" class="rewards-tab">
             <div class="tab-header">
-              <h3>奖励</h3>
+              <h3>Rewards</h3>
             </div>
             <div class="rewards-summary">
               <div class="reward-card">
-                <h4>总未领取奖励</h4>
+                <h4>Total Unclaimed Rewards</h4>
                 <div class="reward-value">{{ formatNumber(totalRewards) }} TIA</div>
-                <button class="claim-btn" @click="claimAllRewards">全部领取</button>
+                <button class="claim-btn" @click="claimAllRewards">Claim All</button>
               </div>
               <div class="reward-info">
-                <p>质押奖励会随时间自动累积，您可以随时领取。领取奖励需要支付少量手续费。</p>
+                <p>Reward accrues over time, you can claim them at any time. Claiming rewards incurs a small fee.</p>
               </div>
             </div>
-            <div v-if="rewards.length === 0" class="no-data">暂无奖励</div>
+            <div v-if="rewards.length === 0" class="no-data">No rewards found</div>
             <div v-else class="rewards-list">
               <div class="table-header">
-                <div class="col-validator">验证者</div>
-                <div class="col-amount">可领取奖励</div>
-                <div class="col-action">操作</div>
+                <div class="col-validator">Validator</div>
+                <div class="col-amount">Claimable Rewards</div>
+                <div class="col-action">Action</div>
               </div>
               <div v-for="reward in rewards" :key="reward.validatorAddress" class="reward-row">
                 <div class="col-validator">
@@ -157,7 +157,7 @@
                 </div>
                 <div class="col-amount">{{ formatNumber(reward.amount) }} TIA</div>
                 <div class="col-action">
-                  <button class="claim-reward-btn" @click="claimReward(reward)">领取</button>
+                  <button class="claim-reward-btn" @click="claimReward(reward)">Claim</button>
                 </div>
               </div>
             </div>
@@ -217,11 +217,11 @@ export default {
       // 模拟API调用
       setTimeout(() => {
         this.transactions = [
-          { hash: '0x1234567890abcdef1234567890abcdef12345678', type: '转账', time: new Date(Date.now() - 1 * 60 * 60 * 1000), amount: 100, direction: 'out', status: 'success' },
-          { hash: '0xabcdef1234567890abcdef1234567890abcdef12', type: '委托', time: new Date(Date.now() - 5 * 60 * 60 * 1000), amount: 500, direction: 'out', status: 'success' },
-          { hash: '0x7890abcdef1234567890abcdef1234567890abcd', type: '领取奖励', time: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), amount: 25, direction: 'in', status: 'success' },
-          { hash: '0xef1234567890abcdef1234567890abcdef123456', type: '转账', time: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), amount: 200, direction: 'in', status: 'success' },
-          { hash: '0x567890abcdef1234567890abcdef1234567890ab', type: '解除委托', time: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), amount: 300, direction: 'in', status: 'success' }
+          { hash: '0x1234567890abcdef1234567890abcdef12345678', type: 'Transfer', time: new Date(Date.now() - 1 * 60 * 60 * 1000), amount: 100, direction: 'out', status: 'success' },
+          { hash: '0xabcdef1234567890abcdef1234567890abcdef12', type: 'Delegate', time: new Date(Date.now() - 5 * 60 * 60 * 1000), amount: 500, direction: 'out', status: 'success' },
+          { hash: '0x7890abcdef1234567890abcdef1234567890abcd', type: 'Claim Reward', time: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), amount: 25, direction: 'in', status: 'success' },
+          { hash: '0xef1234567890abcdef1234567890abcdef123456', type: 'Transfer', time: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), amount: 200, direction: 'in', status: 'success' },
+          { hash: '0x567890abcdef1234567890abcdef1234567890ab', type: 'Undelegate', time: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), amount: 300, direction: 'in', status: 'success' }
         ]
         this.hasMoreTransactions = true
       }, 1200)
@@ -256,28 +256,28 @@ export default {
       } else {
         setTimeout(() => {
           this.transactions.push(
-            { hash: '0xabcde12345abcde12345abcde12345abcde12345', type: '转账', time: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), amount: 50, direction: 'out', status: 'success' },
-            { hash: '0x12345abcde12345abcde12345abcde12345abcde', type: '委托', time: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000), amount: 200, direction: 'out', status: 'success' },
-            { hash: '0x54321edcba54321edcba54321edcba54321edcba', type: '转账', time: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), amount: 75, direction: 'in', status: 'success' }
+            { hash: '0xabcde12345abcde12345abcde12345abcde12345', type: 'Transfer', time: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), amount: 50, direction: 'out', status: 'success' },
+            { hash: '0x12345abcde12345abcde12345abcde12345abcde', type: 'Delegate', time: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000), amount: 200, direction: 'out', status: 'success' },
+            { hash: '0x54321edcba54321edcba54321edcba54321edcba', type: 'Transfer', time: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), amount: 75, direction: 'in', status: 'success' }
           )
         }, 800)
       }
     },
     claimAllRewards() {
-      alert(`模拟领取全部 ${this.totalRewards} TIA 奖励`)
+      alert(`Claiming all ${this.totalRewards} TIA rewards`)
     },
     claimReward(reward) {
-      alert(`模拟领取来自 ${reward.validatorName} 的 ${reward.amount} TIA 奖励`)
+      alert(`Claiming ${reward.amount} TIA from ${reward.validatorName}`)
     },
     copyToClipboard(text) {
       navigator.clipboard.writeText(text).then(() => {
-        alert('地址已复制到剪贴板')
+        alert('Address copied to clipboard')
       }).catch(err => {
-        console.error('无法复制到剪贴板:', err)
+        console.error('Failed to copy to clipboard:', err)
       })
     },
     formatNumber(value) {
-      return new Intl.NumberFormat('zh-CN').format(value)
+      return new Intl.NumberFormat('en-US').format(value)
     },
     formatTime(time) {
       return formatDistance(time, new Date(), { addSuffix: true, locale: zhCN })

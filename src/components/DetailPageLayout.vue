@@ -33,15 +33,15 @@ export default {
     },
     backText: {
       type: String,
-      default: '返回'
+      default: 'Back'
     },
     loadingText: {
       type: String,
-      default: '加载中...'
+      default: 'Loading...'
     },
     errorText: {
       type: String,
-      default: '数据加载失败'
+      default: 'Failed to load data'
     }
   }
 }

@@ -1,88 +1,89 @@
 <template>
   <div class="staking-page">
-    <h1>质押</h1>
+    <h1>Staking</h1>
     
     <div class="stats-cards">
       <div class="stat-card">
-        <h3>总质押量</h3>
+        <h3>Total Staked</h3>
         <div class="value">{{ formatNumber(totalStaked) }} TIA</div>
       </div>
       <div class="stat-card">
-        <h3>质押比例</h3>
+        <h3>Staking Ratio</h3>
         <div class="value">{{ stakingRatio }}%</div>
       </div>
       <div class="stat-card">
-        <h3>质押年化收益率</h3>
+        <h3>Staking APR</h3>
         <div class="value">{{ stakingAPR }}%</div>
       </div>
     </div>
     
     <div class="staking-sections">
-      <div class="section validators-summary">
-        <h2>验证者概要</h2>
+      <div class="section">
+        <h2>Validator Overview</h2>
         <div class="summary-stats">
           <div class="stat-item">
-            <span class="label">活跃验证者</span>
-            <span class="value">{{ activeValidators }}</span>
+            <span class="label">Active Validators</span>
+            <span class="value">{{ activeValidators }} / {{ maxValidators }}</span>
           </div>
           <div class="stat-item">
-            <span class="label">总验证者</span>
-            <span class="value">{{ totalValidators }}</span>
-          </div>
-          <div class="stat-item">
-            <span class="label">最大验证者数量</span>
-            <span class="value">{{ maxValidators }}</span>
+            <span class="label">Inactive Validators</span>
+            <span class="value">{{ totalValidators - activeValidators }}</span>
           </div>
         </div>
-        <div class="validator-table">
-          <div class="table-header">
-            <div class="col">验证者</div>
-            <div class="col">自我质押</div>
-            <div class="col">总质押</div>
-          </div>
-          <div v-for="(validator, index) in topValidators" :key="validator.address" class="table-row">
-            <div class="col validator-name">
-              <div class="rank">{{ index + 1 }}</div>
+        
+        <h3>Top Validators by Stake</h3>
+        <div class="validators-list">
+          <div v-if="topValidators.length === 0" class="no-data">Loading validators...</div>
+          <div v-else class="validator-item" v-for="validator in topValidators" :key="validator.address">
+            <div class="validator-name">
               <router-link :to="`/validators/${validator.address}`">
                 {{ validator.name }}
               </router-link>
             </div>
-            <div class="col">{{ formatNumber(validator.selfStake) }} TIA</div>
-            <div class="col">{{ formatNumber(validator.totalStake) }} TIA</div>
+            <div class="validator-stats">
+              <div class="stat">
+                <span class="label">Self Stake</span>
+                <span class="value">{{ formatNumber(validator.selfStake) }}</span>
+              </div>
+              <div class="stat">
+                <span class="label">Total Stake</span>
+                <span class="value">{{ formatNumber(validator.totalStake) }}</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="view-all-link">
-          <router-link to="/validators">查看所有验证者</router-link>
         </div>
       </div>
       
-      <div class="section staking-calculator">
-        <h2>质押计算器</h2>
-        <div class="calculator">
-          <div class="input-group">
-            <label for="stake-amount">质押金额 (TIA)</label>
-            <input 
-              type="number" 
-              id="stake-amount" 
-              v-model.number="calculatorAmount" 
-              min="1"
-            />
-          </div>
-          <div class="calculator-results">
+      <div class="section calculator">
+        <h2>Rewards Calculator</h2>
+        <div class="input-group">
+          <label for="staking-amount">Amount to Stake (TIA)</label>
+          <input 
+            type="number" 
+            id="staking-amount" 
+            v-model="calculatorAmount"
+            min="1" 
+            step="1"
+          />
+        </div>
+        
+        <div class="reward-results">
+          <div class="result-label">Estimated Rewards ({{ stakingAPR }}% APR)</div>
+          <div class="result-items">
             <div class="result-item">
-              <span class="label">每日收益</span>
+              <span class="label">Daily</span>
               <span class="value">{{ calculateDailyReward() }} TIA</span>
             </div>
             <div class="result-item">
-              <span class="label">每周收益</span>
+              <span class="label">Weekly</span>
               <span class="value">{{ calculateWeeklyReward() }} TIA</span>
             </div>
             <div class="result-item">
-              <span class="label">每月收益</span>
+              <span class="label">Monthly</span>
               <span class="value">{{ calculateMonthlyReward() }} TIA</span>
             </div>
             <div class="result-item">
-              <span class="label">每年收益</span>
+              <span class="label">Yearly</span>
               <span class="value">{{ calculateYearlyReward() }} TIA</span>
             </div>
           </div>
@@ -93,6 +94,9 @@
 </template>
 
 <script>
+import { format } from 'date-fns'
+import enUS from 'date-fns/locale/en-US'
+
 export default {
   name: 'Staking',
   data() {
@@ -124,8 +128,18 @@ export default {
         this.topValidators.sort((a, b) => b.totalStake - a.totalStake)
       }, 1000)
     },
-    formatNumber(num) {
-      return new Intl.NumberFormat().format(num)
+    formatNumber(value) {
+      return new Intl.NumberFormat('en-US').format(value)
+    },
+    formatPercentage(value) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'percent',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value / 100)
+    },
+    formatDate(date) {
+      return format(new Date(date), 'MMM dd, yyyy', { locale: enUS })
     },
     calculateDailyReward() {
       const dailyRate = this.stakingAPR / 365 / 100

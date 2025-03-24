@@ -1,18 +1,18 @@
 <template>
   <div class="transactions-page">
-    <h1>交易</h1>
+    <h1>Transactions</h1>
     
     <div class="stats-cards">
       <div class="stat-card">
-        <h3>总交易数</h3>
+        <h3>Total Transactions</h3>
         <div class="value">{{ formatNumber(totalTx) }}</div>
       </div>
       <div class="stat-card">
-        <h3>平均交易费用</h3>
+        <h3>Average Fee</h3>
         <div class="value">{{ avgFee }} TIA</div>
       </div>
       <div class="stat-card">
-        <h3>24小时交易量</h3>
+        <h3>24h Volume</h3>
         <div class="value">{{ formatNumber(txVolume24h) }} TIA</div>
       </div>
     </div>
@@ -21,23 +21,23 @@
       <div class="search-bar">
         <input 
           type="text" 
-          placeholder="搜索交易哈希..." 
+          placeholder="Search transaction hash..." 
           v-model="searchQuery"
           @keyup.enter="searchTransaction"
         />
-        <button @click="searchTransaction">搜索</button>
+        <button @click="searchTransaction">Search</button>
       </div>
       
       <div class="transactions-table">
         <div class="table-header">
-          <div class="col-hash">交易哈希</div>
-          <div class="col-type">类型</div>
-          <div class="col-time">时间</div>
-          <div class="col-amount">金额</div>
-          <div class="col-fee">费用</div>
+          <div class="col-hash">Tx Hash</div>
+          <div class="col-type">Type</div>
+          <div class="col-time">Time</div>
+          <div class="col-amount">Amount</div>
+          <div class="col-fee">Fee</div>
         </div>
         
-        <div v-if="loading" class="loading">加载中...</div>
+        <div v-if="loading" class="loading">Loading...</div>
         <template v-else>
           <div 
             v-for="tx in transactions" 
@@ -64,14 +64,14 @@
           :disabled="currentPage === 1" 
           @click="currentPage--"
         >
-          上一页
+          Previous
         </button>
-        <span>第 {{ currentPage }} 页</span>
+        <span>Page {{ currentPage }}</span>
         <button 
           :disabled="currentPage === totalPages" 
           @click="currentPage++"
         >
-          下一页
+          Next
         </button>
       </div>
     </div>
@@ -79,8 +79,8 @@
 </template>
 
 <script>
-import { formatDistance } from 'date-fns'
-import zhCN from 'date-fns/locale/zh-CN'
+import { format, formatDistance } from 'date-fns'
+import enUS from 'date-fns/locale/en-US'
 
 export default {
   name: 'Transactions',
@@ -108,10 +108,10 @@ export default {
     fetchTransactions() {
       this.loading = true
       
-      // 模拟API调用
+      // Simulate API call
       setTimeout(() => {
         const mockTransactions = []
-        const txTypes = ['转账', '委托', '赎回', 'MsgSend', 'MsgDelegate']
+        const txTypes = ['Transfer', 'Delegate', 'Undelegate', 'MsgSend', 'MsgDelegate']
         
         for (let i = 0; i < 25; i++) {
           mockTransactions.push({
@@ -135,7 +135,11 @@ export default {
       this.$router.push(`/transactions/${this.searchQuery}`)
     },
     formatTime(time) {
-      return formatDistance(time, new Date(), { addSuffix: true, locale: zhCN })
+      return formatDistance(
+        new Date(time),
+        new Date(),
+        { addSuffix: true, locale: enUS }
+      )
     },
     shortHash(hash) {
       return `${hash.substring(0, 8)}...${hash.substring(hash.length - 6)}`

@@ -1,36 +1,36 @@
 <template>
   <div class="governance-page">
-    <h1>治理</h1>
+    <h1>Governance</h1>
     
     <div class="stats-cards">
       <div class="stat-card">
-        <h3>总提案数</h3>
+        <h3>Total Proposals</h3>
         <div class="value">{{ totalProposals }}</div>
       </div>
       <div class="stat-card">
-        <h3>投票中的提案</h3>
+        <h3>Voting Period</h3>
         <div class="value">{{ votingProposals }}</div>
       </div>
       <div class="stat-card">
-        <h3>总投票人数</h3>
+        <h3>Total Voters</h3>
         <div class="value">{{ formatNumber(totalVoters) }}</div>
       </div>
     </div>
     
     <div class="proposals-container">
-      <div class="filter-tabs">
+      <div class="status-filter">
         <button 
           v-for="status in proposalStatuses" 
           :key="status.value"
           :class="{ active: selectedStatus === status.value }"
           @click="selectedStatus = status.value"
         >
-          {{ status.label }} ({{ getStatusCount(status.value) }})
+          {{ status.label }}
+          <span class="count">({{ getStatusCount(status.value) }})</span>
         </button>
       </div>
       
-      <div v-if="loading" class="loading">加载中...</div>
-      <div v-else-if="filteredProposals.length === 0" class="no-data">没有提案</div>
+      <div v-if="loading" class="loading">Loading...</div>
       <template v-else>
         <div 
           v-for="proposal in filteredProposals" 
@@ -38,44 +38,48 @@
           class="proposal-card"
         >
           <div class="proposal-header">
-            <div class="proposal-id"># {{ proposal.id }}</div>
-            <div :class="['proposal-status', proposal.status]">{{ getStatusLabel(proposal.status) }}</div>
+            <div class="proposal-id">#{{ proposal.id }}</div>
+            <div :class="['proposal-status', proposal.status]">
+              {{ getStatusLabel(proposal.status) }}
+            </div>
           </div>
-          <h3 class="proposal-title">
+          <div class="proposal-title">
             <router-link :to="`/governance/${proposal.id}`">
               {{ proposal.title }}
             </router-link>
-          </h3>
-          <div class="proposal-details">
-            <div class="proposal-submitter">
-              提交者: <router-link :to="`/accounts/${proposal.submitter}`">{{ shortAddress(proposal.submitter) }}</router-link>
-            </div>
-            <div class="proposal-time">提交时间: {{ formatTime(proposal.submitTime) }}</div>
-            <div class="proposal-time">投票结束时间: {{ formatEndTime(proposal.votingEndTime) }}</div>
           </div>
-          <div class="proposal-votes">
-            <div class="progress-bar">
-              <div class="yes" :style="{ width: proposal.yesPercentage + '%' }"></div>
-              <div class="no" :style="{ width: proposal.noPercentage + '%' }"></div>
-              <div class="abstain" :style="{ width: proposal.abstainPercentage + '%' }"></div>
-              <div class="veto" :style="{ width: proposal.vetoPercentage + '%' }"></div>
+          <div class="proposal-meta">
+            <div class="submitter">
+              Submitter: <span>{{ shortAddress(proposal.submitter) }}</span>
             </div>
-            <div class="votes-legend">
+            <div class="voting-end">
+              {{ proposal.status === 'voting' ? 'Ends in: ' : 'Ended: ' }}
+              <span>{{ formatTimeRemaining(proposal.votingEndTime) }}</span>
+            </div>
+          </div>
+          <div class="voting-results">
+            <div class="vote-bar">
+              <div class="yes-votes" :style="{ width: proposal.yesPercentage + '%' }"></div>
+              <div class="no-votes" :style="{ width: proposal.noPercentage + '%' }"></div>
+              <div class="abstain-votes" :style="{ width: proposal.abstainPercentage + '%' }"></div>
+              <div class="veto-votes" :style="{ width: proposal.vetoPercentage + '%' }"></div>
+            </div>
+            <div class="vote-legend">
               <div class="vote-type yes">
                 <span class="dot"></span>
-                <span>是 ({{ proposal.yesPercentage }}%)</span>
+                <span>Yes ({{ proposal.yesPercentage }}%)</span>
               </div>
               <div class="vote-type no">
                 <span class="dot"></span>
-                <span>否 ({{ proposal.noPercentage }}%)</span>
+                <span>No ({{ proposal.noPercentage }}%)</span>
               </div>
               <div class="vote-type abstain">
                 <span class="dot"></span>
-                <span>弃权 ({{ proposal.abstainPercentage }}%)</span>
+                <span>Abstain ({{ proposal.abstainPercentage }}%)</span>
               </div>
               <div class="vote-type veto">
                 <span class="dot"></span>
-                <span>否决 ({{ proposal.vetoPercentage }}%)</span>
+                <span>Veto ({{ proposal.vetoPercentage }}%)</span>
               </div>
             </div>
           </div>
@@ -87,7 +91,7 @@
 
 <script>
 import { format, formatDistance } from 'date-fns'
-import zhCN from 'date-fns/locale/zh-CN'
+import enUS from 'date-fns/locale/en-US'
 
 export default {
   name: 'Governance',
@@ -97,11 +101,11 @@ export default {
       proposals: [],
       selectedStatus: 'all',
       proposalStatuses: [
-        { label: '全部', value: 'all' },
-        { label: '投票中', value: 'voting' },
-        { label: '已通过', value: 'passed' },
-        { label: '已拒绝', value: 'rejected' },
-        { label: '已否决', value: 'vetoed' }
+        { label: 'All', value: 'all' },
+        { label: 'Voting', value: 'voting' },
+        { label: 'Passed', value: 'passed' },
+        { label: 'Rejected', value: 'rejected' },
+        { label: 'Vetoed', value: 'vetoed' }
       ]
     }
   },
@@ -195,22 +199,22 @@ export default {
     },
     getStatusLabel(status) {
       const map = {
-        'voting': '投票中',
-        'passed': '已通过',
-        'rejected': '已拒绝',
-        'vetoed': '已否决'
+        'voting': 'Voting',
+        'passed': 'Passed',
+        'rejected': 'Rejected',
+        'vetoed': 'Vetoed'
       }
       return map[status] || status
     },
     formatTime(time) {
-      return format(time, 'yyyy-MM-dd HH:mm', { locale: zhCN })
+      return format(new Date(time), 'MMM dd, yyyy', { locale: enUS })
     },
     formatEndTime(time) {
       const now = new Date()
       if (time > now) {
-        return `${formatDistance(time, now, { locale: zhCN })}后结束`
+        return `ends in ${formatDistance(time, now, { locale: enUS })}`
       } else {
-        return `${formatDistance(time, now, { locale: zhCN })}前结束`
+        return `ended ${formatDistance(time, now, { locale: enUS })} ago`
       }
     },
     shortAddress(address) {
@@ -219,6 +223,18 @@ export default {
     },
     formatNumber(num) {
       return new Intl.NumberFormat().format(num)
+    },
+    formatTimeRemaining(endTime) {
+      const now = new Date()
+      const end = new Date(endTime)
+      
+      if (now > end) return 'Ended'
+      
+      const diffMs = end - now
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+      const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      
+      return `${diffDays}d ${diffHours}h`
     }
   }
 }
@@ -261,20 +277,20 @@ export default {
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-.filter-tabs {
+.status-filter {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
 }
-.filter-tabs button {
+.status-filter button {
   padding: 8px 15px;
   background: #f5f5f5;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
-.filter-tabs button.active {
+.status-filter button.active {
   background: #42b983;
   color: white;
 }
@@ -325,41 +341,41 @@ export default {
 .proposal-title a:hover {
   color: #42b983;
 }
-.proposal-details {
+.proposal-meta {
   margin-bottom: 15px;
   color: #666;
   font-size: 0.9rem;
 }
-.proposal-details a {
+.proposal-meta a {
   color: #42b983;
   text-decoration: none;
 }
-.proposal-votes {
+.voting-results {
   margin-top: 20px;
 }
-.progress-bar {
+.vote-bar {
   height: 8px;
   display: flex;
   border-radius: 4px;
   overflow: hidden;
 }
-.progress-bar .yes {
+.vote-bar .yes-votes {
   background: #42b983;
   height: 100%;
 }
-.progress-bar .no {
+.vote-bar .no-votes {
   background: #e53e3e;
   height: 100%;
 }
-.progress-bar .abstain {
+.vote-bar .abstain-votes {
   background: #f39c12;
   height: 100%;
 }
-.progress-bar .veto {
+.vote-bar .veto-votes {
   background: #9b59b6;
   height: 100%;
 }
-.votes-legend {
+.vote-legend {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
@@ -398,7 +414,7 @@ export default {
   .stats-cards {
     grid-template-columns: 1fr;
   }
-  .votes-legend {
+  .vote-legend {
     flex-direction: column;
     gap: 8px;
   }

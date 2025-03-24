@@ -2,12 +2,12 @@
   <div class="proposal-detail-page">
     <div class="back-link">
       <router-link to="/governance">
-        <span class="back-arrow">←</span> 返回提案列表
+        <span class="back-arrow">←</span> Back to Proposals
       </router-link>
     </div>
     
-    <div v-if="loading" class="loading">加载提案数据中...</div>
-    <div v-else-if="!proposal" class="error">提案未找到</div>
+    <div v-if="loading" class="loading">Loading proposal data...</div>
+    <div v-else-if="!proposal" class="error">Proposal not found</div>
     <template v-else>
       <div class="proposal-header">
         <div class="proposal-id"># {{ proposal.id }}</div>
@@ -18,38 +18,38 @@
       
       <div class="proposal-meta">
         <div class="meta-item">
-          <span class="label">提交者:</span>
+          <span class="label">Submitter:</span>
           <router-link :to="`/accounts/${proposal.submitter}`">
             {{ shortAddress(proposal.submitter) }}
           </router-link>
         </div>
         <div class="meta-item">
-          <span class="label">提交时间:</span>
+          <span class="label">Submit Time:</span>
           <span>{{ formatTime(proposal.submitTime) }}</span>
         </div>
         <div class="meta-item">
-          <span class="label">投票结束时间:</span>
+          <span class="label">Voting End Time:</span>
           <span>{{ formatTime(proposal.votingEndTime) }}</span>
         </div>
         <div class="meta-item">
-          <span class="label">提案类型:</span>
+          <span class="label">Proposal Type:</span>
           <span>{{ proposal.type }}</span>
         </div>
       </div>
       
       <div class="detail-card">
-        <h2>提案详情</h2>
+        <h2>Proposal Details</h2>
         <div class="proposal-description">
           <div class="section">
-            <h3>摘要</h3>
+            <h3>Summary</h3>
             <p>{{ proposal.summary }}</p>
           </div>
           <div class="section">
-            <h3>动机</h3>
+            <h3>Motivation</h3>
             <p>{{ proposal.motivation }}</p>
           </div>
           <div class="section">
-            <h3>提案内容</h3>
+            <h3>Proposal Content</h3>
             <div class="proposal-content">
               {{ proposal.content }}
             </div>
@@ -58,7 +58,7 @@
       </div>
       
       <div class="detail-card">
-        <h2>投票情况</h2>
+        <h2>Voting Results</h2>
         <div v-if="proposal.status === 'deposit_period'" class="deposit-status">
           <div class="deposit-info">
             <div class="deposit-progress">
@@ -67,11 +67,11 @@
               </div>
               <div class="progress-labels">
                 <span>{{ formatNumber(proposal.depositAmount) }} TIA</span>
-                <span>目标: {{ formatNumber(proposal.depositThreshold) }} TIA</span>
+                <span>Target: {{ formatNumber(proposal.depositThreshold) }} TIA</span>
               </div>
             </div>
             <div class="time-remaining">
-              <span class="label">存款期剩余时间:</span>
+              <span class="label">Deposit Period Remaining Time:</span>
               <span>{{ formatTimeRemaining(proposal.depositEndTime) }}</span>
             </div>
           </div>
@@ -88,37 +88,37 @@
               <div class="votes-legend">
                 <div class="vote-type yes">
                   <span class="dot"></span>
-                  <span>同意 ({{ proposal.yesPercentage }}%)</span>
+                  <span>Yes ({{ proposal.yesPercentage }}%)</span>
                 </div>
                 <div class="vote-type no">
                   <span class="dot"></span>
-                  <span>反对 ({{ proposal.noPercentage }}%)</span>
+                  <span>No ({{ proposal.noPercentage }}%)</span>
                 </div>
                 <div class="vote-type abstain">
                   <span class="dot"></span>
-                  <span>弃权 ({{ proposal.abstainPercentage }}%)</span>
+                  <span>Abstain ({{ proposal.abstainPercentage }}%)</span>
                 </div>
                 <div class="vote-type veto">
                   <span class="dot"></span>
-                  <span>否决 ({{ proposal.vetoPercentage }}%)</span>
+                  <span>Veto ({{ proposal.vetoPercentage }}%)</span>
                 </div>
               </div>
             </div>
             <div class="votes-count">
               <div class="vote-item">
-                <div class="label">总投票:</div>
+                <div class="label">Total Votes:</div>
                 <div class="value">{{ formatNumber(proposal.totalVotes) }} TIA</div>
               </div>
               <div class="vote-item">
-                <div class="label">投票率:</div>
+                <div class="label">Voting Rate:</div>
                 <div class="value">{{ proposal.turnout }}%</div>
               </div>
               <div class="vote-item">
-                <div class="label">投票人数:</div>
+                <div class="label">Voter Count:</div>
                 <div class="value">{{ proposal.votersCount }}</div>
               </div>
               <div v-if="proposal.status === 'voting_period'" class="vote-item">
-                <div class="label">剩余时间:</div>
+                <div class="label">Remaining Time:</div>
                 <div class="value">{{ formatTimeRemaining(proposal.votingEndTime) }}</div>
               </div>
             </div>
@@ -127,14 +127,14 @@
       </div>
       
       <div class="detail-card">
-        <h2>投票列表</h2>
-        <div v-if="votes.length === 0" class="no-data">暂无投票</div>
+        <h2>Voting List</h2>
+        <div v-if="votes.length === 0" class="no-data">No votes yet</div>
         <div v-else class="votes-list">
           <div class="table-header">
-            <div class="col-voter">投票者</div>
-            <div class="col-option">投票选项</div>
-            <div class="col-amount">投票权重</div>
-            <div class="col-time">投票时间</div>
+            <div class="col-voter">Voter</div>
+            <div class="col-option">Vote Option</div>
+            <div class="col-amount">Vote Weight</div>
+            <div class="col-time">Vote Time</div>
           </div>
           <div v-for="vote in votes" :key="vote.id" class="vote-row">
             <div class="col-voter">
@@ -150,7 +150,7 @@
           </div>
         </div>
         <div v-if="votes.length > 0 && hasMoreVotes" class="view-more">
-          <button @click="loadMoreVotes">加载更多</button>
+          <button @click="loadMoreVotes">Load More</button>
         </div>
       </div>
     </template>
@@ -158,8 +158,8 @@
 </template>
 
 <script>
-import { format, formatDistance, formatDistanceToNow } from 'date-fns'
-import zhCN from 'date-fns/locale/zh-CN'
+import { format } from 'date-fns'
+import enUS from 'date-fns/locale/en-US'
 
 export default {
   name: 'ProposalDetail',
@@ -186,15 +186,15 @@ export default {
       setTimeout(() => {
         this.proposal = {
           id: this.proposalId,
-          title: '提案 #' + this.proposalId + ': 提高验证者每区块奖励',
+          title: 'Proposal #' + this.proposalId + ': Increase Validator Block Reward',
           status: ['deposit_period', 'voting_period', 'passed', 'rejected'][Math.floor(Math.random() * 4)],
           submitter: '0xabcdef1234567890abcdef1234567890abcdef12',
           submitTime: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
           votingEndTime: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-          type: '参数变更',
-          summary: '该提案旨在提高验证者的每区块奖励，以增加网络的安全性和去中心化程度。',
-          motivation: '当前的区块奖励对于较小的验证者来说不足以维持运营成本，导致中心化趋势增强。增加奖励将鼓励更多的验证者加入网络，提高整体安全性。',
-          content: '提议将参数 "BlocksReward" 从 1.0 TIA 调整为 1.5 TIA，此更改将立即生效。\n\n此外，对于较小的验证者（在投票权中排名50以后的），额外增加10%的奖励，以鼓励网络去中心化。',
+          type: 'Parameter Change',
+          summary: 'This proposal aims to increase the block reward for validators, to increase the network\'s security and decentralization.',
+          motivation: 'The current block reward is not enough for smaller validators to maintain operating costs, leading to an increase in centralization.',
+          content: 'Proposal to adjust parameter "BlocksReward" from 1.0 TIA to 1.5 TIA, this change will take effect immediately.\n\nAdditionally, for smaller validators (ranked 50th and below in voting power), an additional 10% reward is added to encourage network decentralization.',
           depositAmount: 10000,
           depositThreshold: 50000,
           depositEndTime: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
@@ -232,28 +232,37 @@ export default {
     },
     getStatusLabel(status) {
       const labels = {
-        'deposit_period': '存款期',
-        'voting_period': '投票期',
-        'passed': '已通过',
-        'rejected': '已拒绝',
-        'failed': '已失败'
+        'deposit_period': 'Deposit Period',
+        'voting_period': 'Voting Period',
+        'passed': 'Passed',
+        'rejected': 'Rejected',
+        'failed': 'Failed'
       }
       return labels[status] || status
     },
     getVoteOptionLabel(option) {
       const labels = {
-        'yes': '同意',
-        'no': '反对',
-        'abstain': '弃权',
-        'veto': '否决'
+        'yes': 'Yes',
+        'no': 'No',
+        'abstain': 'Abstain',
+        'veto': 'Veto'
       }
       return labels[option] || option
     },
     formatTime(time) {
-      return format(time, 'yyyy-MM-dd HH:mm:ss', { locale: zhCN })
+      return format(new Date(time), 'yyyy-MM-dd HH:mm:ss', { locale: enUS })
     },
-    formatTimeRemaining(time) {
-      return formatDistanceToNow(time, { addSuffix: true, locale: zhCN })
+    formatTimeRemaining(endTime) {
+      const now = new Date()
+      const end = new Date(endTime)
+      
+      if (now > end) return 'Ended'
+      
+      const diffMs = end - now
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+      const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      
+      return `${diffDays}d ${diffHours}h`
     },
     shortAddress(address) {
       if (!address) return ''
