@@ -2,32 +2,32 @@
   <div class="transaction-detail-page">
     <div class="back-link">
       <router-link to="/transactions">
-        <span class="back-arrow">←</span> 返回交易列表
+        <span class="back-arrow">←</span> Back to Transactions
       </router-link>
     </div>
     
-    <h1>交易详情</h1>
+    <h1>Transaction Details</h1>
     
-    <div v-if="loading" class="loading">加载交易数据中...</div>
-    <div v-else-if="!transaction" class="error">交易未找到</div>
+    <div v-if="loading" class="loading">Loading transaction data...</div>
+    <div v-else-if="!transaction" class="error">Transaction not found</div>
     <template v-else>
       <div class="detail-card">
-        <h2>基本信息</h2>
+        <h2>Basic Information</h2>
         <div class="detail-grid">
           <div class="detail-row">
-            <div class="label">交易哈希</div>
+            <div class="label">Transaction Hash</div>
             <div class="value monospace">{{ transaction.hash }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">状态</div>
+            <div class="label">Status</div>
             <div class="value">
               <span :class="['status-badge', transaction.status]">
-                {{ transaction.status === 'success' ? '成功' : '失败' }}
+                {{ transaction.status === 'success' ? 'Success' : 'Failed' }}
               </span>
             </div>
           </div>
           <div class="detail-row">
-            <div class="label">区块</div>
+            <div class="label">Block</div>
             <div class="value">
               <router-link :to="`/blocks/${transaction.blockHeight}`">
                 {{ transaction.blockHeight }}
@@ -35,33 +35,33 @@
             </div>
           </div>
           <div class="detail-row">
-            <div class="label">时间</div>
+            <div class="label">Time</div>
             <div class="value">{{ formatTime(transaction.time) }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">交易类型</div>
+            <div class="label">Transaction Type</div>
             <div class="value">{{ transaction.type }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">交易费用</div>
+            <div class="label">Fee</div>
             <div class="value">{{ transaction.fee }} TIA</div>
           </div>
           <div class="detail-row">
-            <div class="label">Gas 用量</div>
+            <div class="label">Gas Used</div>
             <div class="value">{{ transaction.gasUsed }} / {{ transaction.gasWanted }}</div>
           </div>
           <div class="detail-row">
             <div class="label">Memo</div>
-            <div class="value">{{ transaction.memo || '无' }}</div>
+            <div class="value">{{ transaction.memo || 'None' }}</div>
           </div>
         </div>
       </div>
       
       <div class="detail-card">
-        <h2>转账详情</h2>
+        <h2>Transfer Details</h2>
         <div class="transfer-info">
           <div class="transfer-row">
-            <div class="label">发送者</div>
+            <div class="label">From</div>
             <div class="value monospace">
               <router-link :to="`/accounts/${transaction.from}`">
                 {{ transaction.from }}
@@ -72,7 +72,7 @@
             <span class="arrow">↓</span>
           </div>
           <div class="transfer-row">
-            <div class="label">接收者</div>
+            <div class="label">To</div>
             <div class="value monospace">
               <router-link :to="`/accounts/${transaction.to}`">
                 {{ transaction.to }}
@@ -86,8 +86,8 @@
       </div>
       
       <div class="detail-card">
-        <h2>原始数据</h2>
-        <div class="code-block">
+        <h2>Raw Data</h2>
+        <div class="raw-data">
           <pre>{{ JSON.stringify(transaction.rawData, null, 2) }}</pre>
         </div>
       </div>
@@ -97,7 +97,7 @@
 
 <script>
 import { format } from 'date-fns'
-import zhCN from 'date-fns/locale/zh-CN'
+import enUS from 'date-fns/locale/en-US'
 
 export default {
   name: 'TransactionDetail',
@@ -115,18 +115,18 @@ export default {
     fetchTransactionData() {
       this.loading = true
       
-      // 模拟API调用
+      // Simulate API call
       setTimeout(() => {
         this.transaction = {
           hash: this.txHash,
           status: Math.random() > 0.2 ? 'success' : 'failed',
           blockHeight: Math.floor(Math.random() * 1000000) + 1000000,
-          time: new Date(Date.now() - Math.random() * 86400000 * 7), // 过去7天内
-          type: ['转账', '委托', '赎回', 'MsgSend', 'MsgDelegate'][Math.floor(Math.random() * 5)],
+          time: new Date(Date.now() - Math.random() * 86400000 * 7), // Past 7 days
+          type: ['Transfer', 'Delegate', 'Undelegate', 'MsgSend', 'MsgDelegate'][Math.floor(Math.random() * 5)],
           fee: (Math.random() * 0.1).toFixed(4),
           gasUsed: Math.floor(Math.random() * 100000),
           gasWanted: 100000,
-          memo: Math.random() > 0.7 ? '这是交易备注' : '',
+          memo: Math.random() > 0.7 ? 'Transaction memo' : '',
           from: `celestia1${Math.random().toString(36).substring(2, 15)}`,
           to: `celestia1${Math.random().toString(36).substring(2, 15)}`,
           amount: (Math.random() * 1000).toFixed(4),
@@ -166,7 +166,7 @@ export default {
                   signature: Math.random().toString(36).substring(2, 100)
                 }
               ],
-              memo: Math.random() > 0.7 ? '这是交易备注' : ''
+              memo: Math.random() > 0.7 ? 'Transaction memo' : ''
             }
           }
         }
@@ -175,7 +175,7 @@ export default {
       }, 1500)
     },
     formatTime(time) {
-      return format(time, 'yyyy-MM-dd HH:mm:ss', { locale: zhCN })
+      return format(time, 'yyyy-MM-dd HH:mm:ss', { locale: enUS })
     }
   }
 }

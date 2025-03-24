@@ -1,18 +1,18 @@
 <template>
   <div class="blocks-page">
-    <h1>区块</h1>
+    <h1>Blocks</h1>
     
     <div class="stats-cards">
       <div class="stat-card">
-        <h3>区块高度</h3>
+        <h3>Block Height</h3>
         <div class="value">{{ latestBlock }}</div>
       </div>
       <div class="stat-card">
-        <h3>平均区块时间</h3>
-        <div class="value">{{ blockTime }} 秒</div>
+        <h3>Average Block Time</h3>
+        <div class="value">{{ blockTime }} seconds</div>
       </div>
       <div class="stat-card">
-        <h3>交易总数</h3>
+        <h3>Total Transactions</h3>
         <div class="value">{{ formatNumber(totalTx) }}</div>
       </div>
     </div>
@@ -21,22 +21,22 @@
       <div class="search-bar">
         <input 
           type="text" 
-          placeholder="搜索区块高度..." 
+          placeholder="Search block height..." 
           v-model="searchQuery"
           @keyup.enter="searchBlock"
         />
-        <button @click="searchBlock">搜索</button>
+        <button @click="searchBlock">Search</button>
       </div>
       
       <div class="blocks-table">
         <div class="table-header">
-          <div class="col-height">高度</div>
-          <div class="col-time">时间</div>
-          <div class="col-txs">交易数</div>
-          <div class="col-proposer">提议者</div>
+          <div class="col-height">Height</div>
+          <div class="col-time">Time</div>
+          <div class="col-txs">Txs</div>
+          <div class="col-proposer">Proposer</div>
         </div>
         
-        <div v-if="loading" class="loading">加载中...</div>
+        <div v-if="loading" class="loading">Loading...</div>
         <template v-else>
           <div 
             v-for="block in blocks" 
@@ -64,14 +64,14 @@
           :disabled="currentPage === 1" 
           @click="currentPage--"
         >
-          上一页
+          Previous
         </button>
-        <span>第 {{ currentPage }} 页</span>
+        <span>Page {{ currentPage }}</span>
         <button 
           :disabled="currentPage === totalPages" 
           @click="currentPage++"
         >
-          下一页
+          Next
         </button>
       </div>
     </div>
@@ -80,7 +80,7 @@
 
 <script>
 import { format, formatDistance } from 'date-fns'
-import zhCN from 'date-fns/locale/zh-CN'
+import enUS from 'date-fns/locale/en-US'
 
 export default {
   name: 'Blocks',
@@ -144,7 +144,11 @@ export default {
       this.$router.push(`/blocks/${height}`)
     },
     formatTime(time) {
-      return formatDistance(time, new Date(), { addSuffix: true, locale: zhCN })
+      return formatDistance(
+        new Date(time),
+        new Date(),
+        { addSuffix: true, locale: enUS }
+      )
     },
     formatNumber(num) {
       return new Intl.NumberFormat().format(num)

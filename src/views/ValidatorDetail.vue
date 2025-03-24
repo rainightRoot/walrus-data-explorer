@@ -2,12 +2,12 @@
   <div class="validator-detail-page">
     <div class="back-link">
       <router-link to="/validators">
-        <span class="back-arrow">←</span> 返回验证者列表
+        <span class="back-arrow">←</span> Back to Validators
       </router-link>
     </div>
     
-    <div v-if="loading" class="loading">加载验证者数据中...</div>
-    <div v-else-if="!validator" class="error">验证者未找到</div>
+    <div v-if="loading" class="loading">Loading validator data...</div>
+    <div v-else-if="!validator" class="error">Validator not found</div>
     <template v-else>
       <div class="validator-header">
         <div class="validator-logo">
@@ -17,7 +17,7 @@
           <h1>{{ validator.name }}</h1>
           <div class="validator-status">
             <span :class="['status-badge', validator.status]">
-              {{ validator.status === 'active' ? '活跃' : '非活跃' }}
+              {{ validator.status === 'active' ? 'Active' : 'Inactive' }}
             </span>
             <span class="rank">#{{ validator.rank }}</span>
           </div>
@@ -26,147 +26,90 @@
       
       <div class="stats-cards">
         <div class="stat-card">
-          <h3>投票权</h3>
+          <h3>Voting Power</h3>
           <div class="value">{{ formatNumber(validator.votingPower) }} TIA</div>
-          <div class="sub-value">{{ validator.votingPowerPercentage }}% 网络占比</div>
+          <div class="sub-value">{{ validator.votingPowerPercentage }}% Network Share</div>
         </div>
         <div class="stat-card">
-          <h3>委托总量</h3>
+          <h3>Total Delegated</h3>
           <div class="value">{{ formatNumber(validator.totalDelegated) }} TIA</div>
-          <div class="sub-value">来自 {{ validator.delegatorsCount }} 委托人</div>
+          <div class="sub-value">from {{ validator.delegatorsCount }} delegators</div>
         </div>
         <div class="stat-card">
-          <h3>佣金比例</h3>
+          <h3>Commission</h3>
           <div class="value">{{ validator.commission }}%</div>
-          <div class="sub-value">最大变化率: {{ validator.maxChangeRate }}%</div>
+          <div class="sub-value">Max Change Rate: {{ validator.maxChangeRate }}%</div>
         </div>
       </div>
       
       <div class="detail-card">
-        <h2>验证者详情</h2>
+        <h2>Validator Details</h2>
         <div class="detail-grid">
           <div class="detail-row">
-            <div class="label">地址</div>
+            <div class="label">Address</div>
             <div class="value monospace">{{ validator.address }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">操作员地址</div>
+            <div class="label">Operator Address</div>
             <div class="value monospace">{{ validator.operatorAddress }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">网站</div>
+            <div class="label">Website</div>
             <div class="value">
               <a :href="validator.website" target="_blank" v-if="validator.website">{{ validator.website }}</a>
-              <span v-else>未提供</span>
+              <span v-else>Not provided</span>
             </div>
           </div>
           <div class="detail-row">
-            <div class="label">自我质押</div>
+            <div class="label">Self-Delegated</div>
             <div class="value">{{ formatNumber(validator.selfDelegated) }} TIA</div>
           </div>
           <div class="detail-row">
-            <div class="label">身份</div>
-            <div class="value">{{ validator.identity || '未提供' }}</div>
+            <div class="label">Identity</div>
+            <div class="value">{{ validator.identity || 'Not provided' }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">安全联系方式</div>
-            <div class="value">{{ validator.securityContact || '未提供' }}</div>
+            <div class="label">Security Contact</div>
+            <div class="value">{{ validator.securityContact || 'Not provided' }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">已完成区块数</div>
-            <div class="value">{{ formatNumber(validator.blocksProposed) }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="label">年化收益率</div>
-            <div class="value">{{ validator.apr }}%</div>
+            <div class="label">Description</div>
+            <div class="value description">{{ validator.description || 'Not provided' }}</div>
           </div>
         </div>
       </div>
       
       <div class="detail-card">
-        <h2>描述</h2>
-        <div class="description">
-          {{ validator.description || '该验证者未提供描述' }}
+        <h2>Performance</h2>
+        <div class="detail-grid">
+          <div class="detail-row">
+            <div class="label">Uptime</div>
+            <div class="value">{{ validator.uptime }}%</div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Missed Blocks (30d)</div>
+            <div class="value">{{ validator.missedBlocks }}</div>
+          </div>
         </div>
       </div>
       
-      <div class="tabbed-section">
-        <div class="tabs">
-          <button 
-            :class="{ active: activeTab === 'delegators' }" 
-            @click="activeTab = 'delegators'"
-          >
-            委托人
-          </button>
-          <button 
-            :class="{ active: activeTab === 'blocks' }" 
-            @click="activeTab = 'blocks'"
-          >
-            提议的区块
-          </button>
-          <button 
-            :class="{ active: activeTab === 'uptime' }" 
-            @click="activeTab = 'uptime'"
-          >
-            在线率
-          </button>
-        </div>
-        
-        <div class="tab-content">
-          <div v-if="activeTab === 'delegators'" class="delegators-tab">
-            <div class="tab-header">
-              <h3>委托人 ({{ validator.delegatorsCount }})</h3>
-            </div>
-            <div v-if="delegators.length === 0" class="no-data">暂无委托人数据</div>
-            <div v-else class="delegators-list">
-              <div v-for="delegator in delegators" :key="delegator.address" class="delegator-item">
-                <div class="delegator-address">
-                  <router-link :to="`/accounts/${delegator.address}`">
-                    {{ shortAddress(delegator.address) }}
-                  </router-link>
-                </div>
-                <div class="delegator-amount">{{ formatNumber(delegator.amount) }} TIA</div>
-              </div>
-              <div class="view-more" v-if="delegators.length < validator.delegatorsCount">
-                <button @click="loadMoreDelegators">加载更多</button>
-              </div>
-            </div>
+      <div class="detail-card">
+        <h2>Recent Blocks</h2>
+        <div v-if="recentBlocks.length === 0" class="no-data">No recent blocks found</div>
+        <div v-else class="blocks-list">
+          <div class="table-header">
+            <div class="col-height">Height</div>
+            <div class="col-time">Time</div>
+            <div class="col-txs">Txs</div>
           </div>
-          
-          <div v-if="activeTab === 'blocks'" class="blocks-tab">
-            <div class="tab-header">
-              <h3>提议的区块</h3>
+          <div v-for="block in recentBlocks" :key="block.height" class="block-row">
+            <div class="col-height">
+              <router-link :to="`/blocks/${block.height}`">
+                {{ block.height }}
+              </router-link>
             </div>
-            <div v-if="blocks.length === 0" class="no-data">暂无区块数据</div>
-            <div v-else class="blocks-list">
-              <div v-for="block in blocks" :key="block.height" class="block-item">
-                <div class="block-height">
-                  <router-link :to="`/blocks/${block.height}`">
-                    #{{ block.height }}
-                  </router-link>
-                </div>
-                <div class="block-time">{{ formatTime(block.time) }}</div>
-                <div class="block-txs">{{ block.txCount }} 交易</div>
-              </div>
-              <div class="view-more" v-if="hasMoreBlocks">
-                <button @click="loadMoreBlocks">加载更多</button>
-              </div>
-            </div>
-          </div>
-          
-          <div v-if="activeTab === 'uptime'" class="uptime-tab">
-            <div class="tab-header">
-              <h3>最近在线率</h3>
-            </div>
-            <div class="uptime-stats">
-              <div class="uptime-value">{{ validator.uptime }}%</div>
-              <div class="uptime-bar">
-                <div class="uptime-fill" :style="{ width: validator.uptime + '%' }"></div>
-              </div>
-              <div class="uptime-info">
-                最近 {{ validator.uptimeBlocks }} 区块中缺席 {{ validator.missedBlocks }} 个
-              </div>
-            </div>
+            <div class="col-time">{{ formatTime(block.time) }}</div>
+            <div class="col-txs">{{ block.txs }}</div>
           </div>
         </div>
       </div>
@@ -176,7 +119,7 @@
 
 <script>
 import { format, formatDistance } from 'date-fns'
-import zhCN from 'date-fns/locale/zh-CN'
+import enUS from 'date-fns/locale/en-US'
 
 export default {
   name: 'ValidatorDetail',
@@ -190,7 +133,8 @@ export default {
       blocks: [],
       delegatorsPage: 1,
       blocksPage: 1,
-      hasMoreBlocks: true
+      hasMoreBlocks: true,
+      recentBlocks: []
     }
   },
   mounted() {
@@ -200,7 +144,7 @@ export default {
     fetchValidatorData() {
       this.loading = true
       
-      // 模拟API调用
+      // Simulate API call
       setTimeout(() => {
         this.validator = {
           address: this.validatorAddress,
@@ -215,12 +159,12 @@ export default {
           commission: (Math.random() * 10).toFixed(2),
           maxChangeRate: (Math.random() * 2).toFixed(2),
           selfDelegated: Math.floor(Math.random() * 1000000) + 10000,
-          identity: Math.random() > 0.5 ? '验证者身份' : '',
+          identity: Math.random() > 0.5 ? 'Validator Identity' : '',
           securityContact: Math.random() > 0.5 ? 'security@example.com' : '',
           website: Math.random() > 0.5 ? 'https://example.com' : '',
           blocksProposed: Math.floor(Math.random() * 10000) + 1000,
           apr: (Math.random() * 5 + 10).toFixed(2),
-          description: '该验证者是Celestia网络的活跃贡献者，提供高可用性和安全的验证服务。我们有丰富的区块链验证经验，并致力于网络的稳定和发展。',
+          description: 'This validator is an active contributor to the Celestia network, providing high availability and secure validation services. We have extensive experience in blockchain validation and are committed to the stability and development of the network.',
           uptime: (Math.random() * 5 + 95).toFixed(2),
           uptimeBlocks: 10000,
           missedBlocks: Math.floor(Math.random() * 100)
@@ -228,12 +172,13 @@ export default {
         
         this.loadDelegators()
         this.loadBlocks()
+        this.fetchRecentBlocks()
         
         this.loading = false
       }, 1500)
     },
     loadDelegators() {
-      // 模拟加载委托人数据
+      // Simulate loading delegator data
       setTimeout(() => {
         const newDelegators = []
         for (let i = 0; i < 10; i++) {
@@ -250,13 +195,13 @@ export default {
       this.loadDelegators()
     },
     loadBlocks() {
-      // 模拟加载区块数据
+      // Simulate loading block data
       setTimeout(() => {
         const newBlocks = []
         for (let i = 0; i < 10; i++) {
           newBlocks.push({
             height: Math.floor(Math.random() * 1000000) + 1000000,
-            time: new Date(Date.now() - Math.random() * 86400000 * 7), // 过去7天内
+            time: new Date(Date.now() - Math.random() * 86400000 * 7), // Past 7 days
             txCount: Math.floor(Math.random() * 100)
           })
         }
@@ -267,11 +212,25 @@ export default {
       this.blocksPage++
       this.loadBlocks()
       if (this.blocksPage >= 5) {
-        this.hasMoreBlocks = false // 模拟数据加载完毕
+        this.hasMoreBlocks = false // Simulate data loading completion
       }
     },
+    fetchRecentBlocks() {
+      // Simulate API call for recent blocks
+      setTimeout(() => {
+        const blocks = []
+        for (let i = 0; i < 5; i++) {
+          blocks.push({
+            height: 1000000 + Math.floor(Math.random() * 10000),
+            time: new Date(Date.now() - (i * Math.random() * 600000)), // Random times within last few hours
+            txs: Math.floor(Math.random() * 50)
+          })
+        }
+        this.recentBlocks = blocks.sort((a, b) => b.height - a.height)
+      }, 1500)
+    },
     formatTime(time) {
-      return format(time, 'yyyy-MM-dd HH:mm:ss', { locale: zhCN })
+      return format(time, 'yyyy-MM-dd HH:mm:ss', { locale: enUS })
     },
     formatNumber(num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")

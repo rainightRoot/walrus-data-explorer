@@ -2,36 +2,36 @@
   <div class="block-detail-page">
     <div class="back-link">
       <router-link to="/blocks">
-        <span class="back-arrow">←</span> 返回区块列表
+        <span class="back-arrow">←</span> Back to Blocks
       </router-link>
     </div>
     
-    <h1>区块 #{{ blockHeight }}</h1>
+    <h1>Block #{{ blockHeight }}</h1>
     
-    <div v-if="loading" class="loading">加载区块数据中...</div>
-    <div v-else-if="!block" class="error">区块未找到</div>
+    <div v-if="loading" class="loading">Loading block data...</div>
+    <div v-else-if="!block" class="error">Block not found</div>
     <template v-else>
       <div class="detail-card">
-        <h2>区块信息</h2>
+        <h2>Block Information</h2>
         <div class="detail-grid">
           <div class="detail-row">
-            <div class="label">区块高度</div>
+            <div class="label">Block Height</div>
             <div class="value">{{ block.height }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">哈希</div>
+            <div class="label">Hash</div>
             <div class="value monospace">{{ block.hash }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">时间</div>
+            <div class="label">Time</div>
             <div class="value">{{ formatTime(block.time) }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">交易数</div>
+            <div class="label">Transaction Count</div>
             <div class="value">{{ block.txCount }}</div>
           </div>
           <div class="detail-row">
-            <div class="label">提议者</div>
+            <div class="label">Proposer</div>
             <div class="value">
               <router-link :to="`/validators/${block.proposerAddress}`">
                 {{ block.proposer }}
@@ -39,19 +39,19 @@
             </div>
           </div>
           <div class="detail-row">
-            <div class="label">区块大小</div>
-            <div class="value">{{ block.size }} 字节</div>
+            <div class="label">Block Size</div>
+            <div class="value">{{ block.size }} bytes</div>
           </div>
           <div class="detail-row">
-            <div class="label">Gas使用量</div>
+            <div class="label">Gas Used</div>
             <div class="value">{{ block.gasUsed }} / {{ block.gasLimit }}</div>
           </div>
         </div>
       </div>
       
       <div class="detail-card">
-        <h2>交易列表 ({{ block.txCount }})</h2>
-        <div v-if="block.txCount === 0" class="no-data">区块中没有交易</div>
+        <h2>Transaction List ({{ block.txCount }})</h2>
+        <div v-if="block.txCount === 0" class="no-data">Block has no transactions</div>
         <div v-else class="transactions-list">
           <div v-for="tx in block.transactions" :key="tx.hash" class="transaction-item">
             <div class="tx-hash">
@@ -63,7 +63,7 @@
               <div class="tx-type">{{ tx.type }}</div>
               <div class="tx-details">
                 <span>{{ tx.amount }} TIA</span>
-                <span>费用: {{ tx.fee }} TIA</span>
+                <span>Fee: {{ tx.fee }} TIA</span>
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@
 
 <script>
 import { format } from 'date-fns'
-import zhCN from 'date-fns/locale/zh-CN'
+import enUS from 'date-fns/locale/en-US'
 
 export default {
   name: 'BlockDetail',
@@ -93,17 +93,17 @@ export default {
     fetchBlockData() {
       this.loading = true
       
-      // 模拟API调用
+      // Simulate API call
       setTimeout(() => {
-        // 生成随机区块哈希
+        // Generate random block hash
         const hash = Array.from({ length: 64 }, () => 
           '0123456789abcdef'[Math.floor(Math.random() * 16)]
         ).join('')
         
-        // 生成随机交易
+        // Generate random transactions
         const transactions = []
         const txCount = Math.floor(Math.random() * 10) + 5
-        const txTypes = ['转账', '委托', '赎回', 'MsgSend', 'MsgDelegate']
+        const txTypes = ['Transfer', 'Delegate', 'Undelegate', 'MsgSend', 'MsgDelegate']
         
         for (let i = 0; i < txCount; i++) {
           transactions.push({
@@ -117,7 +117,7 @@ export default {
         this.block = {
           height: this.blockHeight,
           hash: `0x${hash}`,
-          time: new Date(Date.now() - Math.random() * 86400000), // 过去24小时内
+          time: new Date(Date.now() - Math.random() * 86400000), // Past 24 hours
           txCount,
           proposer: `Validator ${Math.floor(Math.random() * 10) + 1}`,
           proposerAddress: `celestiavaloper${Math.random().toString(36).substring(2, 10)}`,
@@ -131,7 +131,7 @@ export default {
       }, 1500)
     },
     formatTime(time) {
-      return format(time, 'yyyy-MM-dd HH:mm:ss', { locale: zhCN })
+      return format(time, 'yyyy-MM-dd HH:mm:ss', { locale: enUS })
     },
     shortHash(hash) {
       return `${hash.substring(0, 8)}...${hash.substring(hash.length - 6)}`

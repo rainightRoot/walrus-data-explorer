@@ -1,26 +1,26 @@
 <template>
   <div class="home-page">
-    <!-- 项目概述和市场数据 -->
+    <!-- Project overview and market data -->
     <div class="page-header">
       <div class="project-info">
-        <h1>关于 Celestia</h1>
+        <h1>About Celestia</h1>
         <p class="project-description">
-          Celestia 是一个模块化数据可用性网络，可随用户数量安全扩展，使任何人都能轻松启动自己的区块链。
+          Celestia is a modular data availability network that scales with the number of users, enabling anyone to easily deploy their own blockchain.
         </p>
         <div class="project-links">
-          <a href="https://celestia.org" target="_blank" class="link-item">官网</a>
-          <a href="https://docs.celestia.org" target="_blank" class="link-item">文档</a>
-          <a href="https://forum.celestia.org" target="_blank" class="link-item">论坛</a>
+          <a href="https://celestia.org" target="_blank" class="link-item">Website</a>
+          <a href="https://docs.celestia.org" target="_blank" class="link-item">Docs</a>
+          <a href="https://forum.celestia.org" target="_blank" class="link-item">Forum</a>
           <a href="https://www.coingecko.com/en/coins/celestia" target="_blank" class="link-item">CoinGecko</a>
         </div>
       </div>
       <div class="network-info">
         <div class="info-item">
-          <span class="label">总市值</span>
+          <span class="label">Market Cap</span>
           <span class="value">{{ marketCap }}</span>
         </div>
         <div class="info-item">
-          <span class="label">24小时交易量</span>
+          <span class="label">24h Volume</span>
           <span class="value">{{ volume24h }}</span>
         </div>
       </div>
@@ -28,17 +28,17 @@
 
     <div class="main-content">
       <div class="content-left">
-        <!-- TIA 价格图表 -->
+        <!-- TIA Chart -->
         <div class="card chart-card">
           <div class="card-header">
-            <h2>TIA 图表</h2>
+            <h2>TIA Chart</h2>
             <div class="chart-period">
-              <button :class="['period-btn', chartPeriod === '24h' ? 'active' : '']" @click="chartPeriod = '24h'">24小时</button>
-              <button :class="['period-btn', chartPeriod === '1w' ? 'active' : '']" @click="chartPeriod = '1w'">1周</button>
-              <button :class="['period-btn', chartPeriod === '1m' ? 'active' : '']" @click="chartPeriod = '1m'">1月</button>
-              <button :class="['period-btn', chartPeriod === '3m' ? 'active' : '']" @click="chartPeriod = '3m'">3月</button>
-              <button :class="['period-btn', chartPeriod === '1y' ? 'active' : '']" @click="chartPeriod = '1y'">1年</button>
-              <button :class="['period-btn', chartPeriod === 'all' ? 'active' : '']" @click="chartPeriod = 'all'">全部</button>
+              <button :class="['period-btn', chartPeriod === '24h' ? 'active' : '']" @click="chartPeriod = '24h'">24h</button>
+              <button :class="['period-btn', chartPeriod === '1w' ? 'active' : '']" @click="chartPeriod = '1w'">1w</button>
+              <button :class="['period-btn', chartPeriod === '1m' ? 'active' : '']" @click="chartPeriod = '1m'">1m</button>
+              <button :class="['period-btn', chartPeriod === '3m' ? 'active' : '']" @click="chartPeriod = '3m'">3m</button>
+              <button :class="['period-btn', chartPeriod === '1y' ? 'active' : '']" @click="chartPeriod = '1y'">1y</button>
+              <button :class="['period-btn', chartPeriod === 'all' ? 'active' : '']" @click="chartPeriod = 'all'">All</button>
             </div>
           </div>
           <div class="card-body">
@@ -50,25 +50,25 @@
                 </div>
                 <div :class="['price-change', priceChangePercentage >= 0 ? 'positive' : 'negative']">
                   {{ priceChangePercentage >= 0 ? '+' : '' }}{{ priceChangePercentage }}%
-                  <span class="period">24小时</span>
+                  <span class="period">24h</span>
                 </div>
               </div>
             </div>
             <div class="chart-placeholder">
-              <img v-if="chartLoading" src="@/assets/loading.svg" alt="加载中" class="chart-loading">
+              <img v-if="chartLoading" src="@/assets/loading.svg" alt="Loading" class="chart-loading">
               <div v-else class="chart-area" ref="chartContainer"></div>
             </div>
           </div>
         </div>
 
-        <!-- GitHub 活动 -->
+        <!-- GitHub Activity -->
         <div class="card">
           <div class="card-header">
-            <h2>GitHub 活动</h2>
-            <a href="https://github.com/celestiaorg" target="_blank" class="view-all-link">查看全部</a>
+            <h2>GitHub Activity</h2>
+            <a href="https://github.com/celestiaorg" target="_blank" class="view-all-link">View All</a>
           </div>
           <div class="card-body">
-            <div v-if="githubActivity.length === 0" class="no-data">暂无 GitHub 活动数据</div>
+            <div v-if="githubActivity.length === 0" class="no-data">No GitHub activity data available</div>
             <div v-else class="github-activity">
               <div v-for="(activity, index) in githubActivity" :key="index" class="activity-item">
                 <div class="activity-repo">
@@ -77,30 +77,29 @@
                 </div>
                 <div class="activity-message">{{ activity.message }}</div>
                 <div class="activity-author">
-                  <span>由</span>
+                  <span>by</span>
                   <a :href="'https://github.com/' + activity.author" target="_blank">{{ activity.author }}</a>
-                  <span>提交</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 即将解锁 -->
+        <!-- Upcoming Unlocks -->
         <div class="card">
           <div class="card-header">
-            <h2>即将解锁</h2>
+            <h2>Upcoming Unlocks</h2>
           </div>
           <div class="card-body">
-            <div v-if="upcomingUnlocks.length === 0" class="no-data">暂无即将解锁的代币</div>
+            <div v-if="upcomingUnlocks.length === 0" class="no-data">No upcoming token unlocks</div>
             <div v-else class="unlocks-list">
               <div v-for="(unlock, index) in upcomingUnlocks" :key="index" class="unlock-item">
                 <div class="unlock-info">
-                  <div class="unlock-date">{{ formatFullDate(unlock.date) }}</div>
+                  <div class="unlock-date">{{ formatDate(unlock.date) }}</div>
                   <div class="unlock-amount">{{ formatNumber(unlock.amount) }} TIA</div>
                 </div>
                 <div class="unlock-percentage">
-                  <div class="unlock-label">占总供应量百分比</div>
+                  <div class="unlock-label">Percent of Total Supply</div>
                   <div class="unlock-value">{{ unlock.percentOfSupply }}%</div>
                 </div>
               </div>
@@ -110,25 +109,25 @@
       </div>
 
       <div class="content-right">
-        <!-- 最新区块 -->
+        <!-- Latest Blocks -->
         <div class="card">
           <div class="card-header">
-            <h2>最新区块</h2>
-            <router-link to="/blocks" class="view-all-link">查看全部</router-link>
+            <h2>Latest Blocks</h2>
+            <router-link to="/blocks" class="view-all-link">View All</router-link>
           </div>
           <div class="card-body no-padding">
             <latest-blocks :limit="5" />
           </div>
         </div>
 
-        <!-- 活跃提案 -->
+        <!-- Active Proposals -->
         <div class="card">
           <div class="card-header">
-            <h2>活跃提案</h2>
-            <router-link to="/governance" class="view-all-link">查看全部</router-link>
+            <h2>Active Proposals</h2>
+            <router-link to="/governance" class="view-all-link">View All</router-link>
           </div>
           <div class="card-body">
-            <div v-if="activeProposals.length === 0" class="no-data">暂无活跃提案</div>
+            <div v-if="activeProposals.length === 0" class="no-data">No active proposals</div>
             <div v-else class="proposals-list">
               <div v-for="proposal in activeProposals" :key="proposal.id" class="proposal-item">
                 <router-link :to="`/governance/${proposal.id}`" class="proposal-title">
@@ -137,7 +136,7 @@
                 <div class="proposal-meta">
                   <div :class="['proposal-status', proposal.status]">{{ getStatusLabel(proposal.status) }}</div>
                   <div class="proposal-time">
-                    {{ proposal.status === 'voting' ? '结束时间' : '开始时间' }}: {{ formatTime(proposal.endTime) }}
+                    {{ proposal.status === 'voting' ? 'End time' : 'Start time' }}: {{ formatTime(proposal.endTime) }}
                   </div>
                 </div>
               </div>
@@ -145,19 +144,19 @@
           </div>
         </div>
 
-        <!-- 投资者 -->
+        <!-- Investors -->
         <div class="card">
           <div class="card-header">
-            <h2>投资者</h2>
+            <h2>Investors</h2>
           </div>
           <div class="card-body investors-section">
             <div class="investor-stats">
               <div class="investor-stat">
-                <div class="stat-label">筹集资金</div>
+                <div class="stat-label">Raised</div>
                 <div class="stat-value">$28.5M</div>
               </div>
               <div class="investor-stat">
-                <div class="stat-label">出售代币</div>
+                <div class="stat-label">Tokens Sold</div>
                 <div class="stat-value">113M TIA</div>
               </div>
             </div>
@@ -170,39 +169,45 @@
           </div>
         </div>
 
-        <!-- 代币经济学 -->
+        <!-- Tokenomics -->
         <div class="card">
           <div class="card-header">
-            <h2>代币经济学</h2>
+            <h2>Tokenomics</h2>
           </div>
           <div class="card-body">
             <div class="tokenomics-chart">
               <div class="chart-legend">
                 <div class="legend-item">
                   <span class="legend-color bonded"></span>
-                  <span>已质押({{ tokenomics.bondedPercentage }}%)</span>
+                  <span>Bonded</span>
                 </div>
                 <div class="legend-item">
                   <span class="legend-color unbonded"></span>
-                  <span>未质押({{ tokenomics.unbondedPercentage }}%)</span>
+                  <span>Unbonded</span>
                 </div>
               </div>
+              
               <div class="supply-chart">
-                <div class="bonded-supply" :style="{ width: tokenomics.bondedPercentage + '%' }"></div>
-                <div class="unbonded-supply" :style="{ width: tokenomics.unbondedPercentage + '%' }"></div>
+                <div class="bonded-supply" :style="{ width: `${bondedPercent}%` }"></div>
+                <div class="unbonded-supply" :style="{ width: `${100 - bondedPercent}%` }"></div>
               </div>
+              
               <div class="supply-info">
                 <div class="supply-item">
-                  <div class="supply-label">已质押</div>
-                  <div class="supply-value">{{ formatNumber(tokenomics.bonded) }} TIA</div>
+                  <div class="supply-label">Bonded</div>
+                  <div class="supply-value">{{ formatNumber(bondedSupply) }} TIA</div>
                 </div>
                 <div class="supply-item">
-                  <div class="supply-label">未质押</div>
-                  <div class="supply-value">{{ formatNumber(tokenomics.unbonded) }} TIA</div>
+                  <div class="supply-label">Unbonded</div>
+                  <div class="supply-value">{{ formatNumber(unbondedSupply) }} TIA</div>
+                </div>
+                <div class="supply-item">
+                  <div class="supply-label">Community Pool</div>
+                  <div class="supply-value">{{ formatNumber(communityPool) }} TIA</div>
                 </div>
                 <div class="supply-item total">
-                  <div class="supply-label">总供应量:</div>
-                  <div class="supply-value">{{ formatNumber(tokenomics.totalSupply) }} TIA</div>
+                  <div class="supply-label">Total Supply</div>
+                  <div class="supply-value">{{ formatNumber(totalSupply) }} TIA</div>
                 </div>
               </div>
             </div>
@@ -215,6 +220,8 @@
 
 <script>
 import LatestBlocks from '@/components/LatestBlocks.vue'
+import { format, formatDistance } from 'date-fns'
+import enUS from 'date-fns/locale/en-US'
 
 export default {
   name: 'Home',
@@ -302,11 +309,15 @@ export default {
     }, 1500)
   },
   methods: {
-    formatTime(date) {
-      return this.$formatTime(date)
+    formatTime(time) {
+      return formatDistance(
+        new Date(time),
+        new Date(),
+        { addSuffix: true, locale: enUS }
+      )
     },
-    formatFullDate(date) {
-      return this.$formatFullDate(date)
+    formatDate(date) {
+      return format(new Date(date), 'MMM dd, yyyy', { locale: enUS })
     },
     formatNumber(value) {
       return this.$formatNumber(value)

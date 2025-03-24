@@ -11,16 +11,16 @@
         </div>
         
         <nav class="main-nav">
-          <router-link to="/" exact>首页</router-link>
-          <router-link to="/validators">验证者</router-link>
-          <router-link to="/blocks">区块</router-link>
-          <router-link to="/transactions">交易</router-link>
-          <router-link to="/governance">治理</router-link>
-          <router-link to="/staking">质押</router-link>
+          <router-link to="/" exact>Home</router-link>
+          <router-link to="/validators">Validators</router-link>
+          <router-link to="/blocks">Blocks</router-link>
+          <router-link to="/transactions">Transactions</router-link>
+          <router-link to="/governance">Governance</router-link>
+          <router-link to="/staking">Staking</router-link>
         </nav>
         
         <div class="search-section">
-          <input type="text" placeholder="搜索区块/交易/地址..." @keyup.enter="search" v-model="searchQuery" />
+          <input type="text" placeholder="Search blocks/transactions/addresses..." @keyup.enter="search" v-model="searchQuery" />
           <button @click="search" class="search-btn">
             🔍
           </button>
@@ -38,22 +38,22 @@
       <div class="container">
         <div class="footer-content">
           <div class="footer-section">
-            <h3>关于 Celestia</h3>
-            <p>Celestia 是一个模块化数据可用性网络，可随用户数量安全扩展，使任何人都能轻松启动自己的区块链。</p>
+            <h3>About Celestia</h3>
+            <p>Celestia is a modular data availability network that scales with the number of users, enabling anyone to easily deploy their own blockchain.</p>
           </div>
           
           <div class="footer-section">
-            <h3>官方链接</h3>
+            <h3>Official Links</h3>
             <div class="footer-links">
-              <a href="https://celestia.org" target="_blank">官网</a>
-              <a href="https://docs.celestia.org" target="_blank">文档</a>
+              <a href="https://celestia.org" target="_blank">Website</a>
+              <a href="https://docs.celestia.org" target="_blank">Documentation</a>
               <a href="https://discord.gg/celestiacommunity" target="_blank">Discord</a>
               <a href="https://twitter.com/CelestiaOrg" target="_blank">Twitter</a>
             </div>
           </div>
         </div>
         <div class="copyright">
-          © 2023 Celestia Explorer. 本网站仅供学习参考。
+          © 2023 Celestia Explorer. This website is for educational purposes only.
         </div>
       </div>
     </footer>
@@ -74,15 +74,15 @@ export default {
       
       const query = this.searchQuery.trim()
       
-      // 简单的搜索逻辑，根据输入内容判断搜索类型
+      // Simple search logic based on input format
       if (/^\d+$/.test(query)) {
-        // 纯数字认为是区块高度
+        // Pure numbers are treated as block heights
         this.$router.push(`/blocks/${query}`)
       } else if (query.startsWith('0x') || query.length === 64) {
-        // 0x开头或64位长度认为是交易哈希
+        // 0x prefix or 64 characters length treated as transaction hash
         this.$router.push(`/transactions/${query}`)
       } else {
-        // 其他情况认为是地址
+        // Otherwise treated as an address
         this.$router.push(`/accounts/${query}`)
       }
       

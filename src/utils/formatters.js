@@ -1,14 +1,14 @@
 import { format, formatDistance, formatRelative } from 'date-fns'
-import zhCN from 'date-fns/locale/zh-CN'
+import enUS from 'date-fns/locale/en-US'
 
 export function formatNumber(value) {
   if (value === null || value === undefined) return '-'
-  return new Intl.NumberFormat('zh-CN').format(value)
+  return new Intl.NumberFormat('en-US').format(value)
 }
 
 export function formatCurrency(value) {
   if (value === null || value === undefined) return '-'
-  return new Intl.NumberFormat('zh-CN', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 0,
@@ -18,12 +18,12 @@ export function formatCurrency(value) {
 
 export function formatTime(date) {
   if (!date) return '-'
-  return formatDistance(new Date(date), new Date(), { addSuffix: true, locale: zhCN })
+  return formatDistance(new Date(date), new Date(), { addSuffix: true, locale: enUS })
 }
 
 export function formatFullDate(date) {
   if (!date) return '-'
-  return format(new Date(date), 'yyyy-MM-dd HH:mm:ss', { locale: zhCN })
+  return format(new Date(date), 'yyyy-MM-dd HH:mm:ss', { locale: enUS })
 }
 
 export function shortAddress(address) {
@@ -39,10 +39,10 @@ export function shortHash(hash) {
 export function copyToClipboard(text) {
   navigator.clipboard.writeText(text)
     .then(() => {
-      // 可以在这里添加复制成功的通知逻辑
-      console.log('已复制到剪贴板')
+      // Notification logic could be added here
+      console.log('Copied to clipboard')
     })
     .catch(err => {
-      console.error('复制失败:', err)
+      console.error('Copy failed:', err)
     })
 } 

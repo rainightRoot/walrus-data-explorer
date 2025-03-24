@@ -1,18 +1,18 @@
 <template>
   <div class="validators-page">
-    <h1>验证者</h1>
+    <h1>Validators</h1>
     
     <div class="stats-cards">
       <div class="stat-card">
-        <h3>活跃验证者</h3>
+        <h3>Active Validators</h3>
         <div class="value">{{ activeValidators }}</div>
       </div>
       <div class="stat-card">
-        <h3>总验证者</h3>
+        <h3>Total Validators</h3>
         <div class="value">{{ totalValidators }}</div>
       </div>
       <div class="stat-card">
-        <h3>投票权</h3>
+        <h3>Voting Power</h3>
         <div class="value">{{ formatNumber(totalVotingPower) }} TIA</div>
       </div>
     </div>
@@ -20,7 +20,7 @@
     <div class="validators-container">
       <div class="filters">
         <div class="search-bar">
-          <input type="text" placeholder="搜索验证者..." v-model="searchQuery" />
+          <input type="text" placeholder="Search validators..." v-model="searchQuery" />
         </div>
         <div class="status-filter">
           <button 
@@ -37,14 +37,14 @@
       <div class="validators-table">
         <div class="table-header">
           <div class="col-rank">#</div>
-          <div class="col-name">验证者</div>
-          <div class="col-status">状态</div>
-          <div class="col-voting-power">投票权</div>
-          <div class="col-commission">佣金</div>
-          <div class="col-delegators">委托人</div>
+          <div class="col-name">Validator</div>
+          <div class="col-status">Status</div>
+          <div class="col-voting-power">Voting Power</div>
+          <div class="col-commission">Commission</div>
+          <div class="col-delegators">Delegators</div>
         </div>
         
-        <div v-if="loading" class="loading">加载中...</div>
+        <div v-if="loading" class="loading">Loading...</div>
         <template v-else>
           <div 
             v-for="(validator, index) in filteredValidators" 
@@ -59,7 +59,7 @@
             </div>
             <div class="col-status">
               <span :class="['status-badge', validator.status]">
-                {{ validator.status === 'active' ? '活跃' : '不活跃' }}
+                {{ validator.status === 'active' ? 'Active' : 'Inactive' }}
               </span>
             </div>
             <div class="col-voting-power">
@@ -76,6 +76,9 @@
 </template>
 
 <script>
+import { format } from 'date-fns'
+import enUS from 'date-fns/locale/en-US'
+
 export default {
   name: 'Validators',
   data() {
@@ -84,9 +87,9 @@ export default {
       searchQuery: '',
       selectedStatus: 'all',
       statusOptions: [
-        { label: '全部', value: 'all' },
-        { label: '活跃', value: 'active' },
-        { label: '不活跃', value: 'inactive' }
+        { label: 'All', value: 'all' },
+        { label: 'Active', value: 'active' },
+        { label: 'Inactive', value: 'inactive' }
       ],
       validators: []
     }
@@ -145,8 +148,11 @@ export default {
         this.loading = false
       }, 1500)
     },
-    formatNumber(num) {
-      return new Intl.NumberFormat().format(num)
+    formatNumber(value) {
+      return new Intl.NumberFormat('en-US').format(value)
+    },
+    formatTime(time) {
+      return format(new Date(time), 'MMM dd, yyyy HH:mm', { locale: enUS })
     }
   }
 }
