@@ -64,9 +64,8 @@
         <!-- GitHub Activity -->
         <div class="card">
           <div class="card-header">
-<<<<<<< HEAD
-            <h2>GitHub 活动</h2>
-            <a href="https://github.com/MystenLabs" target="_blank" class="view-all-link">查看全部</a>
+            <h2>GitHub Activity</h2>
+            <a href="https://github.com/celestiaorg" target="_blank" class="view-all-link">View All</a>
           </div>
           <div class="card-body">
             <!-- GitHub 活动热力图 -->
@@ -144,23 +143,6 @@
                       </div>
                     </div>
                   </div>
-=======
-            <h2>GitHub Activity</h2>
-            <a href="https://github.com/celestiaorg" target="_blank" class="view-all-link">View All</a>
-          </div>
-          <div class="card-body">
-            <div v-if="githubActivity.length === 0" class="no-data">No GitHub activity data available</div>
-            <div v-else class="github-activity">
-              <div v-for="(activity, index) in githubActivity" :key="index" class="activity-item">
-                <div class="activity-repo">
-                  <span class="repo-name">{{ activity.repo }}</span>
-                  <span class="activity-time">{{ formatTime(activity.time) }}</span>
-                </div>
-                <div class="activity-message">{{ activity.message }}</div>
-                <div class="activity-author">
-                  <span>by</span>
-                  <a :href="'https://github.com/' + activity.author" target="_blank">{{ activity.author }}</a>
->>>>>>> 47360f28b005d8bc500d5e8778b4615b33eef6e1
                 </div>
               </div>
             </div>
@@ -302,12 +284,9 @@
 
 <script>
 import LatestBlocks from '@/components/LatestBlocks.vue'
-<<<<<<< HEAD
 import axios from 'axios'
-=======
 import { format, formatDistance } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
->>>>>>> 47360f28b005d8bc500d5e8778b4615b33eef6e1
 
 export default {
   name: 'Home',
