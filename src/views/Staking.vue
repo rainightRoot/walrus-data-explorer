@@ -1,92 +1,161 @@
 <template>
   <div class="staking-page">
-    <h1>Staking</h1>
-    
-    <div class="stats-cards">
-      <div class="stat-card">
-        <h3>Total Staked</h3>
-        <div class="value">{{ formatNumber(totalStaked) }} TIA</div>
+    <!-- Navigation and Address -->
+    <div class="page-header">
+      <div class="nav-tabs">
+        <button class="tab-btn">Account</button>
+        <button class="tab-btn active">Staking</button>
       </div>
-      <div class="stat-card">
-        <h3>Staking Ratio</h3>
-        <div class="value">{{ stakingRatio }}%</div>
-      </div>
-      <div class="stat-card">
-        <h3>Staking APR</h3>
-        <div class="value">{{ stakingAPR }}%</div>
+      <div class="address-bar">
+        <div class="address">celestia13z9ls9etquus00d6jusrt04z0qv2uw2gpf0l0r</div>
+        <div class="address-actions">
+          <button class="action-btn" title="Copy">
+            <i class="fas fa-copy"></i>
+          </button>
+          <button class="action-btn" title="View in explorer">
+            <i class="fas fa-external-link-alt"></i>
+          </button>
+          <button class="action-btn" title="Add to favorites">
+            <i class="fas fa-star"></i>
+          </button>
+        </div>
       </div>
     </div>
-    
-    <div class="staking-sections">
-      <div class="section">
-        <h2>Validator Overview</h2>
-        <div class="summary-stats">
-          <div class="stat-item">
-            <span class="label">Active Validators</span>
-            <span class="value">{{ activeValidators }} / {{ maxValidators }}</span>
+
+    <!-- Main Staking Grid -->
+    <div class="staking-grid">
+      <!-- My TIA Staking Card -->
+      <div class="staking-card">
+        <h2>My TIA Staking</h2>
+        <div class="staking-info">
+          <div class="info-row">
+            <div class="info-col">
+              <div class="label">TOTAL STAKED</div>
+              <div class="value">{{ formatNumber(totalStaked) }} TIA</div>
+              <div class="usd-value">~${{ formatUSD(totalStaked * tiaPrice) }}</div>
+            </div>
+            <div class="info-col">
+              <div class="label">AVAILABLE</div>
+              <div class="value">{{ formatNumber(available) }} TIA</div>
+              <div class="usd-value">~${{ formatUSD(available * tiaPrice) }}</div>
+            </div>
           </div>
-          <div class="stat-item">
-            <span class="label">Inactive Validators</span>
-            <span class="value">{{ totalValidators - activeValidators }}</span>
+          <div class="rewards-section">
+            <div class="rewards-header">
+              <div class="label">
+                REWARDS
+                <span class="info-icon">ⓘ</span>
+              </div>
+              <button class="claim-btn" @click="claimRewards" :disabled="!canClaimRewards">Claim</button>
+            </div>
+            <div class="value">{{ formatNumber(rewards) }} TIA</div>
+          </div>
+          <button class="stake-btn">Stake</button>
+        </div>
+      </div>
+
+      <!-- Calculator Card -->
+      <div class="staking-card">
+        <div class="card-header">
+          <h2>Calculate your earnings</h2>
+          <span class="info-icon">ⓘ</span>
+        </div>
+        <div class="calculator">
+          <div class="slider-container">
+            <input 
+              type="range" 
+              class="range-slider"
+              v-model="stakingAmount"
+              min="0"
+              max="10000000"
+              step="1000"
+            />
+          </div>
+          <div class="amount-input">
+            <input 
+              type="number" 
+              v-model="stakingAmount"
+              class="amount-field"
+            />
+            <span class="currency">TIA</span>
+          </div>
+          <div class="usd-value">~${{ formatUSD(stakingAmount * tiaPrice) }}</div>
+          
+          <div class="earnings-table">
+            <div class="earning-row">
+              <span>Daily</span>
+              <div class="earning-amount">
+                <div>{{ formatTIA(dailyEarning) }} TIA</div>
+                <div class="usd-value">~${{ formatUSD(dailyEarning * tiaPrice) }}</div>
+              </div>
+            </div>
+            <div class="earning-row">
+              <span>Monthly</span>
+              <div class="earning-amount">
+                <div>{{ formatTIA(monthlyEarning) }} TIA</div>
+                <div class="usd-value">~${{ formatUSD(monthlyEarning * tiaPrice) }}</div>
+              </div>
+            </div>
+            <div class="earning-row">
+              <span>Yearly</span>
+              <div class="earning-amount">
+                <div>{{ formatTIA(yearlyEarning) }} TIA</div>
+                <div class="usd-value">~${{ formatUSD(yearlyEarning * tiaPrice) }}</div>
+              </div>
+            </div>
           </div>
         </div>
-        
-        <h3>Top Validators by Stake</h3>
-        <div class="validators-list">
-          <div v-if="topValidators.length === 0" class="no-data">Loading validators...</div>
-          <div v-else class="validator-item" v-for="validator in topValidators" :key="validator.address">
-            <div class="validator-name">
-              <router-link :to="`/validators/${validator.address}`">
-                {{ validator.name }}
-              </router-link>
-            </div>
-            <div class="validator-stats">
-              <div class="stat">
-                <span class="label">Self Stake</span>
-                <span class="value">{{ formatNumber(validator.selfStake) }}</span>
-              </div>
-              <div class="stat">
-                <span class="label">Total Stake</span>
-                <span class="value">{{ formatNumber(validator.totalStake) }}</span>
-              </div>
-            </div>
+      </div>
+
+      <!-- Stats Card -->
+      <div class="stats-card">
+        <div class="stat-item">
+          <div class="stat-header">
+            <h3>Staking APR</h3>
+            <span class="info-icon">ⓘ</span>
           </div>
+          <div class="stat-value">{{ stakingAPR }}%</div>
+          <div class="stat-change negative">1M -0.97%</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-header">
+            <h3>Unlock Period</h3>
+            <span class="info-icon">ⓘ</span>
+          </div>
+          <div class="stat-value">{{ unlockPeriod }} days</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-header">
+            <h3>Avg. Commission</h3>
+            <span class="info-icon">ⓘ</span>
+          </div>
+          <div class="stat-value">{{ avgCommission }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Validators Section -->
+    <div class="validators-section">
+      <div class="section-header">
+        <div class="tabs">
+          <button class="tab active">Active</button>
+          <button class="tab">Pending</button>
+        </div>
+        <div class="search">
+          <input type="text" placeholder="Enter validator" />
         </div>
       </div>
       
-      <div class="section calculator">
-        <h2>Rewards Calculator</h2>
-        <div class="input-group">
-          <label for="staking-amount">Amount to Stake (TIA)</label>
-          <input 
-            type="number" 
-            id="staking-amount" 
-            v-model="calculatorAmount"
-            min="1" 
-            step="1"
-          />
+      <div class="validators-table">
+        <div class="table-header">
+          <div class="col">Validator</div>
+          <div class="col">Total Amount ↓</div>
+          <div class="col">Pending Amount</div>
+          <div class="col">Rewards</div>
+          <div class="col">Validator Status</div>
         </div>
-        
-        <div class="reward-results">
-          <div class="result-label">Estimated Rewards ({{ stakingAPR }}% APR)</div>
-          <div class="result-items">
-            <div class="result-item">
-              <span class="label">Daily</span>
-              <span class="value">{{ calculateDailyReward() }} TIA</span>
-            </div>
-            <div class="result-item">
-              <span class="label">Weekly</span>
-              <span class="value">{{ calculateWeeklyReward() }} TIA</span>
-            </div>
-            <div class="result-item">
-              <span class="label">Monthly</span>
-              <span class="value">{{ calculateMonthlyReward() }} TIA</span>
-            </div>
-            <div class="result-item">
-              <span class="label">Yearly</span>
-              <span class="value">{{ calculateYearlyReward() }} TIA</span>
-            </div>
-          </div>
+        <div class="table-body">
+          <!-- Table content will be populated dynamically -->
         </div>
       </div>
     </div>
@@ -102,32 +171,27 @@ export default {
   data() {
     return {
       totalStaked: 87654321,
-      stakingRatio: 62.5,
-      stakingAPR: 12.8,
-      activeValidators: 80,
-      totalValidators: 95,
-      maxValidators: 100,
-      topValidators: [],
-      calculatorAmount: 1000
+      available: 7654321,
+      rewards: 12345,
+      tiaPrice: 3.667, // Mock TIA price
+      stakingAPR: 11.45,
+      unlockPeriod: 21,
+      avgCommission: 10.49,
+      stakingAmount: 1000000,
+      dailyEarning: 0,
+      monthlyEarning: 0,
+      yearlyEarning: 0
+    }
+  },
+  computed: {
+    canClaimRewards() {
+      return this.rewards > 0
     }
   },
   mounted() {
-    this.fetchStakingData()
+    this.calculateEarnings()
   },
   methods: {
-    fetchStakingData() {
-      // 模拟API调用
-      setTimeout(() => {
-        this.topValidators = Array.from({ length: 5 }, (_, i) => ({
-          address: `celestiavaloper${(i+1).toString().padStart(6, '0')}`,
-          name: `Validator ${i+1}`,
-          selfStake: Math.floor(Math.random() * 500000) + 100000,
-          totalStake: Math.floor(Math.random() * 5000000) + 1000000
-        }))
-        // 按总质押排序
-        this.topValidators.sort((a, b) => b.totalStake - a.totalStake)
-      }, 1000)
-    },
     formatNumber(value) {
       return new Intl.NumberFormat('en-US').format(value)
     },
@@ -141,305 +205,154 @@ export default {
     formatDate(date) {
       return format(new Date(date), 'MMM dd, yyyy', { locale: enUS })
     },
-    calculateDailyReward() {
-      const dailyRate = this.stakingAPR / 365 / 100
-      return (this.calculatorAmount * dailyRate).toFixed(4)
+    formatTIA(amount) {
+      return amount.toFixed(2)
     },
-    calculateWeeklyReward() {
-      return (this.calculateDailyReward() * 7).toFixed(4)
+    formatUSD(amount) {
+      return amount.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })
     },
-    calculateMonthlyReward() {
-      return (this.calculateDailyReward() * 30).toFixed(4)
+    calculateEarnings() {
+      this.dailyEarning = (this.stakingAmount * this.stakingAPR) / (365 * 100)
+      this.monthlyEarning = this.dailyEarning * 30
+      this.yearlyEarning = this.dailyEarning * 365
     },
-    calculateYearlyReward() {
-      return (this.calculatorAmount * this.stakingAPR / 100).toFixed(4)
+    claimRewards() {
+      // Implementation of claimRewards method
     }
   }
 }
 </script>
 
 <style scoped>
+/* Base styles */
 .staking-page {
-  padding-bottom: 40px;
+  padding: 20px;
 }
-.staking-page h1 {
+
+/* Navigation and Address styles */
+.page-header {
   margin-bottom: 30px;
 }
-.stats-cards {
+
+.nav-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.address-bar {
+  background: var(--card-bg);
+  padding: 15px 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Staking Grid styles */
+.staking-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 30px;
 }
-.stat-card {
-  background: white;
+
+.staking-card {
+  background: var(--card-bg);
   border-radius: 8px;
   padding: 20px;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-.stat-card h3 {
-  margin-top: 0;
-  color: #666;
-  font-size: 0.9rem;
-  font-weight: normal;
-}
-.stat-card .value {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #2c3e50;
-}
-.staking-sections {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
-}
-.section {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-.section h2 {
-  font-size: 1.2rem;
-  margin-top: 0;
-  margin-bottom: 20px;
-  color: #2c3e50;
-}
-.summary-stats {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-.stat-item {
-  text-align: center;
-  padding: 10px;
-}
-.stat-item .label {
-  display: block;
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 5px;
-}
-.stat-item .value {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #2c3e50;
-}
-.validator-table {
-  border-top: 1px solid #eee;
-  margin-bottom: 15px;
-}
-.table-header {
-  display: flex;
-  padding: 15px 0;
-  font-weight: bold;
-  color: #666;
-  border-bottom: 1px solid #eee;
-}
-.table-row {
-  display: flex;
-  padding: 15px 0;
-  border-bottom: 1px solid #eee;
-}
-.col {
-  flex: 1;
-}
-.validator-name {
-  display: flex;
-  align-items: center;
-}
-.rank {
-  background: #f5f5f5;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  margin-right: 10px;
-}
-.validator-name a {
-  color: #42b983;
-  text-decoration: none;
-  font-weight: 500;
-}
-.view-all-link {
-  text-align: center;
-  margin-top: 15px;
-}
-.view-all-link a {
-  color: #42b983;
-  text-decoration: none;
-  font-weight: 500;
-}
-.calculator {
-  padding: 15px;
-  background: #f9f9f9;
-  border-radius: 4px;
-}
-.input-group {
-  margin-bottom: 20px;
-}
-.input-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: #2c3e50;
-  font-weight: 500;
-}
-.input-group input {
+
+/* Calculator specific styles */
+.range-slider {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
+  margin: 20px 0;
+}
+
+.amount-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.amount-field {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
-  font-size: 1rem;
 }
-.calculator-results {
-  border-top: 1px solid #eee;
-  padding-top: 15px;
+
+/* Stats Card styles */
+.stats-card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 20px;
 }
-.result-item {
+
+.stat-item {
+  margin-bottom: 20px;
+}
+
+/* Validators section styles */
+.validators-section {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.section-header {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
+  margin-bottom: 20px;
 }
-.result-item .label {
-  color: #666;
-}
-.result-item .value {
-  font-weight: 500;
-  color: #2c3e50;
-}
-@media (max-width: 768px) {
-  .stats-cards, .staking-sections {
-    grid-template-columns: 1fr;
+
+/* Dark mode styles */
+[data-theme="dark"] {
+  /* Add dark mode specific styles */
+  .staking-card,
+  .stats-card,
+  .validators-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
   }
-}
 
-/* Dark mode styles for Staking Page */
-[data-theme="dark"] .section {
-  background-color: var(--card-bg);
-  border-color: var(--border-color);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
+  .amount-field {
+    background: #2a2a2a;
+    color: #fff;
+    border-color: #444;
+  }
 
-[data-theme="dark"] .staking-page h1 {
-  color: #fff;
-}
+  .tab-btn {
+    color: #aaa;
+  }
 
-[data-theme="dark"] .section h2 {
-  color: #eee;
-}
+  .tab-btn.active {
+    color: white;
+  }
 
-/* Stats cards */
-[data-theme="dark"] .stat-card {
-  background-color: var(--card-bg);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
+  .stat-value {
+    color: #fff;
+  }
 
-[data-theme="dark"] .stat-card h3 {
-  color: #b0b3b8;
-}
-
-[data-theme="dark"] .stat-card .value {
-  color: #fff;
-}
-
-/* Summary stats */
-[data-theme="dark"] .stat-item .label {
-  color: #b0b3b8;
-}
-
-[data-theme="dark"] .stat-item .value {
-  color: #fff;
-}
-
-/* Validator table */
-[data-theme="dark"] .validator-table {
-  border-top-color: #444;
-}
-
-[data-theme="dark"] .table-header {
-  color: #b0b3b8;
-  border-bottom-color: #444;
-}
-
-[data-theme="dark"] .table-row {
-  border-bottom-color: #444;
-}
-
-/* Rank circle */
-[data-theme="dark"] .rank {
-  background-color: #333;
-  color: #ddd;
-}
-
-/* Validator name */
-[data-theme="dark"] .validator-name a {
-  color: #a48aff;
-}
-
-/* Links */
-[data-theme="dark"] .view-all-link a {
-  color: #a48aff;
-}
-
-/* Calculator */
-[data-theme="dark"] .calculator {
-  background-color: #252525;
-}
-
-[data-theme="dark"] .input-group label {
-  color: #ddd;
-}
-
-[data-theme="dark"] .input-group input {
-  background-color: #333;
-  border-color: #555;
-  color: #eee;
-}
-
-[data-theme="dark"] .calculator-results {
-  border-top-color: #444;
-}
-
-[data-theme="dark"] .result-item .label {
-  color: #b0b3b8;
-}
-
-[data-theme="dark"] .result-item .value {
-  color: #fff;
-}
-
-/* Buttons */
-[data-theme="dark"] button {
-  background-color: var(--primary-color);
-  color: white;
-}
-
-/* Status indicators */
-[data-theme="dark"] .active-indicator {
-  background-color: rgba(40, 167, 69, 0.2);
-  color: #4cce5a;
-}
-
-[data-theme="dark"] .inactive-indicator {
-  background-color: rgba(220, 53, 69, 0.2);
-  color: #ff6b6b;
-}
-
-/* Fix specific text elements */
-[data-theme="dark"] .commission,
-[data-theme="dark"] .voting-power,
-[data-theme="dark"] .delegators {
-  color: #b0b3b8;
-}
-
-/* Make sure no-data and loading states are visible */
-[data-theme="dark"] .no-data,
-[data-theme="dark"] .loading {
-  color: #aaa;
+  .usd-value {
+    color: #aaa;
+  }
 }
 </style> 

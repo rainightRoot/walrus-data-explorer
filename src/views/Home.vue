@@ -3,18 +3,19 @@
     <!-- Project overview and market data -->
     <div class="page-header">
       <div class="project-info">
-        <h1>About Celestia</h1>
+        <h1>About Walrus</h1>
         <p class="project-description">
-          Celestia is a modular data availability network that scales with the number of users, enabling anyone to easily deploy their own blockchain.
+          Walrus is a decentralized storage and data availability protocol designed specifically for large binary files, or "blobs". Walrus focuses on providing a robust but affordable solution for storing unstructured content on decentralized storage nodes while ensuring high availability and reliability even in the presence of Byzantine faults.
         </p>
         <div class="project-links">
-          <a href="https://celestia.org" target="_blank" class="link-item">Website</a>
-          <a href="https://docs.celestia.org" target="_blank" class="link-item">Docs</a>
-          <a href="https://forum.celestia.org" target="_blank" class="link-item">Forum</a>
-          <a href="https://www.coingecko.com/en/coins/celestia" target="_blank" class="link-item">CoinGecko</a>
+          <a href="https://www.walrus.xyz/" target="_blank" class="link-item">Website</a>
+          <a href="https://docs.walrus.site/" target="_blank" class="link-item">Docs</a>
+          <a href="https://x.com/walrusprotocol" target="_blank" class="link-item">X</a>
+          <a href="https://discord.com/invite/walrusprotocol" target="_blank" class="link-item">Discord</a>
+          <!-- <a href="https://www.coingecko.com/en/coins/celestia" target="_blank" class="link-item">CoinGecko</a> -->
         </div>
       </div>
-      <div class="network-info">
+      <!-- <div class="network-info">
         <div class="info-item">
           <span class="label">Market Cap</span>
           <span class="value">{{ marketCap }}</span>
@@ -23,13 +24,13 @@
           <span class="label">24h Volume</span>
           <span class="value">{{ volume24h }}</span>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="main-content">
       <div class="content-left">
         <!-- TIA Chart -->
-        <div class="card chart-card">
+        <!-- <div class="card chart-card">
           <div class="card-header">
             <h2>TIA Chart</h2>
             <div class="chart-period">
@@ -59,13 +60,13 @@
               <div v-else class="chart-area" ref="chartContainer"></div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- GitHub Activity -->
         <div class="card">
           <div class="card-header">
             <h2>GitHub Activity</h2>
-            <a href="https://github.com/celestiaorg" target="_blank" class="view-all-link">View All</a>
+            <a href="https://github.com/MystenLabs" target="_blank" class="view-all-link">View All</a>
           </div>
           <div class="card-body">
             <!-- GitHub activity heatmap section -->
