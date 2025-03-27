@@ -67,22 +67,22 @@
       <div class="container">
         <div class="footer-content">
           <div class="footer-section">
-            <h3>About Celestia</h3>
-            <p>Celestia is a modular data availability network that scales with the number of users, enabling anyone to easily deploy their own blockchain.</p>
+            <h3>About Walrus</h3>
+            <p>Walrus is a decentralized storage and data availability protocol designed specifically for large binary files, or "blobs". Walrus focuses on providing a robust but affordable solution for storing unstructured content on decentralized storage nodes while ensuring high availability and reliability even in the presence of Byzantine faults.</p>
           </div>
           
           <div class="footer-section">
             <h3>Official Links</h3>
             <div class="footer-links">
-              <a href="https://celestia.org" target="_blank">Website</a>
-              <a href="https://docs.celestia.org" target="_blank">Documentation</a>
-              <a href="https://discord.gg/celestiacommunity" target="_blank">Discord</a>
-              <a href="https://twitter.com/CelestiaOrg" target="_blank">Twitter</a>
+              <a href="https://www.walrus.xyz/" target="_blank" class="link-item">Website</a>
+          <a href="https://docs.walrus.site/" target="_blank" class="link-item">Docs</a>
+          <a href="https://x.com/walrusprotocol" target="_blank" class="link-item">X</a>
+          <a href="https://discord.com/invite/walrusprotocol" target="_blank" class="link-item">Discord</a>
             </div>
           </div>
         </div>
         <div class="copyright">
-          © 2023 Celestia Explorer. This website is for educational purposes only.
+          © 2025 Walrus Explorer. This website is for educational purposes only.
         </div>
       </div>
     </footer>

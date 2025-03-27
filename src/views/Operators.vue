@@ -27,7 +27,7 @@
             @input="debounceSearch"
           />
         </div>
-        <div class="status-filter">
+        <!-- <div class="status-filter">
           <button 
             v-for="status in statusOptions" 
             :key="status.value"
@@ -36,7 +36,7 @@
           >
             {{ status.label }}
           </button>
-        </div>
+        </div> -->
       </div>
       
       <div class="table-container">
@@ -61,6 +61,12 @@
               <div class="col-name">
                 <router-link :to="`/validators/${validator.address}`">
                   {{ validator.name }}
+                  <img 
+                    v-if="validator.operator" 
+                    src="@/assets/images/official-badge.svg" 
+                    alt="Official" 
+                    class="official-badge"
+                  >
                 </router-link>
               </div>
               <div class="col-status">
@@ -84,12 +90,12 @@
             :disabled="currentPage === 0" 
             @click="changePage(currentPage - 1)"
           >
-            &laquo; 上一页
+            &laquo; Previous
           </button>
           
           <div class="page-info">
-            第 {{ currentPage + 1 }} 页 / 共 {{ totalPages }} 页
-            (共 {{ totalElements }} 条记录)
+            Page {{ currentPage + 1 }} of {{ totalPages }}
+            ({{ totalElements }} records total)
           </div>
           
           <button 
@@ -97,7 +103,7 @@
             :disabled="currentPage >= totalPages - 1" 
             @click="changePage(currentPage + 1)"
           >
-            下一页 &raquo;
+          next &raquo;
           </button>
         </div>
       </div>
@@ -229,7 +235,8 @@ export default {
           status: item.state === 'Active' ? 'active' : 'inactive',
           stake: item.stake || 0,
           commission: item.commissionRate || 0,
-          delegators: item.weight || 0
+          delegators: item.weight || 0,
+          operator: item.operator || false
         }))
         
         // 按投票权排序
@@ -335,6 +342,7 @@ export default {
   margin-top: 30px;
   padding-top: 20px;
   border-top: 1px solid #eee;
+  margin-bottom: 20px;
 }
 .page-btn {
   background: #f8f9fa;
@@ -508,5 +516,13 @@ export default {
 /* Ensure tables have proper hover colors */
 .validator-row:hover {
   background: var(--table-row-hover);
+}
+
+.official-badge {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-left: 4px;
+  display: inline-block;
 }
 </style> 
