@@ -11,14 +11,14 @@ const routes = [
     component: Home
   },
   {
-    path: '/validators',
-    name: 'Validators',
-    component: () => import('../views/Validators.vue')
+    path: '/operators',
+    name: 'Operators',
+    component: () => import('../views/Operators.vue')
   },
   {
-    path: '/validators/:address',
-    name: 'ValidatorDetail',
-    component: () => import('../views/ValidatorDetail.vue')
+    path: '/operators/:address',
+    name: 'OperatorDetail',
+    component: () => import('../views/OperatorDetail.vue')
   },
   {
     path: '/blocks',
