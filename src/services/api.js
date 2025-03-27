@@ -3,7 +3,7 @@ import axios from 'axios';
 // 注意：您需要安装axios: npm install axios
 
 // 以下是模拟的API端点，实际使用时需要替换为真实的区块链API
-const API_BASE_URL = 'https://api.example.com/celestia';
+const API_BASE_URL = 'https://fullnode.testnet.sui.io/';
 
 export default {
   // 获取区块链统计数据

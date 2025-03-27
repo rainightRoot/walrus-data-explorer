@@ -4,7 +4,7 @@
       <div class="header-container">
         <div class="logo-section">
           <router-link to="/" class="logo">
-            <span class="logo-text">Celestia</span>
+            <span class="logo-text">Walrus</span>
             <span class="explorer-text">Explorer</span>
           </router-link>
           <div class="network-tag">mainnet</div>
