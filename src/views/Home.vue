@@ -132,7 +132,13 @@
               <!-- Contributors list -->
               <div class="contributors-section">
                 <h4 class="contributors-title">Top Contributors</h4>
-                <div class="contributors-list">
+                <div v-if="contributorsLoading" class="contributors-loading">
+                  Loading contributors data...
+                </div>
+                <div v-else-if="topContributors.length === 0" class="no-contributors">
+                  No contributors data available
+                </div>
+                <div v-else class="contributors-list">
                   <div v-for="(contributor, index) in topContributors" :key="index" class="contributor-item">
                     <img :src="contributor.avatar" :alt="contributor.name" class="contributor-avatar">
                     <div class="contributor-info">
@@ -305,43 +311,8 @@ export default {
         date: '',
         count: 0
       },
-      topContributors: [
-        {
-          name: 'JackLi',
-          avatar: 'https://avatars.githubusercontent.com/u/12345678',
-          commits: 328,
-          additions: '14,582',
-          deletions: '5,291'
-        },
-        {
-          name: 'Sarah Chen',
-          avatar: 'https://avatars.githubusercontent.com/u/23456789',
-          commits: 256,
-          additions: '9,347',
-          deletions: '4,128'
-        },
-        {
-          name: 'Michael Wang',
-          avatar: 'https://avatars.githubusercontent.com/u/34567890',
-          commits: 187,
-          additions: '7,234',
-          deletions: '3,567'
-        },
-        {
-          name: 'Emma Davis',
-          avatar: 'https://avatars.githubusercontent.com/u/45678901',
-          commits: 142,
-          additions: '5,891',
-          deletions: '2,345'
-        },
-        {
-          name: 'Alex Johnson',
-          avatar: 'https://avatars.githubusercontent.com/u/56789012',
-          commits: 98,
-          additions: '3,456',
-          deletions: '1,234'
-        }
-      ],
+      topContributors: [],
+      contributorsLoading: false,
       chartPeriod: '24h',
       chartLoading: true,
       currentPrice: '$4.82',
@@ -420,8 +391,11 @@ export default {
       })
     }, 1500)
     
-    // 生成 GitHub 贡献数据
-    this.generateMockGithubData()
+    // 获取 GitHub 贡献数据
+    this.fetchGithubContributions()
+    
+    // 获取顶级贡献者列表
+    this.fetchTopContributors()
   },
 
   methods: {
@@ -557,87 +531,138 @@ export default {
     
     getDayLevel(week, day) {
       const index = week * 7 + day;
-      return this.heatmapDays[index] ? this.heatmapDays[index].level : 0;
+      if (!this.heatmapDays || !this.heatmapDays[index]) return 0;
+      const count = this.heatmapDays[index].count || 0;
+      // 确保当count为0时，级别也为0
+      return count === 0 ? 0 : (this.heatmapDays[index].level || 0);
     },
     
     getDayCount(week, day) {
       const index = week * 7 + day;
-      return this.heatmapDays[index] ? this.heatmapDays[index].count : 0;
+      if (!this.heatmapDays || !this.heatmapDays[index]) return 0;
+      return this.heatmapDays[index].count || 0;
     },
     
     getDayDate(week, day) {
       const index = week * 7 + day;
-      return this.heatmapDays[index] ? this.heatmapDays[index].date : '';
+      if (!this.heatmapDays || !this.heatmapDays[index]) return '';
+      return this.heatmapDays[index].date || '';
     },
     
     getDayData(week, day) {
       const index = week * 7 + day;
+      if (!this.heatmapDays || index >= this.heatmapDays.length) return { date: '', count: 0, level: 0 };
       return this.heatmapDays[index] || { date: '', count: 0, level: 0 };
     },
     
-    generateRandomContributions() {
-      console.log('生成模拟数据');
-      // 生成模拟的 GitHub 贡献数据
+    fetchGithubContributions() {
+      console.log('从API获取GitHub贡献数据');
+      this.githubLoading = true;
+      
+      // 获取当前日期
       const today = new Date();
-      const contributions = [];
+      const dayOfWeek = today.getDay();
+      
+      // 计算起始日期（9个月前的周日）
+      const startDate = new Date(today);
+      startDate.setDate(today.getDate() - dayOfWeek - 273); // 回到 9 个月前的周日
+      
+      // 计算结束日期（今天）
+      const endDate = new Date(today);
+      
+      console.log('热力图时间范围:', this.formatDateToYYYYMMDD(startDate), '到', this.formatDateToYYYYMMDD(endDate));
+      
+      // 创建一个空的贡献数据数组
       const daysArray = [];
       
-      // 确定起始日期（周日开始）
-      const startDate = new Date(today);
-      const dayOfWeek = startDate.getDay();
-      startDate.setDate(startDate.getDate() - dayOfWeek - 273); // 回到 9 个月前的周日
-      
-      // 生成 9 个月的数据（周日开始，周六结束）
-      const weeks = 40; // 约 9 个月的周数
-      const daysInWeek = 7;
-      
-      for (let week = 0; week < weeks; week++) {
-        for (let day = 0; day < daysInWeek; day++) {
+      // 初始化 40 周 x 7 天的空数据结构
+      for (let week = 0; week < 40; week++) {
+        for (let day = 0; day < 7; day++) {
+          // 计算当前日期
           const date = new Date(startDate);
           date.setDate(startDate.getDate() + (week * 7) + day);
           
-          // 生成模拟数据：50% 0次提交，30% 1次提交，19% 3次提交，1% 5次提交
-          let count;
-          const random = Math.random();
-          
-          if (random < 0.5) { // 50% 概率
-            count = 0;
-          } else if (random < 0.8) { // 30% 概率
-            count = 1;
-          } else if (random < 0.99) { // 19% 概率
-            count = 3;
-          } else { // 1% 概率
-            count = 5;
+          // 如果日期超过今天，则设置为空
+          if (date > today) {
+            daysArray.push({
+              date: null,
+              count: 0,
+              level: 0,
+              week: week,
+              day: day
+            });
+            continue;
           }
           
           const dateStr = this.formatDateToYYYYMMDD(date);
           const formattedDate = this.formatChineseDate(date);
           
-          // 为热力图准备数据
           daysArray.push({
             date: formattedDate,
-            count: count,
-            level: count, // 等级与数量相同
+            rawDate: dateStr,
+            count: 0,
+            level: 0,
             week: week,
             day: day
           });
-          
-          if (count > 0) {
-            contributions.push({
-              date: dateStr,
-              count: count
-            });
-          }
         }
       }
       
-      console.log('生成的数据数量:', contributions.length);
-      console.log('数据示例:', contributions.slice(0, 3));
-      
-      this.githubContributions = contributions;
-      this.heatmapDays = daysArray;
-      this.githubLoading = false;
+      // 从API获取数据
+      axios.get('http://localhost:3000/api/github/commits/heatmap')
+        .then(response => {
+          const allContributions = response.data.data || [];
+          console.log('API返回的原始数据数量:', allContributions.length);
+          
+          // 过滤出最近9个月的数据
+          const nineMonthsAgoStr = this.formatDateToYYYYMMDD(startDate);
+          const contributions = allContributions.filter(item => {
+            return item.date >= nineMonthsAgoStr && item.date <= this.formatDateToYYYYMMDD(endDate);
+          });
+          
+          console.log('最近9个月的数据数量:', contributions.length);
+          
+          if (contributions.length > 0) {
+            console.log('数据示例:', contributions.slice(0, 3));
+            
+            // 更新heatmapDays中的贡献数据
+            contributions.forEach(contribution => {
+              const date = contribution.date;
+              const count = contribution.count || 0;
+              
+              // 计算活跃度级别（0-4）
+              let level = 0;
+              if (count === 0) level = 0;
+              else if (count > 0 && count <= 2) level = 1;
+              else if (count <= 5) level = 2;
+              else if (count <= 9) level = 3;
+              else if (count > 9) level = 4;
+              
+              // 更新对应日期的数据
+              const dayIndex = daysArray.findIndex(day => day.rawDate === date);
+              if (dayIndex !== -1) {
+                daysArray[dayIndex].count = count;
+                daysArray[dayIndex].level = level;
+              }
+            });
+            
+            // 打印热力图数据设置情况
+            console.log('热力图数据设置完成，有数据的天数:', daysArray.filter(day => day.count > 0).length);
+          }
+          
+          this.githubContributions = contributions;
+          this.heatmapDays = daysArray;
+          this.githubLoading = false;
+        })
+        .catch(error => {
+          console.error('获取GitHub贡献数据失败:', error);
+          this.githubContributions = [];
+          this.heatmapDays = daysArray;
+          this.githubLoading = false;
+        });
     },
+    
+
     
     getOneYearAgo() {
       const date = new Date();
@@ -659,12 +684,14 @@ export default {
     formatTooltipDate(day) {
       if (!day || !day.date) return 'No data available';
       
+      const formattedDate = this.formatChineseDate(new Date(day.date));
+      
       if (day.count === 0) {
-        return `No contributions on ${day.date}`;
+        return `No contributions on ${formattedDate}`;
       } else if (day.count === 1) {
-        return `1 contribution on ${day.date}`;
+        return `1 contribution on ${formattedDate}`;
       } else {
-        return `${day.count} contributions on ${day.date}`;
+        return `${day.count} contributions on ${formattedDate}`;
       }
     },
     
@@ -681,6 +708,39 @@ export default {
       }
       
       return recentMonths;
+    },
+    
+    fetchTopContributors() {
+      console.log('从API获取顶级贡献者数据');
+      this.contributorsLoading = true;
+      
+      axios.get('http://localhost:3000/api/github/contributors')
+        .then(response => {
+          const contributors = response.data.data || [];
+          console.log('获取到的贡献者数量:', contributors.length);
+          
+          if (contributors.length > 0) {
+            // 处理贡献者数据
+            this.topContributors = contributors.map(contributor => ({
+              name: contributor.name || contributor.login || 'Anonymous',
+              avatar: contributor.avatar_url || 'https://avatars.githubusercontent.com/u/0',
+              commits: contributor.commits || 0,
+              additions: this.formatNumber(contributor.additions || 0),
+              deletions: this.formatNumber(contributor.deletions || 0)
+            }));
+            
+            console.log('处理后的贡献者数据:', this.topContributors.slice(0, 2));
+          } else {
+            this.topContributors = [];
+          }
+          
+          this.contributorsLoading = false;
+        })
+        .catch(error => {
+          console.error('获取贡献者数据失败:', error);
+          this.topContributors = [];
+          this.contributorsLoading = false;
+        });
     },
     
     getMonthPositions() {
@@ -1382,6 +1442,14 @@ export default {
   color: #b0b3b8;
 }
 
+[data-theme="dark"] .heatmap-day.level-0 {
+  background-color: #161b22;
+}
+
+[data-theme="dark"] .level-0 {
+  background-color: #161b22;
+}
+
 [data-theme="dark"] .heatmap-days-labels{
   color: #b0b3b8;
 
@@ -1468,23 +1536,19 @@ export default {
 }
 
 .heatmap-day.level-1 {
-  background-color: #c6e48b;
+  background-color: #9be9a8;
 }
 
 .heatmap-day.level-2 {
-  background-color: #7bc96f;
+  background-color: #40c463;
 }
 
 .heatmap-day.level-3 {
-  background-color: #239a3b;
+  background-color: #30a14e;
 }
 
 .heatmap-day.level-4 {
-  background-color: #196127;
-}
-
-.heatmap-day.level-5 {
-  background-color: #0e4420;
+  background-color: #216e39;
 }
 
 .heatmap-title {
@@ -1527,19 +1591,19 @@ export default {
 }
 
 .level-1 {
-  background-color: #c6e48b;
+  background-color: #9be9a8;
 }
 
 .level-2 {
-  background-color: #7bc96f;
+  background-color: #40c463;
 }
 
 .level-3 {
-  background-color: #239a3b;
+  background-color: #30a14e;
 }
 
 .level-4 {
-  background-color: #196127;
+  background-color: #216e39;
 }
 
 /* Heatmap tooltip styles */
@@ -1584,6 +1648,24 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 15px;
+}
+
+.contributors-loading,
+.no-contributors {
+  padding: 15px;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 14px;
+  background-color: var(--card-bg);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .contributors-loading,
+[data-theme="dark"] .no-contributors {
+  color: #b0b3b8;
+  background-color: #252525;
+  border-color: #333;
 }
 
 .contributor-item {

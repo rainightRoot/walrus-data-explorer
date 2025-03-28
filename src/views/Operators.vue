@@ -50,7 +50,7 @@
             <div v-for="(validator, index) in filteredValidators" :key="validator.address" class="validator-row">
               <div class="col-rank">{{ currentPage * pageSize + index + 1 }}</div>
               <div class="col-name">
-                <router-link :to="`/validators/${validator.address}`">
+                <router-link :to="`/operators/${validator.address}`">
                   {{ validator.name }}
                   <img v-if="validator.operator" src="@/assets/images/official-badge.svg" alt="Official"
                     class="official-badge">

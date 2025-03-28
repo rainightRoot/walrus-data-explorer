@@ -16,7 +16,7 @@ const routes = [
     component: () => import('../views/Operators.vue')
   },
   {
-    path: '/operators/:address',
+    path: '/operators/:validatorHash',
     name: 'OperatorDetail',
     component: () => import('../views/OperatorDetail.vue')
   },
