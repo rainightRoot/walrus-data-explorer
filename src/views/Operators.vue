@@ -81,7 +81,7 @@
                 </a>
                 {{ formatAddress(validator.address) }}
                 <img src="@/assets/images/copy-icon.svg" alt="Copy" class="copy-icon"
-                  @click.prevent="copyToClipboard(validator.address)" title="Copy address">
+                  @click.prevent="copyToClipboard(validator.address)" title="Copy Text">
               </div>
             </div>
           </template>
