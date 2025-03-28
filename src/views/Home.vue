@@ -159,22 +159,12 @@
         <!-- Upcoming Unlocks -->
         <div class="card">
           <div class="card-header">
-            <h2>Upcoming Unlocks</h2>
+            <h2>Vesting Schedule
+            </h2>
           </div>
           <div class="card-body">
-            <div v-if="upcomingUnlocks.length === 0" class="no-data">No upcoming token unlocks</div>
-            <div v-else class="unlocks-list">
-              <div v-for="(unlock, index) in upcomingUnlocks" :key="index" class="unlock-item">
-                <div class="unlock-info">
-                  <div class="unlock-date">{{ formatDate(unlock.date) }}</div>
-                  <div class="unlock-amount">{{ formatNumber(unlock.amount) }} TIA</div>
-                </div>
-                <div class="unlock-percentage">
-                  <div class="unlock-label">Percent of Total Supply</div>
-                  <div class="unlock-value">{{ unlock.percentOfSupply }}%</div>
-                </div>
-              </div>
-            </div>
+            <img src="~@/assets/walrus_token_release_schedule.png" width="100%" alt="">            
+
           </div>
         </div>
       </div>
@@ -192,7 +182,7 @@
         </div>
 
         <!-- Active Proposals -->
-        <div class="card">
+        <!-- <div class="card">
           <div class="card-header">
             <h2>Active Proposals</h2>
             <router-link to="/governance" class="view-all-link">View All</router-link>
@@ -213,7 +203,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Investors -->
         <div class="card">
@@ -224,11 +214,11 @@
             <div class="investor-stats">
               <div class="investor-stat">
                 <div class="stat-label">Raised</div>
-                <div class="stat-value">$28.5M</div>
+                <div class="stat-value">$140M</div>
               </div>
               <div class="investor-stat">
                 <div class="stat-label">Tokens Sold</div>
-                <div class="stat-value">113M TIA</div>
+                <div class="stat-value">0 WAL</div>
               </div>
             </div>
             <div class="investors-list">
@@ -246,42 +236,7 @@
             <h2>Tokenomics</h2>
           </div>
           <div class="card-body">
-            <div class="tokenomics-chart">
-              <div class="chart-legend">
-                <div class="legend-item">
-                  <span class="legend-color bonded"></span>
-                  <span>Bonded</span>
-                </div>
-                <div class="legend-item">
-                  <span class="legend-color unbonded"></span>
-                  <span>Unbonded</span>
-                </div>
-              </div>
-              
-              <div class="supply-chart">
-                <div class="bonded-supply" :style="{ width: `${bondedPercent}%` }"></div>
-                <div class="unbonded-supply" :style="{ width: `${100 - bondedPercent}%` }"></div>
-              </div>
-              
-              <div class="supply-info">
-                <div class="supply-item">
-                  <div class="supply-label">Bonded</div>
-                  <div class="supply-value">{{ formatNumber(bondedSupply) }} TIA</div>
-                </div>
-                <div class="supply-item">
-                  <div class="supply-label">Unbonded</div>
-                  <div class="supply-value">{{ formatNumber(unbondedSupply) }} TIA</div>
-                </div>
-                <div class="supply-item">
-                  <div class="supply-label">Community Pool</div>
-                  <div class="supply-value">{{ formatNumber(communityPool) }} TIA</div>
-                </div>
-                <div class="supply-item total">
-                  <div class="supply-label">Total Supply</div>
-                  <div class="supply-value">{{ formatNumber(totalSupply) }} TIA</div>
-                </div>
-              </div>
-            </div>
+            <img src="~@/assets/walrus_token_omics.png" width="100%" alt="">
           </div>
         </div>
       </div>
@@ -366,12 +321,16 @@ export default {
         }
       ],
       investors: [
-        { name: 'Polychain Capital', logo: '/images/investors/polychain.png' },
-        { name: 'Bain Capital Crypto', logo: '/images/investors/bain.png' },
-        { name: 'Paradigm', logo: '/images/investors/paradigm.png' },
-        { name: 'a16z', logo: '/images/investors/a16z.png' },
-        { name: 'Binance Labs', logo: '/images/investors/binance.png' },
-        { name: 'Coinbase Ventures', logo: '/images/investors/coinbase.png' }
+        { name: 'Andreessen Horowitz (a16z)', logo: '/images/investors/a16z.webp' },
+        { name: 'Electric Capital', logo: '/images/investors/electric-capital.webp' },
+        { name: 'Standard Crypto',lead:true, logo: '/images/investors/standard-crypto.webp' },
+        { name: 'Franklin Templeton', logo: '/images/investors/franklin-templeton.webp' },
+        { name: 'Lvna Capital', logo: '/images/investors/lvna-capital.webp' },
+        { name: 'Protagonist', logo: '/images/investors/protagonist.webp' },
+        { name: 'Comma3 Ventures', logo: '/images/investors/comma3-ventures.webp' },
+        { name: 'Karatage', logo: '/images/investors/karatage.webp' },
+        { name: 'RW3 Ventures', logo: '/images/investors/rw3-ventures.webp' },
+        { name: 'Raptor Group', logo: '/images/investors/raptor-group.webp' },
       ],
       tokenomics: {
         bonded: 280000000,

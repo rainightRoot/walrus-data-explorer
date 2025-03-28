@@ -45,7 +45,7 @@
           </button>
           
           <div class="search-section">
-            <input type="text" placeholder="Search blocks/transactions/addresses..." @keyup.enter="search" v-model="searchQuery" />
+            <input type="text" placeholder="Search blob ID..." @keyup.enter="search" v-model="searchQuery" />
             <button @click="search" class="search-btn">
               🔍
             </button>
@@ -116,17 +116,10 @@ export default {
       
       const query = this.searchQuery.trim()
       
-      // Simple search logic based on input format
-      if (/^\d+$/.test(query)) {
-        // Pure numbers are treated as block heights
-        this.$router.push(`/blocks/${query}`)
-      } else if (query.startsWith('0x') || query.length === 64) {
-        // 0x prefix or 64 characters length treated as transaction hash
-        this.$router.push(`/transactions/${query}`)
-      } else {
+      
         // Otherwise treated as an address
-        this.$router.push(`/accounts/${query}`)
-      }
+        this.$router.push(`/blobs/${query}`)
+
       
       this.searchQuery = ''
       this.closeMobileMenu()

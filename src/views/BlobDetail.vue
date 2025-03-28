@@ -25,7 +25,7 @@
                 {{ shortHash(block.senderAddress) }}
               </a>
               <img src="@/assets/images/copy-icon.svg" alt="Copy" class="copy-icon"
-                      @click.prevent="copyToClipboard(block.senderAddress)" title="Copy address">
+                      @click.prevent="copyToClipboard(block.senderAddress)" title="Copy Text">
             </div>
           </div>
           <div class="detail-row">
@@ -36,7 +36,7 @@
 
               </a>
               <img src="@/assets/images/copy-icon.svg" alt="Copy" class="copy-icon"
-              @click.prevent="copyToClipboard(block.suiObjectId)" title="Copy address">
+              @click.prevent="copyToClipboard(block.suiObjectId)" title="Copy Text">
             </div>
           </div>
           <div class="detail-row">
@@ -46,7 +46,7 @@
                 {{ shortHash(block.suiPackageId) }}
               </a>
               <img src="@/assets/images/copy-icon.svg" alt="Copy" class="copy-icon"
-              @click.prevent="copyToClipboard(block.suiPackageId)" title="Copy address">
+              @click.prevent="copyToClipboard(block.suiPackageId)" title="Copy Text">
             </div>
           </div>
 
@@ -92,7 +92,7 @@
                       {{ shortHash(tx.hash) }}
                     </a>
                     <img src="@/assets/images/copy-icon.svg" alt="Copy" class="copy-icon"
-                      @click.prevent="copyToClipboard(tx.hash)" title="Copy address">
+                      @click.prevent="copyToClipboard(tx.hash)" title="Copy Text">
                   </div>
                   <div class="col-time" :title="block.objectId">
                     {{ tx.type }}<br>{{ tx.functions.join(', ') }}
@@ -103,7 +103,7 @@
                       {{ shortHash(tx.senderAddress) }}
                     </a>
                     <img src="@/assets/images/copy-icon.svg" alt="Copy" class="copy-icon"
-                      @click.prevent="copyToClipboard(tx.senderAddress)" title="Copy address">
+                      @click.prevent="copyToClipboard(tx.senderAddress)" title="Copy Text">
                   </div>
                   <div class="col-proposer">
                     {{ tx.txNumber }}
@@ -384,6 +384,7 @@ h1 {
 
 .transaction-list-title-switch {
   display: flex;
+  font-size: 14px;
   gap: 10px;
 }
 

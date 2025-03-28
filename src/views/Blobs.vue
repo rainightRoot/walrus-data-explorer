@@ -2,7 +2,7 @@
   <div class="blocks-page">
     <h1>Blobs</h1>
 
- 
+
 
     <div class="blocks-container">
       <div class="search-bar">
@@ -29,34 +29,17 @@
                 <router-link :to="`/blobs/${block.blobIdBase64}`">
                   {{ shortHash(block.blobIdBase64) }}
                 </router-link>
-                <img 
-                  src="@/assets/images/copy-icon.svg" 
-                  alt="Copy" 
-                  class="copy-icon"
-                  @click.prevent="copyToClipboard(block.blobIdBase64)"
-                  title="Copy address"
-                >
+                <img src="@/assets/images/copy-icon.svg" alt="Copy" class="copy-icon"
+                  @click.prevent="copyToClipboard(block.blobIdBase64)" title="Copy Text">
               </div>
               <div class="col-time" :title="block.objectId">
-                <a 
-                  :href="'https://suiscan.xyz/mainnet/object/'+block.objectId" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  class="external-link"
-                >
-                  <img 
-                    src="@/assets/images/external-link.svg" 
-                    alt="Visit website"
-                    class="external-link-icon"
-                  >
+                <a :href="'https://suiscan.xyz/mainnet/object/' + block.objectId" target="_blank"
+                  rel="noopener noreferrer" class="external-link">
+                  <img src="@/assets/images/external-link.svg" alt="Visit website" class="external-link-icon">
                 </a>
-                {{ shortHash(block.objectId) }}<img 
-                  src="@/assets/images/copy-icon.svg" 
-                  alt="Copy" 
-                  class="copy-icon"
-                  @click.prevent="copyToClipboard(block.blobId)"
-                  title="Copy address"
-                ></div>
+                {{ shortHash(block.objectId) }}<img src="@/assets/images/copy-icon.svg" alt="Copy" class="copy-icon"
+                  @click.prevent="copyToClipboard(block.blobId)" title="Copy Text">
+              </div>
               <div class="col-txs">{{ block.startEpoch }}</div>
               <div class="col-proposer">
                 {{ block.endEpoch }}
@@ -82,11 +65,7 @@
         </button>
       </div>
     </div>
-    <Toast 
-      :message="toastMessage"
-      :visible="showToast"
-      :type="toastType"
-    />
+    <Toast :message="toastMessage" :visible="showToast" :type="toastType" />
   </div>
 </template>
 
@@ -124,6 +103,7 @@ export default {
   },
   mounted() {
     this.fetchBlocks()
+   
   },
   methods: {
     copyToClipboard(text) {
@@ -133,20 +113,20 @@ export default {
     },
     async fetchBlocks() {
       this.loading = true
-      const response = await fetch(`https://walruscan.com/api/walscan-backend/mainnet//api/blobs?page=${this.currentPage}&sortBy=TIMESTAMP&orderBy=DESC&searchStr=${this.searchQuery}&size=20`)
+      const response = await fetch(`https://walruscan.com/api/walscan-backend/mainnet//api/blobs?page=${this.currentPage-1}&sortBy=TIMESTAMP&orderBy=DESC&searchStr=${this.searchQuery}&size=20`)
       const data = await response.json()
       console.log(data)
       // 模拟API调用
       this.blocks = data.content
       this.loading = false
-      
+
 
     },
     showToastMessage(message, type = 'success') {
       this.toastMessage = message;
       this.toastType = type;
       this.showToast = true;
-      
+
       // Hide toast after 3 seconds
       setTimeout(() => {
         this.showToast = false;
@@ -286,15 +266,19 @@ export default {
 [data-theme="dark"] .col-txs {
   color: #b0b3b8;
 }
+
 [data-theme="dark"] .col-proposer {
   color: #b0b3b8;
 }
+
 [data-theme="dark"] .col-time {
   color: #b0b3b8;
 }
+
 [data-theme="dark"] .col-txs {
   color: #b0b3b8;
 }
+
 [data-theme="dark"] .col-txs {
   color: #b0b3b8;
 }
@@ -323,9 +307,11 @@ export default {
   gap: 15px;
   align-items: center;
 }
-.copy-icon{
+
+.copy-icon {
   cursor: pointer;
 }
+
 .pagination button {
   padding: 8px 15px;
   background: #f5f5f5;
@@ -351,7 +337,7 @@ export default {
   }
 
   .search-bar input {
-    width: 100%;
+    width: calc(100% - 30px);
     padding: 12px 15px;
     font-size: 16px;
     border-radius: 4px;

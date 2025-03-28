@@ -7,7 +7,7 @@
       <div v-else-if="blocks.length === 0" class="no-data">No data available</div>
       <div v-else class="block-item" v-for="block in blocks" :key="block.height">
         <div class="block-height">
-          <router-link :to="`/blocks/${block.blobId}`">#{{ shortHash(block.blobId) }}</router-link>
+          <router-link :to="`/blobs/${block.blobIdBase64}`">{{ shortHash(block.blobIdBase64) }}</router-link>
           <div class="block-time">{{ formatTime(block.timestamp) }}</div>
 
         </div>
