@@ -7,13 +7,14 @@
       <div v-else-if="blocks.length === 0" class="no-data">No data available</div>
       <div v-else class="block-item" v-for="block in blocks" :key="block.height">
         <div class="block-height">
-          <router-link :to="`/blocks/${block.height}`">#{{ block.height }}</router-link>
+          <router-link :to="`/blocks/${block.blobId}`">#{{ shortHash(block.blobId) }}</router-link>
+          <div class="block-time">{{ formatTime(block.timestamp) }}</div>
+
         </div>
         <div class="block-info">
-          <div class="block-time">{{ formatTime(block.time) }}</div>
           <div class="block-details">
-            <span>{{ block.txCount }} txs</span>
-            <span>{{ block.proposer }}</span>
+            <span>{{ formatBytes(block.size) }} </span>
+            <span>{{ block.status }}</span>
           </div>
         </div>
       </div>
@@ -24,7 +25,7 @@
 <script>
 import { format, formatDistance } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
-
+import { shortHash,formatBytes } from '@/utils/formatters'
 export default {
   name: 'LatestBlocks',
   data() {
@@ -35,20 +36,22 @@ export default {
   },
   mounted() {
     this.fetchLatestBlocks()
+
+    setInterval(() => {
+    this.fetchLatestBlocks()
+      
+    }, 1000*5);
   },
   methods: {
-    fetchLatestBlocks() {
+    shortHash,
+    formatBytes,
+    async fetchLatestBlocks() {
+      const response = await fetch('https://walruscan.com/api/walscan-backend/mainnet//api/blobs?page=0&sortBy=TIMESTAMP&orderBy=DESC&searchStr=&size=5')
+      const data = await response.json()
+      console.log(data)
       // 模拟API调用
-      setTimeout(() => {
-        this.blocks = [
-          { height: 1234567, time: new Date(Date.now() - 2 * 60 * 1000), txCount: 12, proposer: 'Validator1' },
-          { height: 1234566, time: new Date(Date.now() - 4 * 60 * 1000), txCount: 8, proposer: 'Validator2' },
-          { height: 1234565, time: new Date(Date.now() - 6 * 60 * 1000), txCount: 15, proposer: 'Validator3' },
-          { height: 1234564, time: new Date(Date.now() - 8 * 60 * 1000), txCount: 5, proposer: 'Validator4' },
-          { height: 1234563, time: new Date(Date.now() - 10 * 60 * 1000), txCount: 20, proposer: 'Validator5' }
-        ]
-        this.loading = false
-      }, 1000)
+      this.blocks = data.content
+      this.loading = false
     },
     formatTime(time) {
       return formatDistance(
@@ -64,10 +67,7 @@ export default {
 <style scoped>
 .latest-blocks {
   background: white;
-  border-radius: 8px;
   padding: 20px;
-  margin-top: 30px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 .section-header {
   display: flex;
@@ -93,7 +93,7 @@ export default {
   border-bottom: 1px solid #eee;
 }
 .block-height {
-  width: 100px;
+  width: 200px;
   font-weight: bold;
 }
 .block-height a {

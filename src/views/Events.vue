@@ -134,7 +134,7 @@ export default {
         return
       }
       
-      this.$router.push(`/transactions/${this.searchQuery}`)
+      this.$router.push(`/events/${this.searchQuery}`)
     },
     formatTime(time) {
       return formatDistance(

@@ -35,6 +35,16 @@ export function shortHash(hash) {
   if (!hash) return '-'
   return `${hash.substring(0, 8)}...${hash.substring(hash.length - 6)}`
 }
+export function formatBytes(bytes, decimals = 2) {
+  if (bytes === 0) return '0 B';
+  
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  
+  const value = bytes / Math.pow(k, i);
+  return parseFloat(value.toFixed(decimals)) + ' ' + sizes[i];
+}
 
 export function copyToClipboard(text) {
   navigator.clipboard.writeText(text)

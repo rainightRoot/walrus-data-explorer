@@ -21,24 +21,24 @@ const routes = [
     component: () => import('../views/OperatorDetail.vue')
   },
   {
-    path: '/blocks',
-    name: 'Blocks',
-    component: () => import('../views/Blocks.vue')
+    path: '/blobs',
+    name: 'Blobs',
+    component: () => import('../views/Blobs.vue')
   },
   {
-    path: '/blocks/:height',
-    name: 'BlockDetail',
-    component: () => import('../views/BlockDetail.vue')
+    path: '/blobs/:height',
+    name: 'BlobDetail',
+    component: () => import('../views/BlobDetail.vue')
   },
   {
-    path: '/transactions',
-    name: 'Transactions',
-    component: () => import('../views/Transactions.vue')
+    path: '/events',
+    name: 'Events',
+    component: () => import('../views/Events.vue')
   },
   {
-    path: '/transactions/:hash',
+    path: '/events/:hash',
     name: 'TransactionDetail',
-    component: () => import('../views/TransactionDetail.vue')
+    component: () => import('../views/EventDetail.vue')
   },
   {
     path: '/governance',

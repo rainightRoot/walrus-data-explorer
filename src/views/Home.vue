@@ -177,11 +177,11 @@
         <!-- Latest Blocks -->
         <div class="card">
           <div class="card-header">
-            <h2>Latest Blocks</h2>
-            <router-link to="/blocks" class="view-all-link">View All</router-link>
+            <h2>Latest Blobs</h2>
+            <router-link to="/blobs" class="view-all-link">View All</router-link>
           </div>
           <div class="card-body no-padding">
-            <LatestBlocks :data-theme="theme" />
+            <LatestBlobs :data-theme="theme" />
           </div>
         </div>
 
@@ -284,7 +284,7 @@
 </template>
 
 <script>
-import LatestBlocks from '@/components/LatestBlocks.vue'
+import LatestBlobs from '@/components/LatestBlobs.vue'
 import axios from 'axios'
 import { format, formatDistance } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
@@ -292,7 +292,7 @@ import enUS from 'date-fns/locale/en-US'
 export default {
   name: 'Home',
   components: {
-    LatestBlocks
+    LatestBlobs
   },
   data() {
     return {

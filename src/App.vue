@@ -19,10 +19,10 @@
         <nav class="main-nav" :class="{ 'mobile-open': mobileMenuOpen }">
           <router-link to="/" exact @click="closeMobileMenu">Home</router-link>
           <router-link to="/operators" @click="closeMobileMenu">Operators</router-link>
-          <router-link to="/blocks" @click="closeMobileMenu">Blocks</router-link>
-          <router-link to="/transactions" @click="closeMobileMenu">Transactions</router-link>
-          <router-link to="/governance" @click="closeMobileMenu">Governance</router-link>
-          <router-link to="/staking" @click="closeMobileMenu">Staking</router-link>
+          <router-link to="/blobs" @click="closeMobileMenu">Blobs</router-link>
+          <router-link to="/events" @click="closeMobileMenu">Events</router-link>
+          <!-- <router-link to="/governance" @click="closeMobileMenu">Governance</router-link> -->
+          <!-- <router-link to="/staking" @click="closeMobileMenu">Staking</router-link> -->
         </nav>
         
         <div class="right-controls">
