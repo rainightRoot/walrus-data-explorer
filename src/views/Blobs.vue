@@ -72,7 +72,7 @@
 <script>
 import { format, formatDistance } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
-import { shortHash, formatBytes } from '@/utils/formatters'
+import { shortHash, formatBytes ,formatNumber} from '@/utils/formatters'
 import Toast from '@/components/Toast.vue'
 
 export default {
@@ -146,9 +146,7 @@ export default {
         { addSuffix: true, locale: enUS }
       )
     },
-    formatNumber(num) {
-      return new Intl.NumberFormat().format(num)
-    }
+    formatNumber
   }
 }
 </script>

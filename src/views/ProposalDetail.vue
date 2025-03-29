@@ -160,7 +160,7 @@
 <script>
 import { format } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
-
+import { shortHash, formatNumber } from '@/utils/formatters'
 export default {
   name: 'ProposalDetail',
   data() {
@@ -268,9 +268,7 @@ export default {
       if (!address) return ''
       return address.substring(0, 8) + '...' + address.substring(address.length - 6)
     },
-    formatNumber(num) {
-      return new Intl.NumberFormat().format(num)
-    }
+    formatNumber
   }
 }
 </script>

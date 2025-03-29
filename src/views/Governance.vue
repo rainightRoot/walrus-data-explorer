@@ -92,7 +92,7 @@
 <script>
 import { format, formatDistance } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
-
+import { shortHash, formatNumber } from '@/utils/formatters'
 export default {
   name: 'Governance',
   data() {
@@ -221,9 +221,7 @@ export default {
       if (!address) return ''
       return `${address.substring(0, 8)}...${address.substring(address.length - 5)}`
     },
-    formatNumber(num) {
-      return new Intl.NumberFormat().format(num)
-    },
+    formatNumber,
     formatTimeRemaining(endTime) {
       const now = new Date()
       const end = new Date(endTime)

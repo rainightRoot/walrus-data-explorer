@@ -165,7 +165,7 @@
 <script>
 import { format } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
-
+import { formatNumber } from '@/utils/formatters'
 export default {
   name: 'Staking',
   data() {
@@ -192,9 +192,7 @@ export default {
     this.calculateEarnings()
   },
   methods: {
-    formatNumber(value) {
-      return new Intl.NumberFormat('en-US').format(value)
-    },
+    formatNumber,
     formatPercentage(value) {
       return new Intl.NumberFormat('en-US', {
         style: 'percent',

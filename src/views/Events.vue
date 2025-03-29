@@ -96,7 +96,7 @@
 import { format, formatDistance } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
 import Toast from '@/components/Toast.vue'
-
+import { shortHash, formatNumber } from '@/utils/formatters'
 export default {
   name: 'Transactions',
   components: {
@@ -167,9 +167,7 @@ export default {
     shortHash(hash) {
       return `${hash.substring(0, 8)}...${hash.substring(hash.length - 6)}`
     },
-    formatNumber(num) {
-      return new Intl.NumberFormat().format(num)
-    }
+    formatNumber
   }
 }
 </script>

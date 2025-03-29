@@ -171,7 +171,7 @@
 <script>
 import { format, formatDistance, formatRelative } from 'date-fns'
 import zhCN from 'date-fns/locale/zh-CN'
-
+import { shortHash, formatBytes,formatNumber } from '@/utils/formatters'
 export default {
   name: 'AccountDetail',
   data() {
@@ -276,9 +276,7 @@ export default {
         console.error('Failed to copy to clipboard:', err)
       })
     },
-    formatNumber(value) {
-      return new Intl.NumberFormat('en-US').format(value)
-    },
+    formatNumber,
     formatTime(time) {
       return formatDistance(time, new Date(), { addSuffix: true, locale: zhCN })
     },

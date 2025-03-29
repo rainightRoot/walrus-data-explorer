@@ -13,10 +13,9 @@
         <div class="validator-info">
           <h1>{{ validator.name }}</h1>
           <div class="validator-status">
-            <span :class="['status-badge', validator.status]">
-              {{ validator.status === 'active' ? 'Active' : 'Inactive' }}
+            <span :class="['status-badge', validator.state]">
+              {{ validator.state  }}
             </span>
-            <span class="rank">#{{ validator.rank }}</span>
           </div>
         </div>
       </div>
@@ -24,71 +23,50 @@
       <div class="stats-cards">
         <div class="stat-card">
           <h3>Stake</h3>
-          <div class="value">{{ formatNumber(validator.votingPower) }} WAL</div>
-          <div class="sub-value">{{ validator.votingPowerPercentage }}% Network Share</div>
+          <div class="value">{{ formatNumber(validator.stake) }} WAL</div>
         </div>
-        <div class="stat-card">
-          <h3>Total Delegated</h3>
-          <div class="value">{{ formatNumber(validator.totalDelegated) }} WAL</div>
-          <div class="sub-value">from {{ validator.delegatorsCount }} delegators</div>
-        </div>
+        
         <div class="stat-card">
           <h3>Commission</h3>
-          <div class="value">{{ validator.commission }}%</div>
-          <div class="sub-value">Max Change Rate: {{ validator.maxChangeRate }}%</div>
+          <div class="value">{{ validator.commissionRate }}%</div>
+        </div>
+        <div class="stat-card">
+          <h3>Node Capacity</h3>
+          <div class="value">{{ formatBytes(validator.nodeCapacity) }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Activation Epoch</h3>
+          <div class="value">{{ validator.activationEpoch }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Latest Epoch</h3>
+          <div class="value">{{ validator.latestEpoch }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Pool share</h3>
+          <div class="value">{{ validator.poolShare }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Rewards Pool</h3>
+          <div class="value">{{ validator.rewardsPool }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Write Price</h3>
+          <div class="value">{{ validator.writePrice }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Storage Price</h3>
+          <div class="value">{{ validator.storagePrice }}</div>
+        </div>
+        <div class="stat-card">
+          <h3>Wal Balance</h3>
+          <div class="value">{{ formatNumber(validator.walBalance) }} WAL</div>
         </div>
       </div>
       
-      <div class="detail-card">
-        <h2>Validator Details</h2>
-        <div class="detail-grid">
-          <div class="detail-row">
-            <div class="label">Address</div>
-            <div class="value monospace">{{ validator.address }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="label">Operator Address</div>
-            <div class="value monospace">{{ validator.operatorAddress }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="label">Website</div>
-            <div class="value">
-              <a :href="validator.website" target="_blank" v-if="validator.website">{{ validator.website }}</a>
-              <span v-else>Not provided</span>
-            </div>
-          </div>
-          <div class="detail-row">
-            <div class="label">Self-Delegated</div>
-            <div class="value">{{ formatNumber(validator.selfDelegated) }} WAL</div>
-          </div>
-          <div class="detail-row">
-            <div class="label">Identity</div>
-            <div class="value">{{ validator.identity || 'Not provided' }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="label">Security Contact</div>
-            <div class="value">{{ validator.securityContact || 'Not provided' }}</div>
-          </div>
-          <div class="detail-row">
-            <div class="label">Description</div>
-            <div class="value description">{{ validator.description || 'Not provided' }}</div>
-          </div>
-        </div>
-      </div>
+     
       
-      <div class="detail-card">
-        <h2>Performance</h2>
-        <div class="detail-grid">
-          <div class="detail-row">
-            <div class="label">Uptime</div>
-            <div class="value">{{ validator.uptime }}%</div>
-          </div>
-          <div class="detail-row">
-            <div class="label">Missed Blocks (30d)</div>
-            <div class="value">{{ validator.missedBlocks }}</div>
-          </div>
-        </div>
-      </div>
+     
       
       <!-- 选项卡部分 -->
       <div class="tabbed-section">
@@ -127,9 +105,9 @@
               </div>
               <div v-for="delegator in delegators" :key="delegator.address" class="delegator-row">
                 <div class="col-address monospace">
-                  <router-link :to="`/accounts/${delegator.address}`">
+                  <a :href="`https://suiscan.xyz/mainnet/account/${delegator.address}`" target="_blank">
                     {{ shortAddress(delegator.address) }}
-                  </router-link>
+                  </a>
                 </div>
                 <div class="col-amount">{{ formatNumber(delegator.amount) }} WAL</div>
               </div>
@@ -160,15 +138,27 @@
             <div class="staking-history-table">
               <div class="table-header">
                 <div class="col-tx">ObjectID</div>
+                <div class="col-tx">Sender</div>
+                <div class="col-tx">Tx</div>
                 <div class="col-time">Time</div>
                 <div class="col-amount">Amount</div>
                 <div class="col-type">State</div>
               </div>
               <div v-for="(record, index) in stakingHistory" :key="index" class="staking-history-row">
                 <div class="col-tx monospace">
-                  <router-link :to="`/events/${record.txHash}`">
-                    {{ shortAddress(record.txHash) }}
-                  </router-link>
+                  <a :href="`https://suiscan.xyz/mainnet/object/${record.objectId}`" target="_blank">
+                    {{ shortAddress(record.objectId) }}
+                  </a>
+                </div>
+                <div class="col-tx monospace">
+                  <a :href="`https://suiscan.xyz/mainnet/account/${record.owner}`" target="_blank">
+                    {{ shortAddress(record.owner) }}
+                  </a>
+                </div>
+                <div class="col-tx monospace">
+                  <a :href="`https://suiscan.xyz/mainnet/tx/${record.txDigest}`" target="_blank">
+                    {{ shortAddress(record.txDigest) }}
+                  </a>
                 </div>
                 <div class="col-time">{{ formatTime(new Date(record.timestamp)) }}</div>
                 <div class="col-amount">{{ formatNumber(record.amount) }} WAL</div>
@@ -194,6 +184,8 @@
 <script>
 import { format, formatDistance } from 'date-fns'
 import enUS from 'date-fns/locale/en-US'
+import { shortHash, formatBytes ,formatNumber} from '@/utils/formatters'
+
 
 export default {
   name: 'OperatorDetail',
@@ -221,6 +213,7 @@ export default {
     this.loadStakingHistory(1)
   },
   methods: {
+    formatBytes,
     async fetchValidatorData() {
       this.loading = true
       
@@ -241,31 +234,7 @@ export default {
           const operatorData = responseData.data
           
           // 将API返回的数据映射到组件数据结构
-          this.validator = {
-            address: this.validatorAddress,
-            operatorAddress: operatorData.operatorAddress || this.validatorAddress,
-            name: operatorData.validatorName || 'Unknown Operator',
-            status: operatorData.state === 'Active' ? 'active' : 'inactive',
-            rank: operatorData.weight || 0,
-            votingPower: operatorData.stake || 0,
-            votingPowerPercentage: operatorData.stakePercentage || '0.00',
-            totalDelegated: operatorData.totalDelegated || 0,
-            delegatorsCount: operatorData.delegatorsCount || 0,
-            commission: operatorData.commissionRate || '0.00',
-            maxChangeRate: operatorData.maxChangeRate || '0.00',
-            selfDelegated: operatorData.selfDelegated || 0,
-            identity: operatorData.identity || '',
-            securityContact: operatorData.securityContact || '',
-            website: operatorData.website || '',
-            blocksProposed: operatorData.blocksProposed || 0,
-            apr: operatorData.apr || '0.00',
-            description: operatorData.description || 'No description provided',
-            uptime: operatorData.uptime || '0.00',
-            uptimeBlocks: operatorData.uptimeBlocks || 0,
-            missedBlocks: operatorData.missedBlocks || 0,
-            logo: operatorData.logo || '/images/default-validator.png'
-          }
-          
+          this.validator = operatorData
           // 加载相关数据
           this.loadDelegators(1)
           this.loadStakingHistory(1)
@@ -356,12 +325,7 @@ export default {
         if (responseData.success && responseData.data) {
           // 处理分页数据
           const records = responseData.data.content || []
-          const newStakingHistory = records.map(record => ({
-            txHash: record.objectId || record.transactionHash || '',
-            timestamp: record.timestamp || new Date().toISOString(),
-            amount: record.amount || 0,
-            state: record.state || 'Unknown'
-          }))
+          const newStakingHistory = records
           
           // 如果是第一页，替换列表，否则添加到列表中
           if (page === 1) {
@@ -462,9 +426,7 @@ export default {
     formatTime(time) {
       return format(time, 'yyyy-MM-dd HH:mm:ss', { locale: enUS })
     },
-    formatNumber(num) {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    },
+    formatNumber,
     shortAddress(address) {
       return `${address.substring(0, 10)}...${address.substring(address.length - 6)}`
     }
@@ -515,6 +477,9 @@ export default {
 .validator-status {
   display: flex;
   align-items: center;
+}
+[data-theme="dark"] .status-badge {
+  color: var(--text-color);
 }
 .status-badge {
   display: inline-block;
@@ -616,6 +581,7 @@ export default {
   margin-top: 30px;
 }
 .tabs {
+  margin-bottom: 0px;
   display: flex;
   border-bottom: 1px solid #eee;
 }
@@ -653,7 +619,7 @@ export default {
   border-bottom: 1px solid #eee;
 }
 .col-address a, .col-height a {
-  color: #42b983;
+  /* color: #42b983; */
   text-decoration: none;
 }
 
@@ -672,10 +638,12 @@ export default {
 
 .col-address, .col-height {
   flex: 2;
+  padding-left: 10px;
 }
 
 .col-amount, .col-time, .col-txs {
   flex: 1;
+  padding-right: 10px;
   text-align: right;
 }
 
