@@ -182,7 +182,7 @@ export default {
     async fetchStats() {
       this.statsLoading = true
       try {
-        const response = await fetch('http://127.0.0.1:3000/api/walrus/operator_stats')
+        const response = await fetch('https://walrus-api.equinoxdao.xyz/api/walrus/operator_stats')
         if (!response.ok) {
           throw new Error(`API 请求失败: ${response.status}`)
         }
@@ -206,7 +206,7 @@ export default {
       this.loading = true
       try {
         // 构建带分页和搜索参数的 URL
-        let url = `http://127.0.0.1:3000/api/walrus/committee?page=${page}&size=${this.pageSize}`
+        let url = `https://walrus-api.equinoxdao.xyz/api/walrus/committee?page=${page}&size=${this.pageSize}`
 
         // 添加搜索参数
         if (this.searchQuery.trim()) {

@@ -228,7 +228,7 @@ export default {
         // 调用API获取运营商基本信息
         const validatorHash = this.validatorAddress
         console.log('使用validatorHash获取运营商信息:', validatorHash)
-        const response = await fetch(`http://127.0.0.1:3000/api/walrus/operator_basic_info/${validatorHash}`)
+        const response = await fetch(`https://walrus-api.equinoxdao.xyz/api/walrus/operator_basic_info/${validatorHash}`)
         
         if (!response.ok) {
           throw new Error(`API请求失败: ${response.status}`)
@@ -288,7 +288,7 @@ export default {
         // 使用API获取质押人列表
         const validatorHash = this.validatorAddress
         const pageSize = 10
-        const url = `http://127.0.0.1:3000/api/walrus/operator_delegators/${validatorHash}?page=${page}&size=${pageSize}`
+        const url = `https://walrus-api.equinoxdao.xyz/api/walrus/operator_delegators/${validatorHash}?page=${page}&size=${pageSize}`
         
         console.log('获取质押人列表:', url)
         const response = await fetch(url)
@@ -341,7 +341,7 @@ export default {
         // 使用API获取质押历史记录
         const validatorHash = this.validatorAddress
         const pageSize = 10
-        const url = `http://127.0.0.1:3000/api/walrus/operator_staking_history/${validatorHash}?page=${page}&size=${pageSize}`
+        const url = `https://walrus-api.equinoxdao.xyz/api/walrus/operator_staking_history/${validatorHash}?page=${page}&size=${pageSize}`
         
         console.log('获取质押历史记录:', url)
         const response = await fetch(url)
