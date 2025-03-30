@@ -641,7 +641,7 @@ export default {
   padding-left: 10px;
 }
 
-[data-theme="dark"] .col-address, [data-theme="dark"] .col-amount {
+[data-theme="dark"] .col-address, [data-theme="dark"] .col-amount , [data-theme="dark"] .col-type{
   color: var(--text-color);
 }
 
