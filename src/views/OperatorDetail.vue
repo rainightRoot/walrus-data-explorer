@@ -358,7 +358,7 @@ export default {
     },
     fetchRecentBlocks() {
       // TODO: 在未来替换为实际API调用，例如：
-      // GET http://localhost:3000/api/walrus/operator_recent_blocks/{validatorHash}
+      // GET https://walrus-api.equinoxdao.xyz/api/walrus/operator_recent_blocks/{validatorHash}
       
       // 模拟获取最近的区块
       setTimeout(() => {
@@ -378,7 +378,7 @@ export default {
       this.contributorsLoading = true;
       
       // 构建API URL，包含页码和每页数量
-      const url = `http://localhost:3000/api/github/contributors?page=${page}&size=${this.contributorsPerPage}`;
+      const url = `https://walrus-api.equinoxdao.xyz/api/github/contributors?page=${page}&size=${this.contributorsPerPage}`;
       
       fetch(url)
         .then(response => {
@@ -639,6 +639,10 @@ export default {
 .col-address, .col-height {
   flex: 2;
   padding-left: 10px;
+}
+
+[data-theme="dark"] .col-address, [data-theme="dark"] .col-amount {
+  color: var(--text-color);
 }
 
 .col-amount, .col-time, .col-txs {

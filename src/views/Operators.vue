@@ -488,6 +488,10 @@ export default {
   width: 20%;
 }
 
+[data-theme="dark"] .col-voting-power, [data-theme="dark"] .col-commission, [data-theme="dark"] .col-delegators {
+  color: var(--text-color);
+}
+
 .col-commission {
   width: 15%;
 }

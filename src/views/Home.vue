@@ -30,37 +30,14 @@
     <div class="main-content">
       <div class="content-left">
         <!-- TIA Chart -->
-        <!-- <div class="card chart-card">
+        <div class="card chart-card">
           <div class="card-header">
-            <h2>TIA Chart</h2>
-            <div class="chart-period">
-              <button :class="['period-btn', chartPeriod === '24h' ? 'active' : '']" @click="chartPeriod = '24h'">24h</button>
-              <button :class="['period-btn', chartPeriod === '1w' ? 'active' : '']" @click="chartPeriod = '1w'">1w</button>
-              <button :class="['period-btn', chartPeriod === '1m' ? 'active' : '']" @click="chartPeriod = '1m'">1m</button>
-              <button :class="['period-btn', chartPeriod === '3m' ? 'active' : '']" @click="chartPeriod = '3m'">3m</button>
-              <button :class="['period-btn', chartPeriod === '1y' ? 'active' : '']" @click="chartPeriod = '1y'">1y</button>
-              <button :class="['period-btn', chartPeriod === 'all' ? 'active' : '']" @click="chartPeriod = 'all'">All</button>
-            </div>
+            <h2>Walrus Chart</h2>
           </div>
           <div class="card-body">
-            <div class="tia-info">
-              <div class="price-info">
-                <div class="current-price">
-                  <span>TIA</span>
-                  <span class="price-value">{{ currentPrice }}</span>
-                </div>
-                <div :class="['price-change', priceChangePercentage >= 0 ? 'positive' : 'negative']">
-                  {{ priceChangePercentage >= 0 ? '+' : '' }}{{ priceChangePercentage }}%
-                  <span class="period">24h</span>
-                </div>
-              </div>
-            </div>
-            <div class="chart-placeholder">
-              <img v-if="chartLoading" src="@/assets/loading.svg" alt="Loading" class="chart-loading">
-              <div v-else class="chart-area" ref="chartContainer"></div>
-            </div>
+            <iframe src="https://s.tradingview.com/widgetembed/?hideideas=1&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en#%7B%22symbol%22%3A%22BYBIT%3AWALUSDT%22%2C%22frameElementId%22%3A%22tradingview_4d082%22%2C%22interval%22%3A%2260%22%2C%22hide_side_toolbar%22%3A%220%22%2C%22allow_symbol_change%22%3A%221%22%2C%22save_image%22%3A%221%22%2C%22studies%22%3A%22%5B%5D%22%2C%22theme%22%3A%22light%22%2C%22timezone%22%3A%22Etc%2FUTC%22%2C%22withdateranges%22%3A%221%22%2C%22studies_overrides%22%3A%22%7B%7D%22%2C%22utm_source%22%3A%22cryptorank.io%22%2C%22utm_medium%22%3A%22widget%22%2C%22utm_campaign%22%3A%22chart%22%2C%22utm_term%22%3A%22BYBIT%3AWALUSDT%22%2C%22page-uri%22%3A%22cryptorank.io%2Fprice%2Fwalrus-protocol%22%7D" frameborder="0" width="100%" height="400px"></iframe>
           </div>
-        </div> -->
+        </div>
 
         <!-- GitHub Activity -->
         <div class="card">
@@ -549,7 +526,7 @@ export default {
       }
       
       // 从API获取数据
-      axios.get('http://localhost:3000/api/github/commits/heatmap')
+      axios.get('https://walrus-api.equinoxdao.xyz/api/github/commits/heatmap')
         .then(response => {
           const allContributions = response.data.data || [];
           console.log('API返回的原始数据数量:', allContributions.length);
@@ -654,7 +631,7 @@ export default {
       console.log('从API获取顶级贡献者数据');
       this.contributorsLoading = true;
       
-      axios.get('http://localhost:3000/api/github/contributors')
+      axios.get('https://walrus-api.equinoxdao.xyz/api/github/contributors')
         .then(response => {
           const contributors = response.data.data || [];
           console.log('获取到的贡献者数量:', contributors.length);
