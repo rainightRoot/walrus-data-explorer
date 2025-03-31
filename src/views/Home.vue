@@ -116,7 +116,12 @@
                   No contributors data available
                 </div>
                 <div v-else class="contributors-list">
-                  <div v-for="(contributor, index) in topContributors" :key="index" class="contributor-item">
+                  <a v-for="(contributor, index) in topContributors" 
+                     :key="index" 
+                     class="contributor-item"
+                     :href="`${contributor.html_url}`" 
+                     target="_blank"
+                     rel="noopener noreferrer">
                     <img :src="contributor.avatar" :alt="contributor.name" class="contributor-avatar">
                     <div class="contributor-info">
                       <div class="contributor-name">{{ contributor.name }}</div>
@@ -126,7 +131,7 @@
                         <span class="contributor-deletions">-{{ contributor.deletions }}</span>
                       </div>
                     </div>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -643,7 +648,8 @@ export default {
               avatar: contributor.avatar_url || 'https://avatars.githubusercontent.com/u/0',
               commits: contributor.commits || 0,
               additions: this.formatNumber(contributor.additions || 0),
-              deletions: this.formatNumber(contributor.deletions || 0)
+              deletions: this.formatNumber(contributor.deletions || 0),
+              html_url: contributor.html_url
             }));
             
             console.log('处理后的贡献者数据:', this.topContributors.slice(0, 2));
